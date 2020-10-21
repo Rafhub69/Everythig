@@ -76,8 +76,6 @@ class Circum {
     fieldValue[1] = mass;
     fieldName[2]  = "springiness";
     fieldValue[2] = springness;
-    
-
 
     return 3;
   }

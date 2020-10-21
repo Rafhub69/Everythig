@@ -394,7 +394,7 @@ void contextMenu(int currentIndex)
 void changeVelocityByTheMouse(int currentIndex)
 {
   i = currentIndex;
-  PVector diff = new PVector(0, 0), position= new PVector(0, 0);
+  PVector diff = new PVector(0, 0), position= new PVector(0, 0), result = new PVector(0, 0);
 
   if (!stopStart)
   {
@@ -408,7 +408,10 @@ void changeVelocityByTheMouse(int currentIndex)
           diff = PVector.sub(new PVector(mouseX, mouseY), position);
           diff.normalize();
           diff.mult(scrollMovement);
-          cir.get(currentIndex).setSpeed(diff);
+          result.add(diff);
+        } else
+        {
+          cir.get(currentIndex).acceleration.add(result);
         }
       } else 
       {
@@ -418,7 +421,10 @@ void changeVelocityByTheMouse(int currentIndex)
           diff = PVector.sub(new PVector(mouseX, mouseY), position);
           diff.normalize();
           diff.mult(scrollMovement);
-          cir.get(currentIndex).setSpeed(diff);
+          result.add(diff);
+        } else
+        {
+          cir.get(currentIndex).acceleration.add(result);
         }
       }
     } else if (mode == 2)
@@ -431,8 +437,12 @@ void changeVelocityByTheMouse(int currentIndex)
           diff = PVector.sub(new PVector(mouseX, mouseY), position);
           diff.normalize();
           diff.mult(scrollMovement);
-          pend.get(currentIndex).setSpeed(diff);
+          result.add(diff);
+        } else
+        {
+         pend.get(currentIndex).a1_a += result.mag();
         }
+        
       } else 
       {
         if (scrollMenuOpenByMouse[3])
@@ -441,8 +451,10 @@ void changeVelocityByTheMouse(int currentIndex)
           diff = PVector.sub(new PVector(mouseX, mouseY), position);
           diff.normalize();
           diff.mult(scrollMovement);
-          doublePend.get(currentIndex).setSpeed(diff, 0);
-          
+          result.add(diff);
+        } else
+        {
+         doublePend.get(currentIndex).a1_a += result.mag();
         }
         if (scrollMenuOpenByMouse[4])
         {
@@ -450,17 +462,18 @@ void changeVelocityByTheMouse(int currentIndex)
           diff = PVector.sub(new PVector(mouseX, mouseY), position);
           diff.normalize();
           diff.mult(scrollMovement);
-          doublePend.get(currentIndex).setSpeed(diff, 1);
+          result.add(diff);
+        } else
+        {
+         doublePend.get(currentIndex).a2_a += result.mag();
         }
       }
     }
   }
 
-  diff.add(position);
-  line(position.x, position.y, diff.x, diff.y);
+  line(position.x, position.y, diff.x + position.x, diff.y + position.y);
   circle(diff.x, diff.y, 10);
-  // circle(position.x, position.y, 10);
-  //fill(50, 100, 150);
+  result.set(0,0);
 }
 
 
