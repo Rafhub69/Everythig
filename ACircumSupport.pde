@@ -61,7 +61,7 @@ void centralField()
   float dem = 0, dividerx = 0, dividery = 0, Distance;
   PVector grav_atract = new PVector(0, 0);
   ArrayList<PVector> reverseGravity = new ArrayList<PVector>(cir.size());
-  
+
   if (centralAction)
   {
     for (int i = 0; i < cir.size(); i++)
@@ -105,8 +105,6 @@ void centralField()
       {
         reverseGravity.get(k).mult(0);
       }
-
-      //checkForCollision();
     }
   }
 
@@ -114,8 +112,11 @@ void centralField()
 
   for (int i = 0; i<cir.size(); i++)
   {   
-    //cir.get(i).border();
     cir.get(i).drawing();
+    fill(50, 0, 255 );
+    stroke(255, 0, 50);
+    textAlign(CENTER, CENTER);
+    text(i, cir.get(i).point.x, cir.get(i).point.y);
   }
 
   //Drawing a center of mass
@@ -153,7 +154,11 @@ void homogeneousField()
 
   for (int j = 0; j<cir.size(); j++)
   {
-    //cir.get(j).border();
     cir.get(j).drawing();
+    strokeWeight(6);
+    fill(50, 0, 255 );
+    stroke(255, 0, 50);
+    textAlign(CENTER, CENTER);
+    text(j, cir.get(j).point.x, cir.get(j).point.y);
   }
 }

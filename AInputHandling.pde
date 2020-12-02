@@ -7,8 +7,8 @@ void mousePressed() {
 
   if (!stopStart)
   {
-    if (mode == 1)
-    {
+    switch(mode) {
+    case 1:
       if (field)
       { 
         for (int i = 0; i<cir.size(); i++)
@@ -48,8 +48,8 @@ void mousePressed() {
           }
         }
       }
-    } else if (mode == 2)
-    {
+      break;
+    case 2:
       if (pendul)
       {
         for (int k = 0; k< pend.size(); k++)
@@ -105,10 +105,12 @@ void mousePressed() {
           currentIndex = l;
         }
       }
-    } else if (mode == 4)
-    {
-    } else if (mode == 5)
-    {
+      break;
+    case 4:
+      break; 
+    case 5:
+      fourier.mousePress();
+      break;
     }
   }
 }
@@ -116,8 +118,8 @@ void mousePressed() {
 void mouseReleased() {
   if (!stopStart)
   {
-    if (mode == 1)
-    {
+    switch(mode) {
+    case 1:
       if (field)
       { 
         if (changePositionByMouse[0]) {
@@ -142,8 +144,8 @@ void mouseReleased() {
           scrollMenuOpenByMouse[1] = false;
         }
       }
-    } else if (mode == 2)
-    {
+      break;
+    case 2:
       if (pendul)
       {
         if (changePositionByMouse[2]) {
@@ -175,11 +177,15 @@ void mouseReleased() {
           scrollMenuOpenByMouse[4] = false;
         }
       }
+
+      break;
+    case 4:
+      break; 
+    case 5:
+
+      fourier.mouseRelis();
+      break;
     }
-  } else if (mode == 4)
-  {
-  } else if (mode == 5)
-  {
   }
 }
 
@@ -240,6 +246,18 @@ void keyPressed()
     {//reset
       background(255);
       setting();
+    } else if (key == 'X' ||key == 'x')
+    {
+      cp5.get(Button.class, "Menu").setVisible(!cp5.get(Button.class, "Menu").isVisible());
+      cp5.get(Button.class, "Reset").setVisible(!cp5.get(Button.class, "Reset").isVisible());
+      cp5.get(Button.class, "StartStop").setVisible(!cp5.get(Button.class, "StartStop").isVisible());
+      if (information)
+      {
+        information = !information;
+      }
+    } else if (key == 'Z' ||key == 'z')
+    {
+      StartStop();
     } else  if (key == 'K' ||key == 'k')
     {
       if (!information)
@@ -306,7 +324,7 @@ void checkingIfMouseIsOver()
   } else if (cp5.isMouseOver(cp5.getController("Reset")))
   {
     cp5.getController("Set").hide();
-    cp5.getController("input").setVisible(false);
+    cp5.getController("input").hide();
   } else if (cp5.isMouseOver(cp5.getController("Central"))) {
     cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość obiektów w centralnym polu grawitacyjnym");
     Disclosures_set("Central");
@@ -341,53 +359,59 @@ void checkingIfMouseIsOver()
 void contextMenu(int currentIndex)
 {
   i = currentIndex;
-  int x;
+  int x = 0, y = 0;
   if (contextMenuOpenByMouse[0] || contextMenuOpenByMouse[1])
   {
     cir.get(i).showingData();
     x = cir.get(i).point.x + 156 + cir.get(i).radius> width ? (int)cir.get(i).point.x - (((int)cir.get(i).point.x + 156) - width ) : (int)cir.get(i).point.x + (int)cir.get(i).radius;
-    cp5.get("contextMenu").setPosition(x, cir.get(i).point.y);
+    //y = cir.get(i).point.y + 56 + cir.get(i).radius> height ? (int)cir.get(i).point.y - (((int)cir.get(i).point.y + 56) - height ) : (int)cir.get(i).point.y + (int)cir.get(i).radius;
+    y = (int)cir.get(i).point.y;
+    cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
 
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(cir.get(i).fieldValue[1]).setCaptionLabel(cir.get(i).fieldName[1]).setVisible(true);    
-    cp5.get(Slider.class, "Radius").setValue(cir.get(i).fieldValue[0]).setCaptionLabel(cir.get(i).fieldName[0]); 
-    cp5.get(Slider.class, "Springness").setValue(cir.get(i).fieldValue[2]).setCaptionLabel(cir.get(i).fieldName[2]);
+    cp5.get(Slider.class, "Mass").setValue(cir.get(i).fieldValue[1]).setCaptionLabel(cir.get(i).fieldName[1]).setVisible(true); 
+    cp5.get(Slider.class, "Radius").setValue(cir.get(i).fieldValue[0]).setCaptionLabel(cir.get(i).fieldName[0]).setVisible(true); 
+    cp5.get(Slider.class, "Springness").setValue(cir.get(i).fieldValue[2]).setCaptionLabel(cir.get(i).fieldName[2]).setVisible(true);
   } else if (contextMenuOpenByMouse[2])
   {
     pend.get(i).showingData();
 
     x = pend.get(i).position.x + 156 + cir.get(i).radius> width ? (int)pend.get(i).position.x - (((int)pend.get(i).position.x + 156) - width ) : (int)pend.get(i).position.x + (int)pend.get(i).radius;
-    cp5.get("contextMenu").setPosition(x, pend.get(i).position.y);
+    y = pend.get(i).position.y + 56 + cir.get(i).radius> height ? (int)pend.get(i).position.y - (((int)pend.get(i).position.x + 56) - height ) : (int)pend.get(i).position.y + (int)pend.get(i).radius;
+    cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
 
     cp5.get(Slider.class, "Mass").setVisible(false);
-    cp5.get(Slider.class, "Radius").setValue(pend.get(i).fieldValue[0]).setCaptionLabel(pend.get(i).fieldName[0]); 
+    cp5.get(Slider.class, "Radius").setValue(pend.get(i).fieldValue[0]).setCaptionLabel(pend.get(i).fieldName[0]).setVisible(true); 
     cp5.get(Slider.class, "Gravity").setValue(pend.get(i).fieldValue[1]).setCaptionLabel(pend.get(i).fieldName[1]).setVisible(true); 
-    cp5.get(Slider.class, "Springness").setValue(pend.get(i).fieldValue[2]).setCaptionLabel(pend.get(i).fieldName[2]);
+    cp5.get(Slider.class, "Springness").setValue(pend.get(i).fieldValue[2]).setCaptionLabel(pend.get(i).fieldName[2]).setVisible(true);
   } else if (contextMenuOpenByMouse[3])
   {
     doublePend.get(i).showingData(3);
 
     x = doublePend.get(i).position[0].x + 156 + doublePend.get(i).radius1> width ? (int)doublePend.get(i).position[0].x - (((int)doublePend.get(i).position[0].x + 156) - width ) : (int)doublePend.get(i).position[0].x + (int)doublePend.get(i).radius1;
-    cp5.get("contextMenu").setPosition(x, doublePend.get(i).position[0].y);
+    y = doublePend.get(i).position[0].y + 56 + doublePend.get(i).radius1> height ? (int)doublePend.get(i).position[0].y - (((int)doublePend.get(i).position[0].y + 56) - height ) : (int)doublePend.get(i).position[0].y + (int)doublePend.get(i).radius1;
+    cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
-
+    doublePenIndex = 0;
     cp5.get(Slider.class, "Gravity").setVisible(false);
     cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldValue[1]).setCaptionLabel(doublePend.get(i).fieldName[1]).setVisible(true);    
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldValue[0]).setCaptionLabel(doublePend.get(i).fieldName[0]); 
-    cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldValue[2]).setCaptionLabel(doublePend.get(i).fieldName[2]);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldValue[0]).setCaptionLabel(doublePend.get(i).fieldName[0]).setVisible(true); 
+    cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldValue[2]).setCaptionLabel(doublePend.get(i).fieldName[2]).setVisible(true);
   } else if (contextMenuOpenByMouse[4])
   {
     doublePend.get(i).showingData(4);
 
     x = doublePend.get(i).position[1].x + 156 + doublePend.get(i).radius2> width ? (int)doublePend.get(i).position[1].x - (((int)doublePend.get(i).position[1].x + 156) - width ) : (int)doublePend.get(i).position[1].x + (int)doublePend.get(i).radius2;
-    cp5.get("contextMenu").setPosition(x, doublePend.get(i).position[1].y);
+    y = doublePend.get(i).position[1].y + 56 + doublePend.get(i).radius2> height ? (int)doublePend.get(i).position[1].y - (((int)doublePend.get(i).position[1].y + 56) - height ) : (int)doublePend.get(i).position[1].y + (int)doublePend.get(i).radius2;
+    cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
-
+    doublePenIndex = 1;
+    cp5.get(Slider.class, "Gravity").setVisible(false);
     cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldValue[1]).setCaptionLabel(doublePend.get(i).fieldName[1]).setVisible(true);    
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldValue[0]).setCaptionLabel(doublePend.get(i).fieldName[0]); 
-    cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldValue[2]).setCaptionLabel(doublePend.get(i).fieldName[2]);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldValue[0]).setCaptionLabel(doublePend.get(i).fieldName[0]).setVisible(true); 
+    cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldValue[2]).setCaptionLabel(doublePend.get(i).fieldName[2]).setVisible(true);
   }
 }
 
@@ -400,32 +424,16 @@ void changeVelocityByTheMouse(int currentIndex)
   {
     if (mode == 1)
     {
-      if (field)
+      if (scrollMenuOpenByMouse[0] || scrollMenuOpenByMouse[1])
       {
-        if (scrollMenuOpenByMouse[0])
-        {
-          position = cir.get(currentIndex).point;
-          diff = PVector.sub(new PVector(mouseX, mouseY), position);
-          diff.normalize();
-          diff.mult(scrollMovement);
-          result.add(diff);
-        } else
-        {
-          cir.get(currentIndex).acceleration.add(result);
-        }
-      } else 
+        position = cir.get(currentIndex).point;
+        diff = PVector.sub(new PVector(mouseX, mouseY), position);
+        diff.normalize();
+        diff.mult(scrollMovement);
+        result.add(diff);
+      } else if (currentIndex < cir.size())
       {
-        if (scrollMenuOpenByMouse[1])
-        {
-          position = cir.get(currentIndex).point;
-          diff = PVector.sub(new PVector(mouseX, mouseY), position);
-          diff.normalize();
-          diff.mult(scrollMovement);
-          result.add(diff);
-        } else
-        {
-          cir.get(currentIndex).acceleration.add(result);
-        }
+        cir.get(currentIndex).acceleration.add(result);
       }
     } else if (mode == 2)
     {
@@ -438,11 +446,10 @@ void changeVelocityByTheMouse(int currentIndex)
           diff.normalize();
           diff.mult(scrollMovement);
           result.add(diff);
-        } else
+        } else if (currentIndex < pend.size())
         {
-         pend.get(currentIndex).a1_a += result.mag();
+          pend.get(currentIndex).a1_a += result.mag();
         }
-        
       } else 
       {
         if (scrollMenuOpenByMouse[3])
@@ -452,9 +459,9 @@ void changeVelocityByTheMouse(int currentIndex)
           diff.normalize();
           diff.mult(scrollMovement);
           result.add(diff);
-        } else
+        } else if (currentIndex < doublePend.size())
         {
-         doublePend.get(currentIndex).a1_a += result.mag();
+          doublePend.get(currentIndex).a1_a += result.mag();
         }
         if (scrollMenuOpenByMouse[4])
         {
@@ -463,9 +470,9 @@ void changeVelocityByTheMouse(int currentIndex)
           diff.normalize();
           diff.mult(scrollMovement);
           result.add(diff);
-        } else
+        } else if (currentIndex < doublePend.size())
         {
-         doublePend.get(currentIndex).a2_a += result.mag();
+          doublePend.get(currentIndex).a2_a += result.mag();
         }
       }
     }
@@ -473,7 +480,7 @@ void changeVelocityByTheMouse(int currentIndex)
 
   line(position.x, position.y, diff.x + position.x, diff.y + position.y);
   circle(diff.x, diff.y, 10);
-  result.set(0,0);
+  result.set(0, 0);
 }
 
 
@@ -496,9 +503,7 @@ void changePositionByTheMouse(int currentIndex)
       cir.get(i).point.y = mouseY;
     } else
     {
-      if (left && top || left && bottom || right && top || right && bottom)
-      {
-      } else 
+      if (!(left && top) || !(left && bottom) || !(right && top) || !(right && bottom))
       {
         if (left || right)
         {
@@ -525,9 +530,7 @@ void changePositionByTheMouse(int currentIndex)
       cir.get(i).point.y = mouseY;
     } else
     {
-      if (left && top || left && bottom || right && top || right && bottom)
-      {
-      } else 
+      if (!(left && top) || !(left && bottom) || !(right && top) || !(right && bottom))
       {
         if (left || right)
         {

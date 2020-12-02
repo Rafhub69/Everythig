@@ -1,11 +1,12 @@
 class SaveGame
 {
+  JSONObject json;
 
   SaveGame()
   {
   }
 
-  void save()
+  void saves(Object obj, int whichType)
   {
   }
 
@@ -13,4 +14,5 @@ class SaveGame
   void load()
   {
   }
+  
 }
