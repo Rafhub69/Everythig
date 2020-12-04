@@ -1,42 +1,39 @@
 //reading input from buttons
 void Homogen(int n) {
 
-  CentralButton(n, false);
+  CentralButton(n, true, false);
 }
 
 void Circle(int n) {
 
-  CentralButton(n, true);
+  CentralButton(n, true, false);
 }
 
 void Lisajous(int n) {
 
-  CentralButton(n, true);
+  wholeScreen = true;
+  CentralButton(n, true, false);
 }
 
 void Bonaci(int n) {
 
-  CentralButton(n, false);
+  wholeScreen = false;
+  CentralButton(n, true, false);
 }
 
 void Central(int n) {
 
-  CentralButton(n, true);
+  CentralButton(n, true, true);
 }
 
 void Single(int n) {
 
-  CentralButton(n, true);
+  CentralButton(n, false, true);
 }
 
 void Dual(int n) {
 
-  CentralButton(n, false);
-}
-
-void FourTrans(int n) {
-
-  CentralButton(n, true);
+  CentralButton(n, false, false);
 }
 
 void Menu() 
@@ -50,7 +47,6 @@ void Reset()
   setting();
 }
 
-//buttons for changing various parameters
 void Radius(float theValue)
 {
   if (mode == 1)
@@ -63,13 +59,7 @@ void Radius(float theValue)
       pend.get(currentIndex).radius = theValue;
     } else 
     {
-      if (doublePenIndex == 0)
-      {
-        doublePend.get(currentIndex).radius1 = theValue;
-      } else if (doublePenIndex == 1)
-      {
-        doublePend.get(currentIndex).radius2 = theValue;
-      }
+      //doublePend.get(currentIndex).radius1 = theValue;
     }
   }
 }
@@ -82,63 +72,59 @@ void Mass(float theValue)
     cir.get(currentIndex).mass = theValue;
   } else if (mode == 2)
   {
-    if (doublePenIndex == 0)
+    if (pendul)
     {
-      doublePend.get(currentIndex).mas1 = theValue;
-    } else if (doublePenIndex == 1)
+     // pend.get(currentIndex).mass = theValue;
+    } else 
     {
-      doublePend.get(currentIndex).mas2 = theValue;
+      //doublePend.get(currentIndex).mass = theValue;
     }
-  }
-}
-
-void Gravity(float theValue)
-{
-  if (pendul)
-  {
-    pend.get(currentIndex).gravity = theValue;
-  } else 
-  {
-    doublePend.get(currentIndex).g = theValue;
   }
 }
 
 void Springness(float theValue)
 {
-
+  
   if (mode == 1)
   {
     cir.get(currentIndex).springness = theValue;
   } else if (mode == 2)
   {
-    pend.get(currentIndex).damping = theValue;
+    if (pendul)
+    {
+      pend.get(currentIndex).damping = theValue;
+    } else 
+    {
+      //doublePend.get(currentIndex.springness = theValue;fieldName[0]
+    }
   }
 }
-//A function that manages what happens when the program is stopped and started.
+
 void StartStop() {
 
   stopStart = !stopStart;
 
-  centralAction = stopStart;
-  homogeneousAction = stopStart; 
-  singleAction = stopStart; 
-  doubleAction = stopStart;
-  lisajousAction = stopStart;
-  nBonaciAction = stopStart;
-  strangeCirclesAction = stopStart;
-  fourierTransformAction = stopStart;
-
   if (stopStart)
   {
     cp5.getController("StartStop").setCaptionLabel("Zatrzymanie programu");
+    centralAction = true;
+    homogeneousAction = true; 
+    singleAction = true; 
+    doubleAction = true;
+    lisajousAction = true;
+    nBonaciAction = true;
+    strangeCirclesAction = true;
   } else
   {
     cp5.getController("StartStop").setCaptionLabel("Uruchomienie programu");
-    cp5.get("contextMenu").hide();
-    cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setVisible(false);   
-    cp5.get(Slider.class, "Radius").setVisible(false);
-    cp5.get(Slider.class, "Springness").setVisible(false);
+    centralAction = false;
+    homogeneousAction = false; 
+    singleAction = false; 
+    doubleAction = false;
+    lisajousAction = false;
+    nBonaciAction = false;
+    strangeCirclesAction = false;
+ 
   }
 }
 
@@ -163,26 +149,18 @@ void Set()
   setting();
 }
 
-void CentralButton(int n, boolean switches) 
+void CentralButton(int n, boolean poleOrPendul, boolean i) 
 {
+  mode  = n;
 
-  switch(n)
+  if (poleOrPendul) 
   {
-  case 1:
-    field = switches;
-
-    break;
-  case 2:
-
-    pendul = switches;
-    break;
-  case 3:
-
-    wholeScreen = switches;
-    break;
+    field = i;
+  } else 
+  {
+    pendul = i;
   }
 
-  mode  = n;
   setting();
 }
 
@@ -201,7 +179,6 @@ void ButtonManagement()
     cp5.get(Button.class, "Lisajous").setVisible(true);
     cp5.get(Button.class, "Bonaci").setVisible(true);
     cp5.get(Button.class, "Circle").setVisible(true);
-    cp5.get(Button.class, "FourTrans").setVisible(true);
   } else  if (information == false)
   {
     cp5.get(Button.class, "Homogen").setVisible(false);
@@ -211,7 +188,8 @@ void ButtonManagement()
     cp5.get(Button.class, "Lisajous").setVisible(false);
     cp5.get(Button.class, "Bonaci").setVisible(false);
     cp5.get(Button.class, "Circle").setVisible(false);
-    cp5.get(Button.class, "FourTrans").setVisible(false);
+
+
   }
 }
 
@@ -258,8 +236,9 @@ void input(String theText) {
   } else if (buttonName.equals("Lisajous"))
   {
     table.w = amount;
-  } else if (buttonName.equals(""))
+  }else if (buttonName.equals(""))
   {
+   
   }
 
   setting();
