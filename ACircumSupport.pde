@@ -108,7 +108,7 @@ void centralField()
     }
   }
 
-  checkForCollision();
+  //checkForCollision();
 
   for (int i = 0; i<cir.size(); i++)
   {   
