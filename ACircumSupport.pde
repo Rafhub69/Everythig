@@ -56,7 +56,7 @@ void collision(Circum con1, Circum con2, float dist_, float min_, PVector lock)
   con2.velocity = vel2;
 }
 
-void centralField()
+void centralFieldManagement()
 {
   float dem = 0, dividerx = 0, dividery = 0, Distance;
   PVector grav_atract = new PVector(0, 0);
@@ -89,15 +89,15 @@ void centralField()
 
         //adding gravity
         float strength = (G_const * cir.get(i).mass * cir.get(j).mass)/(Distance * Distance);
-        lengthFrom_i_to_j.mult(strength );
-        lengthFrom_j_to_i.mult(strength );
+        lengthFrom_i_to_j.mult(strength);
+        lengthFrom_j_to_i.mult(strength);
 
         reverseGravity.get(j).add(lengthFrom_j_to_i);
 
         grav_atract.add(lengthFrom_i_to_j);
       }
 
-      grav_atract.add( reverseGravity.get(i));
+      grav_atract.add(reverseGravity.get(i));
       cir.get(i).setSpeed(grav_atract);
       grav_atract.mult(0);
 
@@ -108,11 +108,12 @@ void centralField()
     }
   }
 
-  //checkForCollision();
+  checkForCollision();
 
   for (int i = 0; i<cir.size(); i++)
   {   
     cir.get(i).drawing();
+    
     fill(50, 0, 255 );
     stroke(255, 0, 50);
     textAlign(CENTER, CENTER);
@@ -128,7 +129,7 @@ void centralField()
   popMatrix();
 }
 
-void homogeneousField()
+void homogeneousFieldManagement()
 {
   PVector  air_replica = new PVector(0.004, 0.004);
   PVector  grav = new PVector(0.00, 3.00);

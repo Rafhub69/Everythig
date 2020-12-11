@@ -5,8 +5,7 @@ class Circum {
   PVector  acceleration = new PVector(0, 0);
   PVector  velocity = new PVector(new Random().nextInt(max_velocity) + 0.05, -1 * (new Random().nextInt(max_velocity) + 0.05));
   PVector gre = new PVector(0, 0);
-  String[] fieldName = new String[3];
-  float[] fieldValue = new float[3];
+  HashMap<String, Float> fieldVariables = new HashMap<String, Float>(10);
   Function[] fun = new Function[6];
 
 
@@ -16,27 +15,51 @@ class Circum {
     point.x = (width * new Random().nextFloat()) - radius;
     point.y =  (height * new Random().nextFloat()) - radius;
 
-    fun[0] = new Function(velocity.y - 1, velocity.y + 1);
-    fun[1] = new Function(gre.y + 0.005, gre.y - 0.005);
-    fun[2] = new Function(point.y - 0.005, point.y + 0.01);
-    fun[3] = new Function(point.x - 0.01, point.x + 0.01);
-    fun[4] = new Function(gre.x + 0.005, gre.x - 0.005);
-    fun[5] = new Function(velocity.x - 0.01, max_velocity);
+    inicialization();
   }
 
-  Circum(float x_, float y_, float r_, float m_) {
+  Circum(float x_, float y_, float radius_, float mass_) {
     this();
     point.x = x_;
     point.y = y_;
-    radius = r_;
-    mass = m_;
+    radius = radius_;
+    mass = mass_;
 
+    inicialization();
+  }
+
+  Circum(PVector pos_, PVector vel_, PVector acc_, float radius_, float mass_, float springiness_, float ref_ )
+  {
+    ref = ref_;
+    mass = mass_;
+    point = pos_;
+    velocity = vel_;
+    radius = radius_;    
+    acceleration = acc_;
+    springness = springiness_;
+
+    inicialization();
+  }
+
+  void inicialization()
+  {
     fun[0] = new Function(velocity.y - 1, velocity.y + 1);
     fun[1] = new Function(gre.y + 0.005, gre.y - 0.005);
     fun[2] = new Function(point.y - 0.05, point.y + 0.1);
     fun[3] = new Function(point.x - 0.1, point.x + 0.1);
     fun[4] = new Function(gre.x + 0.005, gre.x - 0.005);
     fun[5] = new Function(velocity.x - 0.01, max_velocity);
+
+    fieldVariables.put("radius", radius);
+    fieldVariables.put("mass", mass);
+    fieldVariables.put("springness", springness);
+    fieldVariables.put("ref", ref);
+    fieldVariables.put("point.x", point.x);
+    fieldVariables.put("point.y", point.y);
+    fieldVariables.put("velocity.x", velocity.x);
+    fieldVariables.put("velocity.y", velocity.y);
+    fieldVariables.put("acceleration.x", acceleration.x);
+    fieldVariables.put("acceleration.y", acceleration.y);
   }
 
   void setSpeed(PVector force) {
@@ -46,7 +69,7 @@ class Circum {
     point.add(velocity);
     gre = acceleration.copy();
 
-      // If out of bounds
+    // If out of bounds
     if (point.y - radius <= 0) 
     {
       velocity.y *= -springness;
@@ -70,12 +93,16 @@ class Circum {
 
   int showingData()
   {
-    fieldName[0]  = "radius";
-    fieldValue[0] = radius;
-    fieldName[1]  = "mass";
-    fieldValue[1] = mass;
-    fieldName[2]  = "springiness";
-    fieldValue[2] = springness;
+    fieldVariables.replace("radius", radius);
+    fieldVariables.replace("mass", mass);
+    fieldVariables.replace("springiness", springness);
+    fieldVariables.replace("ref", ref);
+    fieldVariables.replace("point.x", point.x);
+    fieldVariables.replace("point.y", point.y);
+    fieldVariables.replace("velocity.x", velocity.x);
+    fieldVariables.replace("velocity.y", velocity.y);
+    fieldVariables.replace("acceleration.x", acceleration.x);
+    fieldVariables.replace("acceleration.y", acceleration.y);
 
     return 3;
   }

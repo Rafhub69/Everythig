@@ -1,4 +1,4 @@
-void singlePendulum()
+void singlePendulumManagement()
 {
   
   for (int i = 0; i< pend.size(); i++)
@@ -13,7 +13,7 @@ void singlePendulum()
  
 }
 
-void dublePendulum()
+void dublePendulumManagement()
 {
  
   for (int i = 0; i< doublePend.size(); i++)

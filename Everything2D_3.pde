@@ -2,11 +2,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import processing.sound.*;
 import java.util.Random;
+import java.util.Map;
+import java.io.File;
 import controlP5.*;
 
 Random randa = new Random();
 ControlP5 cp5;
-
 
 int mode = 1;//1 - gravitation , 2 - pendulum, 3 - programs on whole screen, 4 - strenge circles, 5 - fourier transformation
 boolean field = false;//true -  central field , false -  homogeneous field
@@ -20,26 +21,26 @@ boolean centralAction = false, homogeneousAction = false, singleAction = false, 
 boolean[] scrollMenuOpenByMouse = new boolean[5];
 boolean[] changePositionByMouse = new boolean[5];
 boolean[] contextMenuOpenByMouse = new boolean[5];
-long StartedMillis = 0;
+long startedMillis = 0;
 String buttonName;
-char shortcutCentralField = 'V', shortcutHomogenField = 'F', shortcutSinglePendulum = 'P', shortcutDoublePendulum = 'D', shortcutLisajousTable = 'L', shortcutBonaciSeqense = 'N', shortcutStrangeCircles = 'C', shortcutFourierTransform = 'T';
+char shortcutCentralField = 'V', shortcutHomogenField = 'F', shortcutSinglePendulum = 'P', shortcutDoublePendulum = 'D', shortcutLisajousTable = 'L', shortcutBonaciSeqense = 'N';
+char shortcutReset = 'R', shortcutDisableEnableAll = 'X', shortcutStopStartAll = 'Z', shortcutFourierTransform = 'T', shortcutStrangeCircles = 'C';
 int control = 100, current, control2 = control, i, control3 = control2+1, ile = 1, ile2 = ile, ile_pend =1, ile_pend2 = ile_pend, pozX =2, pozY, doublePenIndex = 2;
 int MaxFar = 100, Multi = 10, start, centerX = 0, centerY = 0, button_height =30, button_width = 106, pozXSet = pozX + button_width;
 float mass = 1000, radius = 20, density, G_const = 0.6673, a1 = 4*PI, w = 0.01, scrollMovement = 0;
 float length1, length2, mas1, mas2, a2, poz, rad = 10, angleChange_ = 0.01;
 float pozYSet[] = new float[2], screenSizeX = 0, screenSizeY = 0;
-Everything2D_3 yh;
+FourierTransform fourier;
+StrengeCircles strenCir;
 LisajousTable table;
 BonaciSequence seq;
-StrengeCircles stren;
-FourierTransform fourier;
+Everything2D_3 yh;
 SaveGame save;
 //Object obj;
 
 ArrayList<Circum> cir = new ArrayList<Circum>(control);
-ArrayList<pendulum> pend = new ArrayList<pendulum>(ile_pend);
-ArrayList<double_pendulum> doublePend = new ArrayList<double_pendulum>(ile);
-PVector  inic = new PVector(0.0000, 0.0000);
+ArrayList<Pendulum> pend = new ArrayList<Pendulum>(ile_pend);
+ArrayList<DoublePendulum> doublePend = new ArrayList<DoublePendulum>(ile);
 int amo = 1000, currentIndex = 0;
 PFont font;
 
@@ -59,25 +60,22 @@ void setup() {
   font = createFont("arial", 20);
   centerX = (width/2)  - (button_width/2);
   centerY = (height/2)  - (button_height/2);
+
   //creating individual objects
   table = new LisajousTable();
   seq = new BonaciSequence();
-  stren = new StrengeCircles( rad, angleChange_, amo);
+  strenCir = new StrengeCircles( rad, angleChange_, amo);
   fourier = new FourierTransform(yh);
   save = new SaveGame();
-  
-  
+
   //creating random circles
   for (int i = 0; i <control; i++)
   {
     mass = 20 * randa.nextFloat() + 4;
     radius = mass * 2;
-
     cir.add(new Circum(0, 0, radius, mass));
-    cir.get(i).velocity = new PVector(0, 0);
-    cir.get(i).acceleration = new PVector(0, 0);
-    cir.get(i).gre = new PVector(0, 0);
   }
+
   //creating a random double pendulum
   for (int i = 0; i< ile; i++)
   {
@@ -87,17 +85,17 @@ void setup() {
     length2 = 200;
     mas1 = 40;
     mas2 = 20;
-    doublePend.add(new double_pendulum( a1, a2, length1, length2, mas1, mas2));
+    doublePend.add(new DoublePendulum( a1, a2, length1, length2, mas1, mas2));
   }
 
   //creating a random pendulum
   a1 = PI / (randa.nextFloat() + 0.5);
-  pend.add(new pendulum(a1, new PVector(width / 2, height/3)));
+  pend.add(new Pendulum(a1, new PVector(width / 2, height/3)));
 
   for (int i = 1; i <ile_pend; i++)
   {
     a1 = PI / (randa.nextFloat() + 0.5);
-    pend.add(new pendulum(a1, pend.get(i - 1).position));
+    pend.add(new Pendulum(a1, pend.get(i - 1).position));
   }
 
   int he = button_height, hi = 1;
@@ -116,9 +114,9 @@ void setup() {
   cp5.addButton("Settings").setPosition(centerX, centerY+ 60).setSize(200, 60).setCaptionLabel("Ustawienia");
   cp5.addButton("Exit").setPosition(centerX, centerY + 120).setSize(200, 60).setCaptionLabel("Wyjscie z programu");
 
-  cp5.addButton("Save").setPosition(pozXSet, 63).setSize(button_width, button_height).setCaptionLabel("Zapis").hide();
-  cp5.addButton("Load").setPosition(pozXSet, 63).setSize(button_width, button_height).setCaptionLabel("Odczyt").hide();
-  cp5.addButton("Set").setPosition(pozXSet, 63).setSize(button_width, button_height).setCaptionLabel("Ustawienia").hide();
+  cp5.addButton("Save").setPosition(pozXSet, 63).setSize(65, button_height).setCaptionLabel("Zapis").hide();
+  cp5.addButton("Load").setPosition(pozXSet, 63).setSize(65, button_height).setCaptionLabel("Odczyt").hide();
+  cp5.addButton("Set").setPosition(pozXSet, 63).setSize(70, button_height).setCaptionLabel("Ustawienia").hide();
 
   cp5.addButton("Menu").setPosition(pozX, 1).setSize(button_width, button_height);
   cp5.addButton("Reset").setPosition(pozX, he * hi).setSize(button_width, button_height);
@@ -167,13 +165,13 @@ String formatMillis(long millis)
   return "" + nf(hour, 2, 0) + ":"  + nf(minutes, 2, 0) + ":" + nf(seconds, 2, 0) + ":" + nf(milliseconds, 3, 0);
 }
 
-void setting() 
+void resetToBegining() 
 {
   switch(mode) {
   case 1:
     float pozX = 0, pozY = 0;
-
-    for (int i = control - 1; i >= 0; i--)
+    int size = cir.size();
+    for (int i = size - 1; i >= 0; i--)
     {
       cir.remove(i);
     }
@@ -202,7 +200,7 @@ void setting()
         }
 
         cir.add(new Circum(pozX, pozY, radius, mass));
-        cir.get(i).velocity = inic;
+        cir.get(i).velocity = new PVector(0.0000, 0.0000);
       }
       control = control2;
     } else if ( field == false)
@@ -214,9 +212,22 @@ void setting()
         radius = mass  * 2;
         pozX = (width * new Random().nextFloat()) - radius;
         pozY =  (height * new Random().nextFloat()) - radius;
+        float border= 10;
+
+        //Checking whether circles are overlapping or outside the screen boundary.
+        if (i!=0)
+        {
+          for (int j = 0; j <i; j++)
+          {       
+            while (PVector.sub(new PVector(pozX, pozY), cir.get(j).point).mag() <= cir.get(j).radius + radius + border || pozY - radius <= border || pozY + radius >= height - border || pozX - radius <= border || pozX + radius >= width - border) {
+              pozX = (width * new Random().nextFloat());
+              pozY = (height * new Random().nextFloat());
+            }
+          }
+        }
 
         cir.add(new Circum( pozX, pozY, radius, mass));
-        cir.get(i).setSpeed(inic);
+        cir.get(i).setSpeed(new PVector(0.0000, 0.0000));
       }
       control = control2;
     }
@@ -226,8 +237,8 @@ void setting()
 
     if (pendul == true)
     {
-
-      for (int i = ile_pend2 - 1; i >= 0; i--)
+      size = pend.size();
+      for (int i = size - 1; i >= 0; i--)
       {
         pend.remove(i);
       }
@@ -237,23 +248,24 @@ void setting()
       ile_pend2 = ile_pend;
 
       a1 = PI / (randa.nextFloat() + 0.5);
-      pend.add(new pendulum(a1, new PVector(width / 2, height/3)));
+      pend.add(new Pendulum(a1, new PVector(width / 2, height/3)));
 
       for (int i = 1; i <ile_pend; i++)
       {
         a1 = PI / (randa.nextFloat() + 0.5);
-        pend.add(new pendulum(a1, pend.get(i - 1).position));
+        pend.add(new Pendulum(a1, pend.get(i - 1).position));
       }
     } else if (pendul == false)
     {
-      for (int i = ile - 1; i >= 0; i--)
+      size = doublePend.size();
+      for (int i = size - 1; i >= 0; i--)
       {
         doublePend.remove(i);
       }
 
       for (int i = 0; i< ile2; i++)
       {
-        doublePend.add(new double_pendulum(PI / (randa.nextFloat() + 1), PI / (randa.nextFloat() + 3), 400, 250, 40, 20));
+        doublePend.add(new DoublePendulum(PI / (randa.nextFloat() + 1), PI / (randa.nextFloat() + 3), 400, 250, 40, 20));
         doublePend.get(i).set0();
       }
 
@@ -272,17 +284,17 @@ void setting()
     break;
   case 4:
 
-    stren.reset();
+    strenCir.reset();
     break;
   case 5:
     fourier.reset();
     break;
   }
 
-  StartedMillis = millis();
+  startedMillis = millis();
 }
 
-void strangeCircles()
+void strangeCirclesManagement()
 {
   pushMatrix();
   translate(width / 2, height/2);
@@ -292,7 +304,7 @@ void strangeCircles()
   strokeWeight(2);
   noFill();
   circle(0, 0, 100);
-  stren.strange();
+  strenCir.strange();
   popMatrix();
 }
 
@@ -306,20 +318,20 @@ void draw() {
 
     if (field)
     { 
-      centralField();
+      centralFieldManagement();
     } else 
     {
-      homogeneousField();
+      homogeneousFieldManagement();
     }
     break;
   case 2:
 
     if (pendul)
     {
-      singlePendulum();
+      singlePendulumManagement();
     } else 
     {
-      dublePendulum();
+      dublePendulumManagement();
     }
     break;
   case 3:
@@ -338,7 +350,7 @@ void draw() {
     break;
   case 4:
 
-    strangeCircles();
+    strangeCirclesManagement();
     break; 
   case 5:
 
@@ -359,7 +371,7 @@ void draw() {
   if (!stopStart)
   {
     changePositionByTheMouse(currentIndex);
-    changeVelocityByTheMouse(currentIndex);
+    // changeVelocityByTheMouse(currentIndex);
     contextMenu(currentIndex);
   }
 

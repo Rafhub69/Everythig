@@ -64,7 +64,6 @@ class BonaciSequence
         rotate( j * (PI/2));
 
         rect(0, 0, scene * tab[j], scene * tab[j]);
-        // scene * tab[j],scene * tab[j], scene * tab[j],scene * tab[j]
         strokeWeight(10);
 
         popMatrix();

@@ -1,7 +1,7 @@
 class LisajousTable {
 
-  int w = 100, cols, rows;
-  float angle = 0, angleChange1 = 0.01, angleChange2 = 0.01, offset = w/2, diameter = w - 0.2*w, radius = diameter/2;
+  int size = 100, cols, rows;
+  float angle = 0, angleChange1 = 0.01, angleChange2 = 0.01, offset = size/2, diameter = size - 0.2*size, radius = diameter/2;
   float cx = 0, cy = 0, x = 0, y = 0;
   ArrayList<ArrayList<Curve>> curves = new ArrayList<ArrayList<Curve>>();
   boolean whatLine = true; //true - horizontal line, false - vertical line
@@ -10,8 +10,8 @@ class LisajousTable {
   LisajousTable()
   {
     //Calculation of the number of circles vertically and horizontally
-    cols = (width - int(offset)) / w;
-    rows = (height - int(offset))/ w;
+    cols = (width - int(offset)) / size;
+    rows = (height - int(offset))/ size;
 
     for (int j = 0; j < rows; j++) {
       curves.add(new ArrayList<Curve>());
@@ -26,7 +26,7 @@ class LisajousTable {
 
     angleChange1 = change;
     angleChange2 = change;
-    
+
     for (int j = 0; j < rows; j++) 
     {
       for (int i = 0; i < cols; i++) 
@@ -34,13 +34,13 @@ class LisajousTable {
         curves.get(j).get(i).reset();
       }
     }
-    
-    offset = w/2;
-    diameter = w - 0.2*w;
+
+    offset = size/2;
+    diameter = size - 0.2*size;
     radius = diameter/2;
-    
-    cols = (width - int(offset)) / w;
-    rows = (height - int(offset))/ w;
+
+    cols = (width - int(offset)) / size;
+    rows = (height - int(offset))/ size;
 
     for (int j = 0; j < rows; j++) {
       curves.add(new ArrayList<Curve>());
@@ -74,12 +74,12 @@ class LisajousTable {
 
       if (whatLine)
       {
-        cx = w + i * w + offset;
+        cx = size + i * size + offset;
         cy = offset;
       } else
       {
         cx = offset;
-        cy = w + i * w + offset;
+        cy = size + i * size + offset;
       }
 
       x = radius * cos(angle * (i + 1) - HALF_PI);
@@ -134,7 +134,11 @@ class LisajousTable {
 
     for (int j = 0; j < rows; j++) {
       for (int i = 0; i < cols; i++) {
-        curves.get(j).get(i).addPoint();
+        if (lisajousAction )
+        {
+         curves.get(j).get(i).addPoint();
+        }
+        
         curves.get(j).get(i).show();
       }
     }
