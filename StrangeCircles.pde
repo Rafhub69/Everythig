@@ -27,7 +27,7 @@ class StrengeCircles
     fun[2] = new Function(point[i].y, point[i].y);
   }
 
-  void strange()
+  void strangeCircle()
   {
     if (strangeCirclesAction)
     {

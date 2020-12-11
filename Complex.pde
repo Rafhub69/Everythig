@@ -27,15 +27,6 @@ class Complex
     amp = a;
     phase = p;
   }
-  
-  void reset()
-  {
-    re = 0;
-    im = 0;
-    freq = 0;
-    amp = 0;
-    phase = 0;
-  }
 
   Complex mult(Complex other)
   {
