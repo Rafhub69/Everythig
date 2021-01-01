@@ -3,20 +3,18 @@ class DoublePendulum {
   PVector[]  point = new PVector[500];
   PVector[]  position = new PVector[2];
   PVector origin = new PVector(width / 2, height/3); 
-  float g = 0.4905, delta_t = 1;
+  float g = 3.924;
   float length1, length2; // lenght of pendulums
   float mas1, mas2; //mass of pendulum
   float a1_vel = 0, a2_vel = 0; // angular velocity
   float a1_acc = 0, a2_acc = 0; //angular acceleration 
   float a1, a2; //angle
   float radius1 = 30, radius2 = 20; //radius
-  float den = 0, den2 = 0;
-  float[] counter = new float[8];
   float cx = 0, cy = 0;
   float px2 = -1, py2 = -1;
   int i = 0, current = i, iko = 0;
   HashMap<String, Float> fieldVariables = new HashMap<String, Float>(17);
-  Function[] fun = new Function[6];
+  ArrayList<LotsOfFunctions> colorDetermination;
   ControlP5 cp5;
 
   DoublePendulum(float a1_, float a2_, float length1_, float length2_, float mas1_, float mas2_)
@@ -30,12 +28,14 @@ class DoublePendulum {
 
     position[0] = new PVector(0, 0);
     position[1] = new PVector(0, 0);
+    colorDetermination  = new ArrayList<LotsOfFunctions>(2);
 
     for (int i = 0; i<point.length; i++)
     {
       point[i] = new PVector(position[1].x, position[1].y);
     }
 
+    update();
     inicjalization();
   }
 
@@ -62,19 +62,14 @@ class DoublePendulum {
     {
       point[i] = new PVector(position[1].x, position[1].y);
     }
-    
+
     inicjalization();
   }
 
   void inicjalization()
   {
-
-    fun[0] = new Function(a1_vel, a1_vel);
-    fun[1] = new Function(a1_acc, a1_acc);
-    fun[2] = new Function(a1, a1);
-    fun[3] = new Function(a2_vel, a2_vel);
-    fun[4] = new Function(a2_acc, a2_acc);
-    fun[5] = new Function(a2, a2);
+    colorDetermination.add(new LotsOfFunctions(a1_vel, a1_acc, a1));
+    colorDetermination.add(new LotsOfFunctions(a2_vel, a2_acc, a2));
 
     fieldVariables.put("radius1", radius1);
     fieldVariables.put("mas1", mas1);
@@ -107,12 +102,12 @@ class DoublePendulum {
     a1 = PI / (randa.nextInt(5) + 1);
     a2 = PI / (randa.nextInt(5) + 1);
 
-    if ( a1==PI||a2 == PI)
+    while ( a1==PI||a2 == PI)
     {
       a1+=0.01;
       a2+=randa.nextFloat();
     }
-    double_pen();
+    update();
 
     for (int j = 0; j<point.length; j++)
     {
@@ -127,16 +122,19 @@ class DoublePendulum {
   }
 
 
-  void double_pen()
+  void update()
   {
+    float den = 0, den2 = 0;
+    float[] counter = new float[8];
+
     //calculation of acceleration, velocity and position of double pendulum
     counter[0] = -(g) * (2 * mas1 + mas2) * sin(a1);
     counter[1] = -mas2 * (g)*sin(a1 - 2 * a2);
     counter[2] = -2 * sin(a1 - a2) * mas2;
     counter[3] = a2_vel * a2_vel * length2 + a1_vel * a1_vel * length1 * cos(a1 - a2);
-
     den = length1 * (2 * mas1 + mas2 - mas2 * cos(2 * a1 - 2 * a2));
     a1_acc = (counter[0] +  counter[1] + counter[2] * counter[3]) / den;
+
     counter[4] = 2 * sin(a1 - a2);
     counter[5] = (a1_vel * a1_vel * length1 * (mas1 + mas2));
     counter[6] = (g) * (mas1 + mas2) * cos(a1);
@@ -150,8 +148,8 @@ class DoublePendulum {
     position[1].x = position[0].x + length2 * sin(a2);
     position[1].y = position[0].y + length2 * cos(a2);
 
-    a1_vel += a1_acc;
-    a2_vel += a2_acc;
+    a1_vel += a1_acc * delta_time;
+    a2_vel += a2_acc * delta_time;
     a1 += a1_vel;
     a2 += a2_vel;
 
@@ -167,12 +165,12 @@ class DoublePendulum {
     switch(number) {
 
     case 0:
-      a1_acc = mag(PVector.div(f, mass).x, PVector.div(f, mass).y);
+      a1_acc = mag(PVector.div(f, mas1).x, PVector.div(f, mas1).y);
       a1_vel += a1_acc;
       position[0].add(a1_vel, a1_vel);
 
     case 1:
-      a2_acc = mag(PVector.div(f, mass).x, PVector.div(f, mass).y);
+      a2_acc = mag(PVector.div(f, mas2).x, PVector.div(f, mas2).y);
       a2_vel += a2_acc;
       position[1].add(a2_vel, a2_vel);
     }
@@ -181,7 +179,7 @@ class DoublePendulum {
   void trace(int k, int ile)
   {
     iko = k;
-    double_pen();
+    update();
     point[i].x = position[1].x;
     point[i].y = position[1].y;
 
@@ -249,12 +247,8 @@ class DoublePendulum {
     }
 
     //finding the smallest and largest limit values used to change the color of objects
-    fun[0].findingTheItem(a1_vel);
-    fun[1].findingTheItem(a1_acc);
-    fun[2].findingTheItem(a1);
-    fun[3].findingTheItem(a2_vel);
-    fun[4].findingTheItem(a2_acc);
-    fun[5].findingTheItem(a2);
+    colorDetermination.get(0).findingSmallestAndBiggestValue(a1_vel, a1_acc, a1);
+    colorDetermination.get(1).findingSmallestAndBiggestValue(a2_vel, a2_acc, a2);
 
     //drawing double pendulum
     strokeWeight(2);
@@ -264,11 +258,11 @@ class DoublePendulum {
     line(position[0].x, position[0].y, position[1].x, position[1].y);
     //drawing first ball
     stroke(255, 0, 0);
-    fill((map( a1_vel, fun[0].smallestItem, fun[0].largestItem, 10, 255)), (map( a1_acc, fun[1].smallestItem, fun[1].largestItem, 10, 255)), (map(a1, fun[2].smallestItem, fun[2].largestItem, 10, 255)));
+    fill(colorDetermination.get(0).valueMapping(0, a1_vel, 10, 255), colorDetermination.get(0).valueMapping(1, a1_acc, 10, 255), colorDetermination.get(0).valueMapping(2, a1, 10, 255));
     circle(position[0].x, position[0].y, radius1 * 2);
     //drawing second ball
     stroke(0, 0, 255);
-    fill( (map(a2_vel, fun[3].smallestItem, fun[3].largestItem, 10, 255)), (map( a2_acc, fun[4].smallestItem, fun[4].largestItem, 10, 255)), (map(a2, fun[5].smallestItem, fun[5].largestItem, 10, 255)));
+    fill(colorDetermination.get(1).valueMapping(0, a2_vel, 10, 255), colorDetermination.get(1).valueMapping(1, a2_acc, 10, 255), colorDetermination.get(1).valueMapping(2, a2, 10, 255));
     circle(position[1].x, position[1].y, radius2 * 2);
     stroke(0, 0, 255);
     fill(255, 0, 0);

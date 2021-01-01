@@ -14,7 +14,8 @@ void mousePressed() {
         for (int i = 0; i<cir.size(); i++)
         {
           float d = dist(mouseX, mouseY, cir.get(i).point.x, cir.get(i).point.y);
-          if (d <= cir.get(i).radius ) {
+          if (d <= cir.get(i).radius ) 
+          {
             currentIndex = i;
             if (mouseButton == LEFT)
             {
@@ -33,7 +34,8 @@ void mousePressed() {
         for (int j = 0; j<cir.size(); j++)
         {
           float d = dist(mouseX, mouseY, cir.get(j).point.x, cir.get(j).point.y);
-          if (d <= cir.get(j).radius) {
+          if (d <= cir.get(j).radius) 
+          {
             currentIndex = j;
             if (mouseButton == LEFT)
             {
@@ -52,12 +54,12 @@ void mousePressed() {
     case 2:
       if (pendul)
       {
-        for (int k = 0; k< pend.size(); k++)
+        for (int k = 0; k< singlePend.size(); k++)
         {
-          float d = dist(mouseX, mouseY, pend.get(k).position.x, pend.get(k).position.y);
+          float d = dist(mouseX, mouseY, singlePend.get(k).position.x, singlePend.get(k).position.y);
 
-          if (d <= cir.get(k).radius) {
-
+          if (d <= cir.get(k).radius) 
+          {
             currentIndex = k;
 
             if (mouseButton == LEFT)
@@ -79,7 +81,10 @@ void mousePressed() {
           float d1 = dist(mouseX, mouseY, doublePend.get(l).position[0].x, doublePend.get(l).position[0].y);
           float d2 = dist(mouseX, mouseY, doublePend.get(l).position[1].x, doublePend.get(l).position[1].y);
 
-          if (d1 <= doublePend.get(l).radius1) {
+          if (d1 <= doublePend.get(l).radius1) 
+          {
+            currentIndex = l;
+
             if (mouseButton == LEFT)
             {
               changePositionByMouse[3] = true;
@@ -90,7 +95,10 @@ void mousePressed() {
             {
               scrollMenuOpenByMouse[3] = true;
             }
-          } else if (d2 <= doublePend.get(l).radius2) {
+          } else if (d2 <= doublePend.get(l).radius2) 
+          {
+            currentIndex = l;
+
             if (mouseButton == LEFT)
             {
               changePositionByMouse[4] = true;
@@ -102,7 +110,6 @@ void mousePressed() {
               scrollMenuOpenByMouse[4] = true;
             }
           }
-          currentIndex = l;
         }
       }
       break;
@@ -182,7 +189,6 @@ void mouseReleased() {
     case 4:
       break; 
     case 5:
-
       fourier.mouseRelis();
       break;
     }
@@ -204,49 +210,55 @@ void keyPressed()
     if (key == 'M' ||key == 'm')
     { 
       information = !information; //menu
-    } else if (key == (shortcutHomogenField + 32) ||key == shortcutHomogenField)
-    {
+    } else if (key == (shortcutTable.get("shortcutHomogenField") + 32) ||key == shortcutTable.get("shortcutHomogenField"))
+    {  
       mode = 1;
       field = false; // f - homogeneous field 
       resetToBegining();
-    } else if (key == (shortcutCentralField + 32) ||key == shortcutCentralField)
+    } else if (key == (shortcutTable.get("shortcutCentralField") + 32) ||key == shortcutTable.get("shortcutCentralField"))
     {
       mode = 1;
       field = true; //v - central field
       resetToBegining();
-    } else if (key == (shortcutSinglePendulum + 32) ||key ==  shortcutSinglePendulum)
+    } else if (key == (shortcutTable.get("shortcutSinglePendulum") + 32) ||key ==  shortcutTable.get("shortcutSinglePendulum"))
     {
       mode = 2;
       pendul = true; //p - single pendulum
       resetToBegining();
-    } else if (key == (shortcutDoublePendulum + 32) ||key == shortcutDoublePendulum)
+    } else if (key == (shortcutTable.get("shortcutDoublePendulum") + 32) ||key == shortcutTable.get("shortcutDoublePendulum"))
     {
       mode = 2;
       pendul = false; //d - double pendulum
       resetToBegining();
-    } else if (key == (shortcutLisajousTable + 32) ||key == shortcutLisajousTable)
+    } else if (key == (shortcutTable.get("shortcutLisajousTable") + 32) ||key == shortcutTable.get("shortcutLisajousTable"))
     {
       mode = 3;
       wholeScreen = true;
       resetToBegining();
-    } else if (key == (shortcutBonaciSeqense + 32) ||key == shortcutBonaciSeqense)
+    } else if (key == (shortcutTable.get("shortcutBonaciSeqense") + 32) ||key == shortcutTable.get("shortcutBonaciSeqense"))
     {
       mode = 3;
       wholeScreen = false;
       resetToBegining();
-    } else if (key == (shortcutStrangeCircles + 32) ||key == shortcutStrangeCircles)
+    } else if (key == (shortcutTable.get("shortcutStrangeCircles") + 32) ||key == shortcutTable.get("shortcutStrangeCircles"))
     {
-      mode = 4;//c - strange circles
+      mode = 4;//strange circles
+      cirOrNpendul = true;
       resetToBegining();
-    } else if (key == (shortcutFourierTransform + 32) ||key == shortcutFourierTransform)
+    } else if (key == (shortcutTable.get("shortcutNpendulum") + 32) ||key == shortcutTable.get("shortcutNpendulum"))
+    {
+      mode = 4;//nth pendulum
+      cirOrNpendul = false;
+      resetToBegining();
+    } else if (key == (shortcutTable.get("shortcutFourierTransform") + 32) ||key == shortcutTable.get("shortcutFourierTransform"))
     {
       mode = 5;//t - fourier transformation
       resetToBegining();
-    } else if (key == (shortcutReset + 32) ||key == shortcutReset)
+    } else if (key == (shortcutTable.get("shortcutReset") + 32) ||key == shortcutTable.get("shortcutReset"))
     {//reset
       background(255);
       resetToBegining();
-    } else if (key == (shortcutDisableEnableAll + 32) ||key == shortcutDisableEnableAll)
+    } else if (key == (shortcutTable.get("shortcutDisableEnableAll") + 32) ||key == shortcutTable.get("shortcutDisableEnableAll"))
     {//Disable/Enable menu and all buttons
       cp5.get(Button.class, "Menu").setVisible(!cp5.get(Button.class, "Menu").isVisible());
       cp5.get(Button.class, "Reset").setVisible(!cp5.get(Button.class, "Reset").isVisible());
@@ -255,7 +267,7 @@ void keyPressed()
       {
         information = !information;
       }
-    } else if (key == (shortcutStopStartAll + 32) ||key == shortcutStopStartAll)
+    } else if (key == (shortcutTable.get("shortcutStopStartAll") + 32) ||key == shortcutTable.get("shortcutStopStartAll"))
     {//stopping and starting the program
       StartStop();
     } else  if (key == 'K' ||key == 'k')
@@ -264,9 +276,6 @@ void keyPressed()
       {
         information = !information;
       }  
-      cp5.get(Button.class, "Menu").setVisible(!cp5.get(Button.class, "Menu").isVisible());
-      cp5.get(Button.class, "Reset").setVisible(!cp5.get(Button.class, "Reset").isVisible());
-      cp5.get(Button.class, "StartStop").setVisible(!cp5.get(Button.class, "StartStop").isVisible());
 
       if (mode == 1 & field == true)
       {
@@ -286,14 +295,17 @@ void keyPressed()
       } else if (mode == 3 & wholeScreen == false)
       {    
         //pozYSet = cp5.getController("Bonaci").getPosition();
-      } else if (mode == 4)
+      } else if (mode == 4 && cirOrNpendul == true)
       {
         pozYSet = cp5.getController("Circle").getPosition();
+      } else if (mode == 4 && cirOrNpendul == false)
+      {
+        pozYSet = cp5.getController("Npendul").getPosition();
       } else if (mode == 5)
       {
-        pozYSet = cp5.getController("Fourier").getPosition();
+        pozYSet = cp5.getController("FourTrans").getPosition();
       }
-      
+
       cp5.get(Button.class, "Set").setPosition(pozXSet, pozYSet[1]).setVisible(true);
       cp5.get(Textfield.class, "input").setPosition(pozXSet, pozYSet[1]+button_height).setVisible(true).setFocus(true);
       resetToBegining();
@@ -303,48 +315,52 @@ void keyPressed()
 
 void checkingIfMouseIsOver()
 {
-  if (cp5.isMouseOver(cp5.getController("Menu"))) {
-    cp5.getController("Set").hide();
-    cp5.getController("Load").hide();
-    cp5.getController("Save").hide();
-    cp5.getController("input").hide();
-    textFont(font, 20);
-    textLeading(18);
-    textAlign(LEFT);
-    String advice = " Nie ma znaczenia jaka jest wielkość liter.\n "+ shortcutHomogenField + "- pole jednorodne\n "+ shortcutCentralField +" - pole centralne\n "+ shortcutSinglePendulum +" - pojedyncze wahadło\n "
-      + shortcutDoublePendulum  +" - podwójne wahadło\n "+ shortcutFourierTransform + "- transformata furiera\n "+ shortcutLisajousTable  +" - tablica Lisajous\n "+ shortcutBonaciSeqense +" - sekwencja fibonacziego\n "
-      + shortcutStrangeCircles +" - dziwne koła\n K - zmiana ilości obiektów\n " + shortcutReset + " - reset\n " + shortcutDisableEnableAll + " - Wyłączenie pokazywania menu\n " + shortcutStopStartAll + " - Zatrzymanie obiektów\n"; 
-    text(advice, 110, 20, 660, 330);
-  } else if (cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")))
+  if (cp5.isMouseOver(cp5.getController("Menu")) || cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("StartStop")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")) || cp5.isMouseOver(cp5.getController("Lisajous")) || cp5.isMouseOver(cp5.getController("Circle")) || cp5.isMouseOver(cp5.getController("Npendul"))) 
   {
+
+    if (cp5.isMouseOver(cp5.getController("Menu")) || cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")) || cp5.isMouseOver(cp5.getController("StartStop")))
+    {
+      cp5.getController("input").hide();
+    }
+
+    if (cp5.isMouseOver(cp5.getController("Menu"))) {
+      textFont(font, 20);
+      textLeading(18);
+      textAlign(LEFT);
+      String advice = " Nie ma znaczenia jaka jest wielkość liter.\n "+ shortcutTable.get("shortcutHomogenField") + " - pole jednorodne\n "+ shortcutTable.get("shortcutCentralField") +" - pole centralne\n "
+        + shortcutTable.get("shortcutSinglePendulum") +" - pojedyncze wahadło\n " + shortcutTable.get("shortcutDoublePendulum")  +" - podwójne wahadło\n "+ shortcutTable.get("shortcutFourierTransform") + " - transformata furiera\n "
+        + shortcutTable.get("shortcutLisajousTable")  +" - tablica Lisajous\n " + shortcutTable.get("shortcutBonaciSeqense") +" - sekwencja fibonacziego\n "+ shortcutTable.get("shortcutNpendulum") +" - wahadło z n kół\n " + shortcutTable.get("shortcutStrangeCircles") +" - dziwne koła\n K - zmiana ilości obiektów\n " 
+        + shortcutTable.get("shortcutReset") + " - reset\n " + shortcutTable.get("shortcutDisableEnableAll") + " - Wyłączenie pokazywania menu\n " + shortcutTable.get("shortcutStopStartAll") + " - Zatrzymanie obiektów\n"; 
+      text(advice, 110, 20, 660, 330);
+    } else if (cp5.isMouseOver(cp5.getController("Lisajous")))
+    {
+      Disclosures_set("Lisajous");
+      cp5.get(Textfield.class, "input").setLabel("Ustaw wielkość okręgów");
+    } else if (cp5.isMouseOver(cp5.getController("Circle")))
+    {
+      Disclosures_set("Circle");
+      cp5.get(Textfield.class, "input").setLabel("Ustaw wielkość zmiany kąta");
+    } else if (cp5.isMouseOver(cp5.getController("Npendul")))
+    {
+      Disclosures_set("Npendul");
+      cp5.get(Textfield.class, "input").setLabel("Ustaw ilość wahadeł n-tego stopnia");
+    }
+
     cp5.getController("Set").hide();
     cp5.getController("Load").hide();
     cp5.getController("Save").hide();
-    cp5.getController("input").hide();
   } else if (cp5.isMouseOver(cp5.getController("Central"))) {
-    cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość obiektów w centralnym polu grawitacyjnym");
     Disclosures_set("Central");
+    cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość obiektów w centralnym polu grawitacyjnym");
   } else if (cp5.isMouseOver(cp5.getController("Homogen"))) {
-    cp5.get(Textfield.class, "input").setLabel("Ustaw ilość obiektów w jednorodnym polu grawitacyjnym");
     Disclosures_set("Homogen");
+    cp5.get(Textfield.class, "input").setLabel("Ustaw ilość obiektów w jednorodnym polu grawitacyjnym");
   } else if (cp5.isMouseOver(cp5.getController("Single"))) {
     Disclosures_set("Single");   
     cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość pojedyńczych wahadeł");
   } else if (cp5.isMouseOver(cp5.getController("Dual"))) {
-    cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość podwójnych wahadeł");
     Disclosures_set("Dual");
-  } else if (cp5.isMouseOver(cp5.getController("Lisajous"))) {
-    Disclosures_set("Lisajous");
-    cp5.get(Textfield.class, "input").setLabel("Ustaw wielkość okręgów");
-    cp5.getController("Set").hide();
-    cp5.getController("Load").hide();
-    cp5.getController("Save").hide();
-  } else if (cp5.isMouseOver(cp5.getController("Circle"))) {
-    Disclosures_set("Circle");
-    cp5.get(Textfield.class, "input").setLabel("Ustaw wielkość zmiany kąta");
-    cp5.getController("Set").hide();
-    cp5.getController("Load").hide();
-    cp5.getController("Save").hide();
+    cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość podwójnych wahadeł");
   }
 }
 
@@ -367,17 +383,17 @@ void contextMenu(int currentIndex)
     cp5.get(Slider.class, "Springness").setValue(cir.get(i).fieldVariables.get("springness")).setCaptionLabel("springness").setVisible(true);
   } else if (contextMenuOpenByMouse[2])
   {
-    pend.get(i).showingData();
+    singlePend.get(i).setingFieldVariables();
 
-    x = pend.get(i).position.x + 156 + cir.get(i).radius> width ? pend.get(i).position.x - ((pend.get(i).position.x + 156) - width ) : pend.get(i).position.x + pend.get(i).radius;
-    y = pend.get(i).position.y + 56 + cir.get(i).radius> height ? pend.get(i).position.y - ((pend.get(i).position.x + 56) - height ) : pend.get(i).position.y + pend.get(i).radius;
+    x = singlePend.get(i).position.x + 156 + cir.get(i).radius> width ? singlePend.get(i).position.x - ((singlePend.get(i).position.x + 156) - width ) : singlePend.get(i).position.x + singlePend.get(i).radius;
+    y = singlePend.get(i).position.y + 56 + cir.get(i).radius> height ? singlePend.get(i).position.y - ((singlePend.get(i).position.x + 56) - height ) : singlePend.get(i).position.y + singlePend.get(i).radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
 
     cp5.get(Slider.class, "Mass").setVisible(false);
-    cp5.get(Slider.class, "Radius").setValue(pend.get(i).fieldVariables.get("radius")).setCaptionLabel("radius").setVisible(true); 
-    cp5.get(Slider.class, "Gravity").setValue(pend.get(i).fieldVariables.get("gravity")).setCaptionLabel("gravity").setVisible(true); 
-    cp5.get(Slider.class, "Springness").setValue(pend.get(i).fieldVariables.get("damping")).setCaptionLabel("damping").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(singlePend.get(i).fieldVariables.get("radius")).setCaptionLabel("radius").setVisible(true); 
+    cp5.get(Slider.class, "Gravity").setValue(singlePend.get(i).fieldVariables.get("gravity")).setCaptionLabel("gravity").setVisible(true); 
+    cp5.get(Slider.class, "Springness").setValue(singlePend.get(i).fieldVariables.get("damping")).setCaptionLabel("damping").setVisible(true);
   } else if (contextMenuOpenByMouse[3])
   {
     doublePend.get(i).setingFieldVariables();
@@ -514,14 +530,14 @@ void changePositionByTheMouse(int currentIndex)
     }
   } else if (changePositionByMouse[2])
   {
-    pend.get(i).position.x = mouseX;
-    pend.get(i).position.y = mouseY;
+    singlePend.get(i).position.x = mouseX;
+    singlePend.get(i).position.y = mouseY;
 
-    diff = PVector.sub(pend.get(i).origin, new PVector(mouseX, mouseY));      // Difference between 2 points
-    pend.get(i).angle = atan2(-1*diff.y, diff.x) - radians(90);                      // Angle relative to vertical axis
+    diff = PVector.sub(singlePend.get(i).origin, new PVector(mouseX, mouseY));      // Difference between 2 points
+    singlePend.get(i).angle = atan2(-1*diff.y, diff.x) - radians(90);                      // Angle relative to vertical axis
 
-    pend.get(i).lengh = diff.mag();
-    pend.get(i).penVel = 0;
+    singlePend.get(i).lengh = diff.mag();
+    singlePend.get(i).penVel = 0;
   } else if (changePositionByMouse[3])
   {
     doublePend.get(i).position[0].x = mouseX;

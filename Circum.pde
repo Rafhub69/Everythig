@@ -66,7 +66,7 @@ class Circum {
     PVector f = force.copy();
     acceleration.add(PVector.div( f, mass));
     velocity.add(acceleration);
-    point.add(velocity);
+    point.add(PVector.mult(velocity,delta_time));
     gre = acceleration.copy();
 
     // If out of bounds

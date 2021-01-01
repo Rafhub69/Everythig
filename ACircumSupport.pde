@@ -132,7 +132,7 @@ void centralFieldManagement()
 void homogeneousFieldManagement()
 {
   PVector  air_replica = new PVector(0.004, 0.004);
-  PVector  grav = new PVector(0.00, 3.00);
+  PVector  grav = new PVector(0.00, 9.00);
   PVector air;
 
   if (homogeneousAction)

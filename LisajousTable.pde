@@ -1,7 +1,7 @@
 class LisajousTable {
 
   int size = 100, cols, rows;
-  float angle = 0, angleChange1 = 0.01, angleChange2 = 0.01, offset = size/2, diameter = size - 0.2*size, radius = diameter/2;
+  float angle = 0, angleChange1 = 0.05, angleChange2 = 0.05, offset = size/2, diameter = size - 0.2*size, radius = diameter/2;
   float cx = 0, cy = 0, x = 0, y = 0;
   ArrayList<ArrayList<Curve>> curves = new ArrayList<ArrayList<Curve>>();
   boolean whatLine = true; //true - horizontal line, false - vertical line
@@ -143,7 +143,7 @@ class LisajousTable {
       }
     }
 
-    angle -= angleChange1;
+    angle -= angleChange1 * delta_time;
 
     // If the angle is - two pi, the first circle has traveled the entire lap.
     if (angle < -TWO_PI) {
