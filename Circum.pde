@@ -1,13 +1,13 @@
 class Circum {
-  int max_velocity = 15;
-  float radius, mass, ref = 0.5, springness = 0.9999;
+  int max_velocity = 15;  
+  PVector gre = new PVector(0, 0);  
   PVector  point = new PVector(0, 0);
   PVector  acceleration = new PVector(0, 0);
-  PVector  velocity = new PVector(new Random().nextInt(max_velocity) + 0.05, -1 * (new Random().nextInt(max_velocity) + 0.05));
-  PVector gre = new PVector(0, 0);
+  float radius, mass, ref = 0.5, springness = 0.9999;
   HashMap<String, Float> fieldVariables = new HashMap<String, Float>(10);
+  PVector  velocity = new PVector(new Random().nextInt(max_velocity) + 0.05, -1 * (new Random().nextInt(max_velocity) + 0.05));  
+  
   Function[] fun = new Function[6];
-
 
   Circum() {
     mass = 5 * new Random().nextFloat() + 1;
@@ -22,8 +22,8 @@ class Circum {
     this();
     point.x = x_;
     point.y = y_;
-    radius = radius_;
     mass = mass_;
+    radius = radius_; 
 
     inicialization();
   }
@@ -50,14 +50,14 @@ class Circum {
     fun[4] = new Function(gre.x + 0.005, gre.x - 0.005);
     fun[5] = new Function(velocity.x - 0.01, max_velocity);
 
-    fieldVariables.put("radius", radius);
-    fieldVariables.put("mass", mass);
-    fieldVariables.put("springness", springness);
     fieldVariables.put("ref", ref);
+    fieldVariables.put("mass", mass);   
+    fieldVariables.put("radius", radius);  
     fieldVariables.put("point.x", point.x);
     fieldVariables.put("point.y", point.y);
     fieldVariables.put("velocity.x", velocity.x);
     fieldVariables.put("velocity.y", velocity.y);
+    fieldVariables.put("springness", springness);   
     fieldVariables.put("acceleration.x", acceleration.x);
     fieldVariables.put("acceleration.y", acceleration.y);
   }
@@ -93,14 +93,14 @@ class Circum {
 
   int showingData()
   {
-    fieldVariables.replace("radius", radius);
-    fieldVariables.replace("mass", mass);
-    fieldVariables.replace("springiness", springness);
     fieldVariables.replace("ref", ref);
+    fieldVariables.replace("mass", mass);    
+    fieldVariables.replace("radius", radius);    
     fieldVariables.replace("point.x", point.x);
     fieldVariables.replace("point.y", point.y);
     fieldVariables.replace("velocity.x", velocity.x);
     fieldVariables.replace("velocity.y", velocity.y);
+    fieldVariables.replace("springiness", springness);   
     fieldVariables.replace("acceleration.x", acceleration.x);
     fieldVariables.replace("acceleration.y", acceleration.y);
 

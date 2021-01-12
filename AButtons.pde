@@ -1,13 +1,13 @@
-void creatingButtons(int he)
+void creatingButtons(int he, PFont inputFont, PFont font_)
 {
   int hi = 1;
 
   //creating buttons
   Group menu = cp5.addGroup("contextMenu").disableCollapse().addCloseButton().setCaptionLabel("Informacje").hide();
-  cp5.addSlider("Radius").setGroup(menu).setPosition(0, 0).setRange(5, 50);// position is relative to menu group
-  cp5.addSlider("Mass").setGroup(menu).setPosition(0, 15).setRange(5, 50); 
+  cp5.addSlider("Mass").setGroup(menu).setPosition(0, 15).setRange(5, 50); // position is relative to menu group
+  cp5.addSlider("Radius").setGroup(menu).setPosition(0, 0).setRange(5, 50);
+  cp5.addSlider("Gravity").setGroup(menu).setPosition(0, 15).setRange(0.01, 1);  
   cp5.addSlider("Springness").setGroup(menu).setPosition(0, 30).setRange(0.01, 1);
-  cp5.addSlider("Gravity").setGroup(menu).setPosition(0, 15).setRange(0.01, 1);
 
 
   cp5.addButton("Start").setPosition(centerX, centerY).setSize(200, 60).setCaptionLabel("Start");
@@ -18,11 +18,10 @@ void creatingButtons(int he)
   cp5.addButton("Load").setPosition(pozXSet, 63).setSize(65, button_height).setCaptionLabel("Odczyt").hide();
   cp5.addButton("Set").setPosition(pozXSet, 63).setSize(70, button_height).setCaptionLabel("Ustawienia").hide();
 
-  cp5.addButton("Menu").setPosition(pozX, 1).setSize(button_width, button_height);
-  cp5.addButton("Reset").setPosition(pozX, he * hi).setSize(button_width, button_height);
+  cp5.addButton("Menu").setPosition(pozX, 1).setSize(button_width, button_height).hide();
+  cp5.addButton("Reset").setPosition(pozX, he * hi).setSize(button_width, button_height).hide();
   hi++;
-  cp5.addButton("StartStop").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Uruchomienie programu");
-
+  cp5.addButton("StartStop").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Uruchomienie programu").hide();
   hi++;
   cp5.addButton("Single").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Pojedyncze wahadło").hide().setValue(2);
   hi++;
@@ -39,13 +38,26 @@ void creatingButtons(int he)
   cp5.addButton("Circle").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Wzory").hide().setValue(4);
   hi++;
   cp5.addButton("Npendul").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Wahadło n-tego stopnia").hide().setValue(4);
+  cp5.addTextfield("degreesOfPendulum").setPosition(pozX + 308, he * hi + button_height).setSize(200, 40).setFont(font_).setFocus(false).setCaptionLabel("What degree of pendulum?").setColor(color(255, 0, 0)).hide().align(pozX + 328, he * hi + button_height + 40, pozX + 328, he * hi + button_height);
   hi++;
   cp5.addButton("FourTrans").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Transformata fouriera").hide().setValue(5);
   hi++;
-  cp5.addTextfield("input").setPosition(20, 100).setSize(200, 40).setFont(font).setFocus(false).setCaptionLabel(" ").setColor(color(255, 0, 0)).hide();
+  cp5.addTextfield("input").setPosition(20, 100).setSize(200, 40).setFont(inputFont).setFocus(false).setCaptionLabel(" ").setColor(color(255, 0, 0)).hide();
 }
 
 //reading input from buttons
+void Settings() {
+}
+
+void Exit() {
+  exit();
+}
+
+void Set() 
+{
+  resetToBegining();
+}
+
 void Homogen(int n) {
 
   CentralButton(n, false);
@@ -116,12 +128,17 @@ void Radius(float theValue)
     {
       if (doublePenIndex == 0)
       {
-        doublePend.get(currentIndex).radius1 = theValue;
+        doublePend.get(currentIndex).pen1.radius = theValue;
       } else if (doublePenIndex == 1)
       {
-        doublePend.get(currentIndex).radius2 = theValue;
+        doublePend.get(currentIndex).pen2.radius = theValue;
       }
     }
+  } else if (mode == 4)
+  {
+    int index = nPend.get(currentIndex).index;
+
+    nPend.get(currentIndex).singlePen.get(index).radius = theValue;
   }
 }
 
@@ -135,11 +152,16 @@ void Mass(float theValue)
   {
     if (doublePenIndex == 0)
     {
-      doublePend.get(currentIndex).mas1 = theValue;
+      doublePend.get(currentIndex).pen1.mass = theValue;
     } else if (doublePenIndex == 1)
     {
-      doublePend.get(currentIndex).mas2 = theValue;
+      doublePend.get(currentIndex).pen2.mass = theValue;
     }
+  } else if (mode == 4)
+  {
+    int index = nPend.get(currentIndex).index;
+
+    nPend.get(currentIndex).singlePen.get(index).radius = theValue;
   }
 }
 
@@ -163,6 +185,9 @@ void Springness(float theValue)
   } else if (mode == 2)
   {
     singlePend.get(currentIndex).damping = theValue;
+  } else if (mode == 4)
+  {
+    nPend.get(currentIndex).g = theValue;
   }
 }
 //A function that manages what happens when the program is stopped and started.
@@ -170,58 +195,49 @@ void StartStop() {
 
   stopStart = !stopStart;
 
-  centralAction = stopStart;
-  homogeneousAction = stopStart; 
   singleAction = stopStart; 
   doubleAction = stopStart;
-  lisajousAction = stopStart;
+  centralAction = stopStart; 
   nBonaciAction = stopStart;
-  strangeCirclesAction = stopStart;
-  fourierTransformAction = stopStart;
+  lisajousAction = stopStart;
   nPendulumAction = stopStart;
+  homogeneousAction = stopStart; 
+  strangeCirclesAction = stopStart;
+  fourierTransformAction = stopStart; 
 
   if (stopStart)
   {
     cp5.getController("StartStop").setCaptionLabel("Zatrzymanie programu");
   } else
   {
-    cp5.getController("StartStop").setCaptionLabel("Uruchomienie programu");
-    cp5.get("contextMenu").hide();
-    cp5.get(Slider.class, "Gravity").setVisible(false);
+    cp5.get("contextMenu").hide();          
     cp5.get(Slider.class, "Mass").setVisible(false);   
     cp5.get(Slider.class, "Radius").setVisible(false);
+    cp5.get(Slider.class, "Gravity").setVisible(false);
     cp5.get(Slider.class, "Springness").setVisible(false);
+    cp5.getController("StartStop").setCaptionLabel("Uruchomienie programu");
   }
 }
 
 void Start() {
-  cp5.get(Button.class, "Start").hide();
-  cp5.get(Button.class, "Settings").hide();
   cp5.get(Button.class, "Exit").hide();
+  cp5.get(Button.class, "Start").hide();  
+  cp5.get(Button.class, "Settings").hide();
+
   stopStart = true;
   startMenu = false;
-}
 
-void Settings() {
-}
-
-void Exit() {
-  exit();
-}
-
-
-void Set() 
-{
-  resetToBegining();
+  cp5.get(Button.class, "Menu").show();
+  cp5.get(Button.class, "Reset").show();
+  cp5.get(Button.class, "StartStop").show();
 }
 
 void Save()
 {  
-
-  //JSONObject js = new JSONObject();
-  ArrayList<JSONObject> jsonArray = new ArrayList<JSONObject>();
-  JSONArray values = new JSONArray();
+  
   String objectName = null;
+  JSONArray values = new JSONArray();
+  ArrayList<JSONObject> jsonArray = new ArrayList<JSONObject>();
 
   switch(mode) {
   case 1:
@@ -277,7 +293,7 @@ void Save()
     {
       for (int i = 0; i< nPend.size(); i++)
       {
-        doublePend.get(i).setingFieldVariables();
+        nPend.get(i).setingFieldVariables();
         jsonArray.add(new JSONObject());
         jsonArray.get(i).setFloat("Id", i);
         jsonArray.get(i).setString("Name", "nPend");
@@ -301,20 +317,13 @@ void Load()
   // Save();
   switch(mode) {
   case 1:
-
-    if (field)
-    { 
-      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveCir*.json"));
-    } else 
-    {
-      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveCir*.json"));
-    }
+    selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveCir*.json"));    
     break;
   case 2:
 
     if (pendul)
     {
-      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/savePend*.json"));
+      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveSinglePend*.json"));
     } else 
     {
       selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveDoublePend*.json"));
@@ -366,20 +375,22 @@ void ButtonManagement()
   if (information)
   {
     textAlign(LEFT, BOTTOM);
+    text(frameRate, width - 80, 40);
     long DurationMillis = millis() - startedMillis;
     text(formatMillis(DurationMillis), width - 136, 20);
-    text( frameRate, width - 80, 40);
+    
   }
 
-  cp5.get(Button.class, "Homogen").setVisible(information);
-  cp5.get(Button.class, "Central").setVisible(information);
-  cp5.get(Button.class, "Single").setVisible(information);
   cp5.get(Button.class, "Dual").setVisible(information);
-  cp5.get(Button.class, "Lisajous").setVisible(information);
   cp5.get(Button.class, "Bonaci").setVisible(information);
   cp5.get(Button.class, "Circle").setVisible(information);
-  cp5.get(Button.class, "FourTrans").setVisible(information);
+  cp5.get(Button.class, "Single").setVisible(information);
+  cp5.get(Button.class, "Homogen").setVisible(information);
+  cp5.get(Button.class, "Central").setVisible(information);
   cp5.get(Button.class, "Npendul").setVisible(information);
+  cp5.get(Button.class, "Lisajous").setVisible(information);
+  cp5.get(Button.class, "FourTrans").setVisible(information);
+
 }
 
 void Disclosures_set(String name)
@@ -389,11 +400,20 @@ void Disclosures_set(String name)
   cp5.getController("Set").setPosition(pozXSet, pozYSet[1]);
   cp5.getController("Load").setPosition(pozXSet + 70, pozYSet[1]);
   cp5.getController("Save").setPosition(pozXSet + 135, pozYSet[1]);
-  cp5.getController("input").setPosition(pozXSet, pozYSet[1]+button_height);   
+  cp5.getController("input").setPosition(pozXSet, pozYSet[1]+button_height);  
+  
   cp5.getController("Set").show();
   cp5.getController("Load").show();
   cp5.getController("Save").show();
   cp5.getController("input").show();
+
+  if (buttonName == "Npendul")
+  {
+    cp5.getController("degreesOfPendulum").show();
+  } else
+  {
+    cp5.getController("degreesOfPendulum").hide();
+  }
 }
 
 int inputChange(String theText) 
@@ -435,6 +455,16 @@ void input(String theText) {
     {
       numberOfNpendulum = amount;
     }
+
+    resetToBegining();
+  }
+}
+
+void degreesOfPendulum(String theText) {
+
+  if (theText != null || true)
+  {
+    degreeOfPendulum = inputChange(theText);
 
     resetToBegining();
   }

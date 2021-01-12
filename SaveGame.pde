@@ -9,8 +9,8 @@ class SaveGame
 
   void saves(JSONArray obj, String ObjectName)
   {
-    String date = finDate.findingData();
     String fileName = "saves/save";
+    String date = finDate.findingData();
 
     if (ObjectName != null)
     {
@@ -18,6 +18,7 @@ class SaveGame
     }
 
     boolean exist = true;
+    
     if (obj != null)
     {
       File f;
@@ -70,10 +71,10 @@ class SaveGame
         {
           doublePend.remove(i);
         }
-      } else if (fileName.contains("Cir"))
+      } else if (fileName.contains("NPend"))
       {
         size = nPend.size();
-        
+
         for (int i = size - 1; i >= 0; i--)
         {
           nPend.remove(i);
@@ -86,22 +87,37 @@ class SaveGame
         String name = item.getString("Name");
         if (name.equals("cir"))
         {
-          cir.add(new Circum(new PVector(item.getFloat("point.x"), item.getFloat("point.y")), new PVector(item.getFloat("velocity.x"), item.getFloat("velocity.y")), new PVector(item.getFloat("acceleration.x"), item.getFloat("acceleration.y")), 
-            item.getFloat("radius"), item.getFloat("mass"), item.getFloat("springness"), item.getFloat("ref")));
-        } else if (name.equals("pend"))
+          cir.add(new Circum(new PVector(item.getFloat("point.x"), item.getFloat("point.y")), new PVector(item.getFloat("velocity.x"), 
+          item.getFloat("velocity.y")), new PVector(item.getFloat("acceleration.x"), item.getFloat("acceleration.y")), item.getFloat("radius"), item.getFloat("mass"), item.getFloat("springness"), item.getFloat("ref")));
+        } else if (name.equals("singlePend"))
         {
-          singlePend.add(new Pendulum(new PVector(item.getFloat("origin.x"), item.getFloat("origin.y")), item.getFloat("radius"), item.getFloat("gravity"), item.getFloat("damping"), item.getFloat("angle"), item.getFloat("penVel"), 0 , item.getFloat("lengh")));
+          singlePend.add(new Pendulum(new PVector(item.getFloat("origin.x"), item.getFloat("origin.y")), item.getFloat("radius"), item.getFloat("gravity"), item.getFloat("damping"), item.getFloat("angle"), item.getFloat("penVel"), item.getFloat("lengh")));
         } else if (name.equals("doublePend"))
         {
-          doublePend.add(new DoublePendulum(item.getFloat("a1"), item.getFloat("a2"), item.getFloat("a1_vel"), item.getFloat("a2_vel"), item.getFloat("a1_a"), item.getFloat("a2_a"), item.getFloat("length1"), 
-            item.getFloat("length2"), item.getFloat("mas1"), item.getFloat("mas2"), item.getFloat("radius1"), item.getFloat("radius2"), item.getFloat("g"), 
-            new PVector(item.getFloat("position[0].x"), item.getFloat("position[0].y")), new PVector(item.getFloat("position[1].x"), item.getFloat("position[1].y"))));
-        }else if (name.equals("nPend"))
+          doublePend.add(new DoublePendulum(item.getFloat("a1"), item.getFloat("a2"), item.getFloat("a1_vel"), item.getFloat("a2_vel"), item.getFloat("a1_a"), 
+          item.getFloat("a2_a"), item.getFloat("length1"), item.getFloat("length2"), item.getFloat("mas1"), item.getFloat("mas2"), item.getFloat("radius1"), item.getFloat("radius2"), 
+          item.getFloat("g"), new PVector(item.getFloat("position[0].x"), item.getFloat("position[0].y")), new PVector(item.getFloat("position[1].x"), item.getFloat("position[1].y"))));
+        } else if (name.equals("nPend"))
         {
-          int tier = item.getInt("tier");
+          int tier = int(item.getFloat("tier"));
+          FloatList mass = new FloatList(), angles = new FloatList();  
+          FloatList lenghts = new FloatList(), radiuses = new FloatList();
+          FloatList positionX = new FloatList(), positionY = new FloatList();
+          FloatList velocities = new FloatList(), accelerations = new FloatList();        
+
+          for (int i = 0; i< tier; i++)
+          {
+            mass.append(item.getFloat("mas" + i));
+            angles.append(item.getFloat("angles" + i));
+            lenghts.append(item.getFloat("length" + i));
+            radiuses.append(item.getFloat("radius" + i));
+            velocities.append(item.getFloat("velocities" + i));
+            positionX.append(item.getFloat("position[" + i +"].x"));
+            positionY.append(item.getFloat("position[" + i +"].y"));            
+            accelerations.append(item.getFloat("accelerations" + i));
+          }
           
-          //nPend.add();
-          
+          nPend.add(new NPendulum( tier, mass, angles, lenghts, radiuses, velocities, accelerations, positionX, positionY));
         }
       }
     }

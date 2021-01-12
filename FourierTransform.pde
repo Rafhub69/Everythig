@@ -5,34 +5,34 @@ class FourierTransform {
   int state = -1;
   int epicycles;
 
-  //floating point variables
-  float diameter;
-  float amplitude;
   float time;
+  float phase;
+  float diameter;
   float interval;
   float frequency;
-  float phase;
-  SinOsc sine;
+  float amplitude;  
 
   //PVector variables
   PVector pos;
   PVector prev;
 
   //arrays and arraylists
+   ArrayList<Complex> x;
   ArrayList<PVector> path;
   ArrayList<PVector> drawing;
-  ArrayList<Complex> x;
   ArrayList<Complex> Fourier;
+  
+  SinOsc sine;
 
-  FourierTransform(Everything2D_3 th)
+  FourierTransform(Everything2D_4 th)
   {
     pos = new PVector();
     prev = new PVector();
     sine = new SinOsc(th);
     //initialize the ArrayLists
     x = new ArrayList<Complex>();
-    Fourier = new ArrayList<Complex>();
     path = new ArrayList<PVector>();
+    Fourier = new ArrayList<Complex>();   
     drawing = new ArrayList<PVector>();
   }
 
@@ -154,10 +154,10 @@ class FourierTransform {
 
   void mousePress()
   {
-    state = USER; 
-    drawing.clear();
-    path.clear();
     x.clear();
+    state = USER; 
+    path.clear();
+    drawing.clear();   
     time = 0;
   }
 

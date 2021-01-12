@@ -78,10 +78,10 @@ void mousePressed() {
       {
         for (int l = 0; l< doublePend.size(); l++)
         {
-          float d1 = dist(mouseX, mouseY, doublePend.get(l).position[0].x, doublePend.get(l).position[0].y);
-          float d2 = dist(mouseX, mouseY, doublePend.get(l).position[1].x, doublePend.get(l).position[1].y);
+          float d1 = dist(mouseX, mouseY, doublePend.get(l).pen1.position.x, doublePend.get(l).pen1.position.y);
+          float d2 = dist(mouseX, mouseY, doublePend.get(l).pen2.position.x, doublePend.get(l).pen2.position.y);
 
-          if (d1 <= doublePend.get(l).radius1) 
+          if (d1 <= doublePend.get(l).pen1.radius) 
           {
             currentIndex = l;
 
@@ -95,7 +95,7 @@ void mousePressed() {
             {
               scrollMenuOpenByMouse[3] = true;
             }
-          } else if (d2 <= doublePend.get(l).radius2) 
+          } else if (d2 <= doublePend.get(l).pen2.radius) 
           {
             currentIndex = l;
 
@@ -114,6 +114,30 @@ void mousePressed() {
       }
       break;
     case 4:
+      for (int m = 0; m < nPend.size(); m++)
+      {
+        for (int i = 0; i < nPend.get(m).tier; i++)
+        {
+          float distance = dist(mouseX, mouseY, nPend.get(m).singlePen.get(i).position.x, nPend.get(m).singlePen.get(i).position.y);
+
+          if (distance <= nPend.get(m).singlePen.get(i).radius) 
+          {
+            currentIndex = m;
+            nPend.get(currentIndex).index = i;
+
+            if (mouseButton == LEFT)
+            {
+              changePositionByMouse[5] = true;
+            } else if (mouseButton == RIGHT)
+            {
+              contextMenuOpenByMouse[5] = true;
+            } else if (mouseButton == CENTER)
+            {
+              scrollMenuOpenByMouse[5] = true;
+            }
+          }
+        }
+      }
       break; 
     case 5:
       fourier.mousePress();
@@ -187,6 +211,15 @@ void mouseReleased() {
 
       break;
     case 4:
+      if (changePositionByMouse[5]) {
+        changePositionByMouse[5] = false;
+      }
+      if (contextMenuOpenByMouse[5]) {
+        contextMenuOpenByMouse[5] = false;
+      }
+      if (scrollMenuOpenByMouse[5]) {
+        scrollMenuOpenByMouse[5] = false;
+      }
       break; 
     case 5:
       fourier.mouseRelis();
@@ -315,23 +348,27 @@ void keyPressed()
 
 void checkingIfMouseIsOver()
 {
-  if (cp5.isMouseOver(cp5.getController("Menu")) || cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("StartStop")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")) || cp5.isMouseOver(cp5.getController("Lisajous")) || cp5.isMouseOver(cp5.getController("Circle")) || cp5.isMouseOver(cp5.getController("Npendul"))) 
+  if (cp5.isMouseOver(cp5.getController("Menu")) || cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("StartStop")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")) || cp5.isMouseOver(cp5.getController("Lisajous")) || cp5.isMouseOver(cp5.getController("Circle"))) 
   {
 
     if (cp5.isMouseOver(cp5.getController("Menu")) || cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")) || cp5.isMouseOver(cp5.getController("StartStop")))
     {
       cp5.getController("input").hide();
+      cp5.getController("degreesOfPendulum").hide();
     }
 
     if (cp5.isMouseOver(cp5.getController("Menu"))) {
-      textFont(font, 20);
+      textFont(arialFont, 20);
       textLeading(18);
       textAlign(LEFT);
-      String advice = " Nie ma znaczenia jaka jest wielkość liter.\n "+ shortcutTable.get("shortcutHomogenField") + " - pole jednorodne\n "+ shortcutTable.get("shortcutCentralField") +" - pole centralne\n "
-        + shortcutTable.get("shortcutSinglePendulum") +" - pojedyncze wahadło\n " + shortcutTable.get("shortcutDoublePendulum")  +" - podwójne wahadło\n "+ shortcutTable.get("shortcutFourierTransform") + " - transformata furiera\n "
-        + shortcutTable.get("shortcutLisajousTable")  +" - tablica Lisajous\n " + shortcutTable.get("shortcutBonaciSeqense") +" - sekwencja fibonacziego\n "+ shortcutTable.get("shortcutNpendulum") +" - wahadło z n kół\n " + shortcutTable.get("shortcutStrangeCircles") +" - dziwne koła\n K - zmiana ilości obiektów\n " 
-        + shortcutTable.get("shortcutReset") + " - reset\n " + shortcutTable.get("shortcutDisableEnableAll") + " - Wyłączenie pokazywania menu\n " + shortcutTable.get("shortcutStopStartAll") + " - Zatrzymanie obiektów\n"; 
+      String advice = " Nie ma znaczenia jaka jest wielkość liter.\n " + shortcutTable.get("shortcutHomogenField") + " - pole jednorodne\n " 
+      + shortcutTable.get("shortcutCentralField") + " - pole centralne\n " + shortcutTable.get("shortcutSinglePendulum") + " - pojedyncze wahadło\n "
+      + shortcutTable.get("shortcutDoublePendulum") + " - podwójne wahadło\n " + shortcutTable.get("shortcutBonaciSeqense") + " - sekwencja fibonacziego\n "
+      + shortcutTable.get("shortcutLisajousTable")  + " - tablica Lisajous\n " + shortcutTable.get("shortcutFourierTransform") + " - transformata furiera\n "
+      + shortcutTable.get("shortcutNpendulum") +" - wahadło z n kół\n " + shortcutTable.get("shortcutStrangeCircles") + " - dziwne koła\n K - zmiana ilości obiektów\n "  
+      + shortcutTable.get("shortcutReset") + " - reset\n " + shortcutTable.get("shortcutDisableEnableAll") + " - Wyłączenie pokazywania menu\n " + shortcutTable.get("shortcutStopStartAll") + " - Zatrzymanie obiektów\n "; 
       text(advice, 110, 20, 660, 330);
+      
     } else if (cp5.isMouseOver(cp5.getController("Lisajous")))
     {
       Disclosures_set("Lisajous");
@@ -340,11 +377,7 @@ void checkingIfMouseIsOver()
     {
       Disclosures_set("Circle");
       cp5.get(Textfield.class, "input").setLabel("Ustaw wielkość zmiany kąta");
-    } else if (cp5.isMouseOver(cp5.getController("Npendul")))
-    {
-      Disclosures_set("Npendul");
-      cp5.get(Textfield.class, "input").setLabel("Ustaw ilość wahadeł n-tego stopnia");
-    }
+    } 
 
     cp5.getController("Set").hide();
     cp5.getController("Load").hide();
@@ -361,6 +394,10 @@ void checkingIfMouseIsOver()
   } else if (cp5.isMouseOver(cp5.getController("Dual"))) {
     Disclosures_set("Dual");
     cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość podwójnych wahadeł");
+  } else if (cp5.isMouseOver(cp5.getController("Npendul"))) {
+    Disclosures_set("Npendul");
+    cp5.get(Textfield.class, "input").setLabel("Ustaw ilość wahadeł n-tego stopnia");
+    cp5.getController("degreesOfPendulum").show();
   }
 }
 
@@ -371,9 +408,8 @@ void contextMenu(int currentIndex)
   if (contextMenuOpenByMouse[0] || contextMenuOpenByMouse[1])
   {
     cir.get(i).showingData();
-    x = cir.get(i).point.x + 156 + cir.get(i).radius> width ? cir.get(i).point.x - ((cir.get(i).point.x + 156) - width ) : cir.get(i).point.x + cir.get(i).radius;
-    //y = cir.get(i).point.y + 56 + cir.get(i).radius> height ? (int)cir.get(i).point.y - (((int)cir.get(i).point.y + 56) - height ) : (int)cir.get(i).point.y + (int)cir.get(i).radius;
     y = cir.get(i).point.y;
+    x = cir.get(i).point.x + 156 + cir.get(i).radius> width ? cir.get(i).point.x - ((cir.get(i).point.x + 156) - width ) : cir.get(i).point.x + cir.get(i).radius;    
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
 
@@ -398,99 +434,51 @@ void contextMenu(int currentIndex)
   {
     doublePend.get(i).setingFieldVariables();
 
-    x = doublePend.get(i).position[0].x + 156 + doublePend.get(i).radius1> width ? doublePend.get(i).position[0].x - ((doublePend.get(i).position[0].x + 156) - width ) : doublePend.get(i).position[0].x + doublePend.get(i).radius1;
-    y = doublePend.get(i).position[0].y + 56 + doublePend.get(i).radius1> height ? doublePend.get(i).position[0].y - ((doublePend.get(i).position[0].y + 56) - height ) : doublePend.get(i).position[0].y + doublePend.get(i).radius1;
+    x = doublePend.get(i).pen1.position.x + 156 + doublePend.get(i).pen1.radius> width ? doublePend.get(i).pen1.position.x - ((doublePend.get(i).pen1.position.x + 156) - width ) : doublePend.get(i).pen1.position.x + doublePend.get(i).pen1.radius;
+    y = doublePend.get(i).pen1.position.y + 56 + doublePend.get(i).pen1.radius> height ? doublePend.get(i).pen1.position.y - ((doublePend.get(i).pen1.position.y + 56) - height ) : doublePend.get(i).pen1.position.y + doublePend.get(i).pen1.radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
     doublePenIndex = 0;
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldVariables.get("mas1")).setCaptionLabel("mas1").setVisible(true);    
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true); 
+    cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldVariables.get("mas1")).setCaptionLabel("mas1").setVisible(true);
     cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true); 
+    
   } else if (contextMenuOpenByMouse[4])
   {
     doublePend.get(i).setingFieldVariables();
 
-    x = doublePend.get(i).position[1].x + 156 + doublePend.get(i).radius2> width ? doublePend.get(i).position[1].x - ((doublePend.get(i).position[1].x + 156) - width ) : doublePend.get(i).position[1].x + doublePend.get(i).radius2;
-    y = doublePend.get(i).position[1].y + 56 + doublePend.get(i).radius2> height ? doublePend.get(i).position[1].y - ((doublePend.get(i).position[1].y + 56) - height ) : doublePend.get(i).position[1].y + doublePend.get(i).radius2;
+    x = doublePend.get(i).pen2.position.x + 156 + doublePend.get(i).pen2.radius> width ? doublePend.get(i).pen2.position.x - ((doublePend.get(i).pen2.position.x + 156) - width ) : doublePend.get(i).pen2.position.x + doublePend.get(i).pen2.radius;
+    y = doublePend.get(i).pen2.position.y + 56 + doublePend.get(i).pen2.radius> height ? doublePend.get(i).pen2.position.y - ((doublePend.get(i).pen2.position.y + 56) - height ) : doublePend.get(i).pen2.position.y + doublePend.get(i).pen2.radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
     doublePenIndex = 1;
+    
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldVariables.get("mas2")).setCaptionLabel("mas2").setVisible(true);    
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldVariables.get("radius2")).setCaptionLabel("radius2").setVisible(true); 
+    cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldVariables.get("mas2")).setCaptionLabel("mas2").setVisible(true); 
     cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldVariables.get("radius2")).setCaptionLabel("radius2").setVisible(true); 
+    
+  } else if (contextMenuOpenByMouse[5])
+  {
+    int index = nPend.get(i).index;
+    nPend.get(i).setingFieldVariables();
+
+    x = nPend.get(i).singlePen.get(index).position.x + 156 + nPend.get(i).singlePen.get(index).radius> width ? nPend.get(i).singlePen.get(index).position.x - ((nPend.get(i).singlePen.get(index).position.x + 156) - width ) 
+      : nPend.get(i).singlePen.get(index).position.x + nPend.get(i).singlePen.get(index).radius;
+
+    y = nPend.get(i).singlePen.get(index).position.y + 56 + nPend.get(i).singlePen.get(index).radius> height ? nPend.get(i).singlePen.get(index).position.y - ((nPend.get(i).singlePen.get(index).position.y + 56) - height ) 
+      : nPend.get(i).singlePen.get(index).position.y + nPend.get(i).singlePen.get(index).radius;
+
+    cp5.get("contextMenu").setPosition(x, y);
+    cp5.get("contextMenu").show();
+
+    cp5.get(Slider.class, "Gravity").setVisible(false);
+    cp5.get(Slider.class, "Springness").setValue(nPend.get(i).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
+    cp5.get(Slider.class, "Mass").setValue(nPend.get(i).fieldVariables.get("mas" + index)).setCaptionLabel("mass").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(nPend.get(i).fieldVariables.get("radius" + index)).setCaptionLabel("radius").setVisible(true);     
   }
 }
-
-//void changeVelocityByTheMouse(int currentIndex)
-//{
-//  i = currentIndex;
-//  PVector diff = new PVector(0, 0), position= new PVector(0, 0), result = new PVector(0, 0);
-
-//  if (!stopStart)
-//  {
-//    if (mode == 1)
-//    {
-//      if (scrollMenuOpenByMouse[0] || scrollMenuOpenByMouse[1])
-//      {
-//        position = cir.get(currentIndex).point;
-//        diff = PVector.sub(new PVector(mouseX, mouseY), position);
-//        diff.normalize();
-//        diff.mult(scrollMovement);
-//        result.add(diff);
-//      } else if (currentIndex < cir.size())
-//      {
-//        cir.get(currentIndex).acceleration.add(result);
-//      }
-//    } else if (mode == 2)
-//    {
-//      if (pendul)
-//      {
-//        if (scrollMenuOpenByMouse[2])
-//        {
-//          position = pend.get(currentIndex).position;
-//          diff = PVector.sub(new PVector(mouseX, mouseY), position);
-//          diff.normalize();
-//          diff.mult(scrollMovement);
-//          result.add(diff);
-//        } else if (currentIndex < pend.size())
-//        {
-//          pend.get(currentIndex).penAcc += result.mag();
-//        }
-//      } else 
-//      {
-//        if (scrollMenuOpenByMouse[3])
-//        {
-//          position = doublePend.get(currentIndex).position[1];
-//          diff = PVector.sub(new PVector(mouseX, mouseY), position);
-//          diff.normalize();
-//          diff.mult(scrollMovement);
-//          result.add(diff);
-//        } else if (currentIndex < doublePend.size())
-//        {
-//          doublePend.get(currentIndex).a1_acc += result.mag();
-//        }
-//        if (scrollMenuOpenByMouse[4])
-//        {
-//          position = doublePend.get(currentIndex).position[1];
-//          diff = PVector.sub(new PVector(mouseX, mouseY), position);
-//          diff.normalize();
-//          diff.mult(scrollMovement);
-//          result.add(diff);
-//        } else if (currentIndex < doublePend.size())
-//        {
-//          doublePend.get(currentIndex).a2_acc += result.mag();
-//        }
-//      }
-//    }
-//  }
-
-//  line(position.x, position.y, diff.x + position.x, diff.y + position.y);
-//  circle(diff.x, diff.y, 10);
-//  result.set(0, 0);
-//}
-
 
 void changePositionByTheMouse(int currentIndex)
 {
@@ -540,26 +528,45 @@ void changePositionByTheMouse(int currentIndex)
     singlePend.get(i).penVel = 0;
   } else if (changePositionByMouse[3])
   {
-    doublePend.get(i).position[0].x = mouseX;
-    doublePend.get(i).position[0].y = mouseY;
+    doublePend.get(i).pen1.position.x = mouseX;
+    doublePend.get(i).pen1.position.y = mouseY;
 
     diff = PVector.sub(doublePend.get(i).origin, new PVector(mouseX, mouseY));     
-    doublePend.get(i).a1 = atan2(-1*diff.y, diff.x)- radians(90);                         
+    doublePend.get(i).pen1.angle = atan2(-1*diff.y, diff.x)- radians(90);                         
 
-    doublePend.get(i).length1 = diff.mag();
-    PVector diff2 = PVector.sub(doublePend.get(i).position[0], doublePend.get(i).position[1]);
-    doublePend.get(i).length2 = diff2.mag();
-    doublePend.get(i).a1_vel = 0;
-    doublePend.get(i).a2_vel = 0;
+    doublePend.get(i).pen1.lengh = diff.mag();
+    PVector diff2 = PVector.sub(doublePend.get(i).pen1.position, doublePend.get(i).pen2.position);
+    doublePend.get(i).pen2.lengh = diff2.mag();
+    doublePend.get(i).pen1.penVel = 0;
+    doublePend.get(i).pen2.penVel = 0;
+    
   } else if (changePositionByMouse[4])
   {
-    doublePend.get(i).position[1].x = mouseX;
-    doublePend.get(i).position[1].y = mouseY;
+    doublePend.get(i).pen2.position.x = mouseX;
+    doublePend.get(i).pen2.position.y = mouseY;
 
-    diff = PVector.sub(doublePend.get(i).position[0], new PVector(mouseX, mouseY));     
-    doublePend.get(i).a2 = atan2(-1*diff.y, diff.x)- radians(90);                              
+    diff = PVector.sub(doublePend.get(i).pen1.position, new PVector(mouseX, mouseY));     
+    doublePend.get(i).pen2.angle = atan2(-1*diff.y, diff.x)- radians(90);                              
 
-    doublePend.get(i).length2 = diff.mag();
-    doublePend.get(i).a2_vel = 0;
+    doublePend.get(i).pen2.lengh = diff.mag();
+    doublePend.get(i).pen2.penVel = 0;
+  } else if (changePositionByMouse[5])
+  {
+    int index = nPend.get(i).index;
+    nPend.get(i).singlePen.get(index).position.x = mouseX;
+    nPend.get(i).singlePen.get(index).position.y = mouseY;
+
+    if (index > 1)
+    {
+      diff = PVector.sub(nPend.get(i).singlePen.get(index - 1).position, new PVector(mouseX, mouseY));
+    } else
+    {
+      diff = PVector.sub(nPend.get(i).singlePen.get(0).origin, new PVector(mouseX, mouseY));
+    }
+
+    nPend.get(i).singlePen.get(index).angle = atan2(-1*diff.y, diff.x)- radians(90);                              
+
+    nPend.get(i).singlePen.get(index).lengh = diff.mag();
+    nPend.get(i).singlePen.get(index).penVel = 0;
   }
 }

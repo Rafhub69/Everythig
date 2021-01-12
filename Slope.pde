@@ -1,8 +1,8 @@
 class Slope
 {
   float a = 250, b = 200, c = 100;
-  float a1_a = 0, a1_vel = 0, g = 9.81, delta_t = 0.003;
   float x1 = -8, y1 = (-b - 26), spot = 0;
+  float a1_a = 0, a1_vel = 0, g = 9.81, delta_t = 0.003; 
 
   Slope()
   {

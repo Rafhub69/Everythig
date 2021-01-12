@@ -6,60 +6,61 @@ import java.util.Map;
 import java.io.File;
 import controlP5.*;
 
-Random randa = new Random();
 ControlP5 cp5;
+Random randa = new Random();
 
-int mode = 1;//1 - gravitation , 2 - pendulum, 3 - programs on whole screen, 4 - strenge circles, 5 - fourier transformation
+int mode = 0;//1 - gravitation , 2 - pendulum, 3 - programs on whole screen, 4 - strenge circles, 5 - fourier transformation
 boolean field = false;//true -  central field , false -  homogeneous field
 boolean pendul = false;//true - single pendulum , false - double pendulum
 boolean wholeScreen = false;// true - Lisajous table, false - nBonaci Sequence
 boolean cirOrNpendul = false;//true - Circle, false - N-pendulum
-boolean information = false;
 boolean startMenu = true;
-boolean stopStart = true;//true - everything is working , false - everything is stoped
+boolean stopStart = false;//true - everything is working , false - everything is stoped
+boolean information = false;
 boolean isMouseOver = false;
 boolean centralAction = false, homogeneousAction = false, singleAction = false, doubleAction = false, lisajousAction = false, nBonaciAction = false, strangeCirclesAction = false, fourierTransformAction = false, nPendulumAction = false;
 boolean[] scrollMenuOpenByMouse = new boolean[6];
 boolean[] changePositionByMouse = new boolean[6];
 boolean[] contextMenuOpenByMouse = new boolean[6];
-long startedMillis = 0;
 String buttonName;
-HashMap<String, Character> shortcutTable = new HashMap<String, Character>(12);
-int control = 100, current, control2 = control, i, control3 = control2+1, ile = 1, ile2 = ile, ile_pend =1, ile_pend2 = ile_pend, pozX =2, pozY, doublePenIndex = 2;
-int MaxFar = 100, Multi = 10, start, centerX = 0, centerY = 0, button_height =30, button_width = 106, pozXSet = pozX + button_width, numberOfNpendulum = 1;
-float mass = 1000, radius = 20, density, G_const = 0.6673, a1 = 4*PI, w = 0.05;
-float length1, length2, mas1, mas2, a2, poz, rad = 10, angleChange_ = 0.01;
-float pozYSet[] = new float[2], screenSizeX = 0, screenSizeY = 0;
+PFont font, arialFont;
+long startedMillis = 0;
+int amo = 1000, currentIndex = 0, ile_pend = 1, start, current, pozX = 2;
+int doublePenIndex = 2, numberOfNpendulum = 1, degreeOfPendulum = 5, Multi = 10, MaxFar = 100;
+int centerX = 0, centerY = 0, button_height =30, button_width = 106, pozXSet = pozX + button_width;
+int control = 50, i, ile = 1, ile2 = ile, ile_pend2 = ile_pend, pozY, control2 = control, control3 = control2+1;
 float delta_time, now = System.nanoTime(), scrollMovement = 0;
-FourierTransform fourier;
-StrengeCircles strenCir;
-LisajousTable table;
-BonaciSequence seq;
-Everything2D_3 yh;
+float pozYSet[] = new float[2], screenSizeX = 0, screenSizeY = 0;
+float length1, length2, mas1, mas2, a2, poz, rad = 10, angleChange_ = 0.01;
+float mass = 1000, radius = 20, density, G_const = 0.6673, a1 = 4*PI, w = 0.05;
+//Objects that occur individually
 SaveGame save;
-//Object obj;
+BonaciSequence seq;
+LisajousTable table;
+StrengeCircles strenCir;
+FourierTransform fourier;
+
 ArrayList<Circum> cir = new ArrayList<Circum>(control);
 ArrayList<Pendulum> singlePend = new ArrayList<Pendulum>(ile_pend);
 ArrayList<NPendulum> nPend = new ArrayList<NPendulum>(numberOfNpendulum);
 ArrayList<DoublePendulum> doublePend = new ArrayList<DoublePendulum>(ile);
-int amo = 1000, currentIndex = 0;
-PFont font;
+HashMap<String, Character> shortcutTable = new HashMap<String, Character>(12);
 
 void settings() {
   size(1920, 1020, P2D);
   PJOGL.setIcon("icon5.png");
 }
 
-
 void setup() {  
 
   surface.setResizable(true);
   surface.setTitle("Fizyka");
   stroke(255);
-  background(255);
-  font = createFont("arial", 20);
-  centerX = (width/2)  - (button_width/2);
-  centerY = (height/2)  - (button_height/2); 
+  background(255);  
+  font = createFont("arial", 10);
+  arialFont = createFont("arial", 20);
+  centerX = (width/2) - (button_width/2);
+  centerY = (height/2) - (button_height/2); 
 
   creatingShortcuts();
 
@@ -67,23 +68,23 @@ void setup() {
 
   cp5 = new ControlP5(this);
 
-  creatingButtons(button_height);
+  creatingButtons(button_height, arialFont, font);
 }
 
 void creatingObjects()
 {
 
   //creating individual objects
-  table = new LisajousTable();
-  seq = new BonaciSequence();
-  strenCir = new StrengeCircles( rad, angleChange_, amo);
-  fourier = new FourierTransform(new Everything2D_3());
   save = new SaveGame();
+  seq = new BonaciSequence();
+  table = new LisajousTable(); 
+  fourier = new FourierTransform(new Everything2D_4());
+  strenCir = new StrengeCircles( rad, angleChange_, amo);
 
   //creating a random npendulum
   for (int i= 0; i <numberOfNpendulum; i++)
   {
-    nPend.add(new NPendulum(5));
+    nPend.add(new NPendulum(degreeOfPendulum));
   }
 
 
@@ -98,12 +99,12 @@ void creatingObjects()
   //creating a random double pendulum
   for (int i = 0; i< ile; i++)
   {
-    a1 = PI / (randa.nextFloat() + 1);
-    a2 = PI / (randa.nextFloat() + 3);
-    length1 = 350;
-    length2 = 200;
     mas1 = 40;
     mas2 = 20;
+    length1 = 350;
+    length2 = 200;
+    a1 = PI / (randa.nextFloat() + 1);
+    a2 = PI / (randa.nextFloat() + 3); 
     doublePend.add(new DoublePendulum( a1, a2, length1, length2, mas1, mas2));
   }
 
@@ -121,6 +122,7 @@ void creatingObjects()
 void creatingShortcuts()
 {
   shortcutTable.put("shortcutReset", 'R'); 
+  shortcutTable.put("shortcutNpendulum", 'N'); 
   shortcutTable.put("shortcutCentralField", 'C');
   shortcutTable.put("shortcutHomogenField", 'H');
   shortcutTable.put("shortcutStopStartAll", 'Z');
@@ -131,7 +133,6 @@ void creatingShortcuts()
   shortcutTable.put("shortcutStrangeCircles", 'S');
   shortcutTable.put("shortcutDisableEnableAll", 'X');
   shortcutTable.put("shortcutFourierTransform", 'F'); 
-  shortcutTable.put("shortcutNpendulum", 'N'); 
 
   File shortcut = dataFile("saves/shortcuts/shortcutFile1.json");
 
@@ -139,7 +140,8 @@ void creatingShortcuts()
   {
     JSONObject obj = new JSONObject();
 
-    for (Map.Entry<String, Character> me : shortcutTable.entrySet()) {
+    for (Map.Entry<String, Character> me : shortcutTable.entrySet()) 
+    {
       String meStrVal = me.getValue().toString();
       obj.setString(me.getKey().toString(), meStrVal);
     }
@@ -152,10 +154,10 @@ void drawBorders()
 {
   strokeWeight(6);
   stroke(200, 0, 10);
-  line(0, height, width, height);
   line(0, 0, width, 0);
   line(0, 0, 0, height);
   line(width, 0, width, height);
+  line(0, height, width, height);  
   strokeWeight(1);
 }
 
@@ -173,9 +175,9 @@ String formatMillis(long millis)
 void resetToBegining() 
 {
   switch(mode) {
-  case 1:
-    float pozX = 0, pozY = 0;
+  case 1:    
     int size = cir.size();
+    float pozX = 0, pozY = 0;
     for (int i = size - 1; i >= 0; i--)
     {
       cir.remove(i);
@@ -186,11 +188,11 @@ void resetToBegining()
 
       for (int i = 0; i <control2; i++)
       {
+        float border= 10;
         mass = 8 * randa.nextFloat() + 4;
         radius = mass  * 4;
         pozX = width * new Random().nextFloat();
-        pozY = height * new Random().nextFloat();
-        float border= 10;
+        pozY = height * new Random().nextFloat();       
 
         //Checking whether circles are overlapping or outside the screen boundary.
         if (i!=0)
@@ -248,11 +250,8 @@ void resetToBegining()
         singlePend.remove(i);
       }
 
-      a1 = PI  / (4 * randa.nextFloat() + 1);
-
       ile_pend2 = ile_pend;
-
-      a1 = PI / (randa.nextFloat() + 0.5);
+      a1 = PI / (4 * randa.nextFloat() + 0.5);
       singlePend.add(new Pendulum(a1, new PVector(width / 2, height/3)));
 
       for (int i = 1; i <ile_pend; i++)
@@ -293,16 +292,16 @@ void resetToBegining()
       strenCir.reset();
     } else
     {
-       size = nPend.size();
-       
+      size = nPend.size();
+
       for (int i = size - 1; i >= 0; i--)
       {
         nPend.remove(i);
       }
-      
+
       for (int i= 0; i <numberOfNpendulum; i++)
       {
-        nPend.add(new NPendulum(5));
+        nPend.add(new NPendulum(degreeOfPendulum));
       }
     }
     break; 
@@ -317,27 +316,27 @@ void resetToBegining()
 void strangeCirclesManagement()
 {
   pushMatrix();
-  translate(width / 2, height/2);
   background(0);
   strokeWeight(5);
-  point(0, 0);
-  strokeWeight(2);
+  translate(width / 2, height/2);  
+  point(0, 0);  
   noFill();
+  strokeWeight(2);
   circle(0, 0, 100);
   strenCir.strange();
   popMatrix();
 }
 
 void calc_delta_time() {
-  delta_time = (System.nanoTime()-now)/100000000;
+  delta_time = (System.nanoTime()- now)/100000000;
   now = System.nanoTime();
 }
 
 void draw() {
 
-  calc_delta_time();
-  background(120);
   drawBorders();
+  background(120);
+  calc_delta_time();
 
   switch(mode) {
   case 1:
@@ -385,8 +384,8 @@ void draw() {
     break;    
   case 5:
 
-    background(0);
     noFill();
+    background(0);    
     fourier.show();
     break;
   }
@@ -401,9 +400,8 @@ void draw() {
 
   if (!stopStart)
   {
-    changePositionByTheMouse(currentIndex);
-    // changeVelocityByTheMouse(currentIndex);
     contextMenu(currentIndex);
+    changePositionByTheMouse(currentIndex);  
   }
 
   checkingIfMouseIsOver();

@@ -70,13 +70,16 @@ class LotsOfFunctions {
   }
 
   float valueMapping(int index, float value, int smallestValue, int biggestValue)
-  {   
-    float result = map(value, fun[index].smallestItem, fun[index].largestItem, smallestValue, biggestValue);
+  {
+    float result;
 
-    if (Float.isNaN(result)) {
+    if (value >= fun[index].largestItem || value < fun[index].smallestItem)
+    {
       result = (biggestValue + smallestValue)/2;
+    } else
+    {
+      result = map(value, fun[index].smallestItem, fun[index].largestItem, smallestValue, biggestValue);
     }
-
     return result;
   }
 }

@@ -1,17 +1,18 @@
 class LisajousTable {
 
   int size = 100, cols, rows;
-  float angle = 0, angleChange1 = 0.05, angleChange2 = 0.05, offset = size/2, diameter = size - 0.2*size, radius = diameter/2;
-  float cx = 0, cy = 0, x = 0, y = 0;
+  float cx = 0, cy = 0, x = 0, y = 0;  
   ArrayList<ArrayList<Curve>> curves = new ArrayList<ArrayList<Curve>>();
   boolean whatLine = true; //true - horizontal line, false - vertical line
+  float angle = 0, angleChange1 = 0.05, angleChange2 = 0.05, offset = size/2, diameter = size - 0.2 * size, radius = diameter/2;    
+ 
 
 
   LisajousTable()
   {
     //Calculation of the number of circles vertically and horizontally
     cols = (width - int(offset)) / size;
-    rows = (height - int(offset))/ size;
+    rows = (height - int(offset)) / size;
 
     for (int j = 0; j < rows; j++) {
       curves.add(new ArrayList<Curve>());
@@ -36,11 +37,11 @@ class LisajousTable {
     }
 
     offset = size/2;
-    diameter = size - 0.2*size;
+    diameter = size - 0.2 * size;
     radius = diameter/2;
 
     cols = (width - int(offset)) / size;
-    rows = (height - int(offset))/ size;
+    rows = (height - int(offset)) / size;
 
     for (int j = 0; j < rows; j++) {
       curves.add(new ArrayList<Curve>());
@@ -58,14 +59,14 @@ class LisajousTable {
 
     if (whatLine)
     {
-      plane = height;
       line1 = cols;
       line2 = rows;
+      plane = height;     
     } else
     {
-      plane = width;
       line1 = rows;
       line2 = cols;
+      plane = width;     
     }
 
 
@@ -74,8 +75,8 @@ class LisajousTable {
 
       if (whatLine)
       {
-        cx = size + i * size + offset;
         cy = offset;
+        cx = size + i * size + offset;      
       } else
       {
         cx = offset;

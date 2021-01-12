@@ -1,10 +1,11 @@
 class BonaciSequence
 {
-  int many = 100, much = 1000;
-  long[] tab = new long[many];
+  int many = 100; 
+  int much = 1000;
   int control = many;
   float scene = 100.0000;
   boolean reflection = true;
+  long[] tab = new long[many];
   Function[] fun = new Function[3];
 
   BonaciSequence()
@@ -22,9 +23,9 @@ class BonaciSequence
   {
     tab[0] = 0;
     tab[1] = 1;
-    scene = 100.0000;
     much = 1000;
     many = control;
+    scene = 100.0000;       
     reflection = true;
 
     for (int j = 2; j < many; j++)
@@ -36,7 +37,7 @@ class BonaciSequence
 
   void drawing()
   {
-    pushMatrix();
+    pushMatrix();   
     translate(width/2, height/2);
     noFill();
 
@@ -61,11 +62,10 @@ class BonaciSequence
         stroke((map(scene, fun[0].smallestItem, fun[0].largestItem, 100, 200)), (map(i, fun[1].smallestItem, fun[1].largestItem, 50, 255)), (map(tab[j], fun[2].smallestItem, fun[2].largestItem, 100, 200)) );
         pushMatrix();
 
-        rotate( j * (PI/2));
-
-        rect(0, 0, scene * tab[j], scene * tab[j]);
         strokeWeight(10);
-
+        rotate(j * (PI/2));
+        rect(0, 0, scene * tab[j], scene * tab[j]);
+        
         popMatrix();
       }
 

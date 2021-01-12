@@ -1,39 +1,28 @@
 class DoublePendulum {
 
-  PVector[]  point = new PVector[500];
-  PVector[]  position = new PVector[2];
-  PVector origin = new PVector(width / 2, height/3); 
   float g = 3.924;
-  float length1, length2; // lenght of pendulums
-  float mas1, mas2; //mass of pendulum
-  float a1_vel = 0, a2_vel = 0; // angular velocity
-  float a1_acc = 0, a2_acc = 0; //angular acceleration 
-  float a1, a2; //angle
-  float radius1 = 30, radius2 = 20; //radius
+  Pendulum pen1, pen2;
   float cx = 0, cy = 0;
   float px2 = -1, py2 = -1;
   int i = 0, current = i, iko = 0;
-  HashMap<String, Float> fieldVariables = new HashMap<String, Float>(17);
+  PVector[]  point = new PVector[500];
+  PVector[]  position = new PVector[2];
   ArrayList<LotsOfFunctions> colorDetermination;
-  ControlP5 cp5;
-
+  PVector origin = new PVector(width / 2, height/3);  
+  HashMap<String, Float> fieldVariables = new HashMap<String, Float>(17);
+  
   DoublePendulum(float a1_, float a2_, float length1_, float length2_, float mas1_, float mas2_)
-  {
-    a1 = a1_;
-    a2 = a2_;
-    length1 = length1_;
-    length2 = length2_;
-    mas1 = mas1_;
-    mas2 = mas2_;
+  {   
+    pen1 = new Pendulum(a1_, length1_, mas1_, origin);
+    pen2 = new Pendulum(a2_, length2_, mas2_, origin);
+    
+    pen1.radius = 30;
+    pen2.radius = 20;
 
-    position[0] = new PVector(0, 0);
-    position[1] = new PVector(0, 0);
+    pen1.position = new PVector(0, 0);
+    pen2.position = new PVector(0, 0);
+
     colorDetermination  = new ArrayList<LotsOfFunctions>(2);
-
-    for (int i = 0; i<point.length; i++)
-    {
-      point[i] = new PVector(position[1].x, position[1].y);
-    }
 
     update();
     inicjalization();
@@ -41,84 +30,83 @@ class DoublePendulum {
 
   DoublePendulum(float a1_, float a2_, float a1_vel_, float a2_vel_, float a1_acc_, float a2_acc_, float length1_, float length2_, float mas1_, float mas2_, float radius1_, float radius2_, float g_, PVector position0, PVector position1)
   {
-    a1 = a1_;
-    a2 = a2_;
-    length1 = length1_;
-    length2 = length2_;
-    mas1 = mas1_;
-    mas2 = mas2_;
-    radius1 = radius1_;
-    radius2 = radius2_; 
-    a1_vel = a1_vel_;
-    a2_vel = a2_vel_; 
-    a1_acc = a1_acc_;
-    a2_acc = a2_acc_;
-    g = g_;
-
-    position[0] = new PVector(position0.x, position0.y);
-    position[1] = new PVector(position1.x, position1.y);
-
-    for (int i = 0; i<point.length; i++)
-    {
-      point[i] = new PVector(position[1].x, position[1].y);
-    }
+    pen1 = new Pendulum(origin, radius1_, g_, 0.998, a1_, a1_vel_, length1_);
+    pen2 = new Pendulum(origin, radius2_, g_, 0.998, a2_, a2_vel_, length2_);
+    
+    pen1.radius = 30;
+    pen2.radius = 20;
+    pen1.mass = mas1_;
+    pen2.mass = mas2_;
+    pen1.penAcc = a1_acc_;
+    pen2.penAcc = a2_acc_;  
+    
+    pen1.position = new PVector(position0.x, position0.y);
+    pen2.position = new PVector(position1.x, position1.y);
 
     inicjalization();
   }
 
   void inicjalization()
   {
-    colorDetermination.add(new LotsOfFunctions(a1_vel, a1_acc, a1));
-    colorDetermination.add(new LotsOfFunctions(a2_vel, a2_acc, a2));
 
-    fieldVariables.put("radius1", radius1);
-    fieldVariables.put("mas1", mas1);
+    for (int i = 0; i<point.length; i++)
+    {
+      point[i] = new PVector(pen2.position.x, pen2.position.y);
+    }
+
+    colorDetermination.add(new LotsOfFunctions(pen1.penVel, pen1.penAcc, pen1.angle));
+    colorDetermination.add(new LotsOfFunctions(pen2.penVel, pen2.penAcc, pen2.angle));
+
     fieldVariables.put("gravity", g);
-    fieldVariables.put("length1", length1);
-    fieldVariables.put("position[0].x", position[0].x);
-    fieldVariables.put("position[0].y", position[0].y);
-    fieldVariables.put("a1_vel", a1_vel);
-    fieldVariables.put("a1", a1);
-    fieldVariables.put("a1_a", a1_acc);
-    fieldVariables.put("radius2", radius2);
-    fieldVariables.put("mas2", mas2);
-    fieldVariables.put("length2", length2);
-    fieldVariables.put("position[1].x", position[1].x);
-    fieldVariables.put("position[1].y", position[1].y);
-    fieldVariables.put("a2_vel", a2_vel);
-    fieldVariables.put("a2", a2);
-    fieldVariables.put("a2_a", a2_acc);
+    fieldVariables.put("a1", pen1.angle);
+    fieldVariables.put("a2", pen2.angle);
+    fieldVariables.put("mas1", pen1.mass);
+    fieldVariables.put("mas2", pen2.mass);    
+    fieldVariables.put("a1_a", pen1.penAcc);
+    fieldVariables.put("a2_a", pen2.penAcc);
+    fieldVariables.put("length1", pen1.lengh);
+    fieldVariables.put("length2", pen2.lengh);
+    fieldVariables.put("a1_vel", pen1.penVel);
+    fieldVariables.put("a2_vel", pen2.penVel);
+    fieldVariables.put("radius1", pen1.radius);
+    fieldVariables.put("radius2", pen2.radius);   
+    fieldVariables.put("position[0].x", pen1.position.x);
+    fieldVariables.put("position[0].y", pen1.position.y);
+    fieldVariables.put("position[1].x", pen2.position.x);
+    fieldVariables.put("position[1].y", pen2.position.y);   
+    
   }
 
   void set0()
   {
-    position[0].set(origin.x, origin.y);
-    position[1].set(position[0].x, position[0].y);
+    pen1.penVel = 0;
+    pen2.penVel = 0;
+    pen1.penAcc = 0;
+    pen2.penAcc = 0;
+    
+    pen1.angle = PI / (randa.nextInt(5) + 1);
+    pen2.angle = PI / (randa.nextInt(5) + 1);
+    
+    pen1.position.set(origin.x, origin.y);
+    pen2.position.set(pen1.position.x, pen1.position.y);
 
-    a1_vel = 0;
-    a2_vel = 0;
-    a1_acc = 0;
-    a2_acc = 0;
-    a1 = PI / (randa.nextInt(5) + 1);
-    a2 = PI / (randa.nextInt(5) + 1);
-
-    while ( a1==PI||a2 == PI)
+    while ( pen1.angle==PI||pen2.angle == PI)
     {
-      a1+=0.01;
-      a2+=randa.nextFloat();
+      pen1.angle+=0.01;
+      pen2.angle+=randa.nextFloat();
     }
     update();
 
     for (int j = 0; j<point.length; j++)
     {
-      point[j].x = position[1].x;
-      point[j].y = position[1].y;
+      point[j].x = pen2.position.x;
+      point[j].y = pen2.position.y;
     }
 
-    a1_vel = 0;
-    a2_vel = 0;
-    a1_acc = 0;
-    a2_acc = 0;
+    pen1.penVel = 0;
+    pen2.penVel = 0;
+    pen1.penAcc = 0;
+    pen2.penAcc = 0;
   }
 
 
@@ -128,35 +116,35 @@ class DoublePendulum {
     float[] counter = new float[8];
 
     //calculation of acceleration, velocity and position of double pendulum
-    counter[0] = -(g) * (2 * mas1 + mas2) * sin(a1);
-    counter[1] = -mas2 * (g)*sin(a1 - 2 * a2);
-    counter[2] = -2 * sin(a1 - a2) * mas2;
-    counter[3] = a2_vel * a2_vel * length2 + a1_vel * a1_vel * length1 * cos(a1 - a2);
-    den = length1 * (2 * mas1 + mas2 - mas2 * cos(2 * a1 - 2 * a2));
-    a1_acc = (counter[0] +  counter[1] + counter[2] * counter[3]) / den;
+    counter[0] = -(g) * (2 * pen1.mass + pen2.mass) * sin(pen1.angle);
+    counter[1] = -mas2 * (g) * sin(pen1.angle - 2 * pen2.angle);
+    counter[2] = -2 * sin(pen1.angle - pen2.angle) * pen2.mass;
+    counter[3] = pen2.penVel * pen2.penVel * pen2.lengh + pen1.penVel * pen1.penVel * pen1.lengh * cos(pen1.angle - pen2.angle);
+    den = length1 * (2 * pen1.mass + pen2.mass - pen2.mass * cos(2 * pen1.angle - 2 * pen2.angle));
+    pen1.penAcc = (counter[0] +  counter[1] + counter[2] * counter[3]) / den;
 
-    counter[4] = 2 * sin(a1 - a2);
-    counter[5] = (a1_vel * a1_vel * length1 * (mas1 + mas2));
-    counter[6] = (g) * (mas1 + mas2) * cos(a1);
-    counter[7] = a2_vel * a2_vel * length2 * mas2 * cos(a1 - a2);
-    den2 = length2 * (2 * mas1 + mas2 - mas2 * cos(2 * a1 - 2 * a2));
-    a2_acc = (counter[4] * (counter[5] + counter[6] + counter[7])) / den2;
+    counter[4] = 2 * sin(pen1.angle - pen2.angle);
+    counter[5] = (pen1.penVel * pen1.penVel * pen1.lengh * (pen1.mass + pen2.mass));
+    counter[6] = (g) * (pen1.mass + pen2.mass) * cos(pen1.angle);
+    counter[7] = pen2.penVel * pen2.penVel * length2 * pen2.mass * cos(pen1.angle - pen2.angle);
+    den2 = pen2.lengh * (2 * pen1.mass + pen2.mass - pen2.mass * cos(2 * pen1.angle - 2 * pen2.angle));
+    pen2.penAcc = (counter[4] * (counter[5] + counter[6] + counter[7])) / den2;
 
-    position[0].x = length1 * sin(a1);
-    position[0].y = length1 * cos(a1);
-    position[0].add(origin); 
-    position[1].x = position[0].x + length2 * sin(a2);
-    position[1].y = position[0].y + length2 * cos(a2);
+    pen1.position.x = pen1.lengh * sin(pen1.angle);
+    pen1.position.y = pen1.lengh * cos(pen1.angle);
+    pen1.position.add(origin); 
+    pen2.position.x = pen1.position.x + pen2.lengh * sin(pen2.angle);
+    pen2.position.y = pen1.position.y + pen2.lengh * cos(pen2.angle);
 
-    a1_vel += a1_acc * delta_time;
-    a2_vel += a2_acc * delta_time;
-    a1 += a1_vel;
-    a2 += a2_vel;
+    pen1.penVel += pen1.penAcc * delta_time;
+    pen2.penVel += pen2.penAcc * delta_time;
+    pen1.angle += pen1.penVel;
+    pen2.angle += pen2.penVel;
 
-    a1_vel *= 0.999;
-    a2_vel *= 0.999;
-    px2 = position[1].x;
-    py2 = position[1].y;
+    pen1.penVel *= 0.999;
+    pen2.penVel *= 0.999;
+    px2 = pen2.position.x;
+    py2 = pen2.position.y;
   }
 
   void setSpeed(PVector force, int number) {
@@ -165,14 +153,14 @@ class DoublePendulum {
     switch(number) {
 
     case 0:
-      a1_acc = mag(PVector.div(f, mas1).x, PVector.div(f, mas1).y);
-      a1_vel += a1_acc;
-      position[0].add(a1_vel, a1_vel);
+      pen1.penAcc = mag(PVector.div(f, mas1).x, PVector.div(f, mas1).y);
+      pen1.penVel += pen1.penAcc;
+      pen1.position.add(pen1.penVel, pen1.penVel);
 
     case 1:
-      a2_acc = mag(PVector.div(f, mas2).x, PVector.div(f, mas2).y);
-      a2_vel += a2_acc;
-      position[1].add(a2_vel, a2_vel);
+      pen2.penAcc = mag(PVector.div(f, mas2).x, PVector.div(f, mas2).y);
+      pen2.penVel += pen2.penAcc;
+      pen2.position.add(pen2.penVel, pen2.penVel);
     }
   }
 
@@ -180,8 +168,8 @@ class DoublePendulum {
   {
     iko = k;
     update();
-    point[i].x = position[1].x;
-    point[i].y = position[1].y;
+    point[i].x = pen2.position.x;
+    point[i].y = pen2.position.y;
 
     i++;
 
@@ -216,23 +204,23 @@ class DoublePendulum {
 
   int setingFieldVariables()
   {
-    fieldVariables.replace("radius1", radius1);
-    fieldVariables.replace("mas1", mas1);
     fieldVariables.replace("gravity", g);
-    fieldVariables.replace("length1", length1);
-    fieldVariables.replace("position[0].x", position[0].x);
-    fieldVariables.replace("position[0].y", position[0].y);
-    fieldVariables.replace("a1_vel", a1_vel);
-    fieldVariables.replace("a1", a1);
-    fieldVariables.replace("a1_a", a1_acc);
-    fieldVariables.replace("radius2", radius2);
-    fieldVariables.replace("mas2", mas2);
-    fieldVariables.replace("length2", length2);
-    fieldVariables.replace("position[1].x", position[1].x);
-    fieldVariables.replace("position[1].y", position[1].y);
-    fieldVariables.replace("a2_vel", a2_vel);
-    fieldVariables.replace("a2", a2);
-    fieldVariables.replace("a2_a", a2_acc);
+    fieldVariables.replace("a1", pen1.angle);
+    fieldVariables.replace("a2", pen2.angle);
+    fieldVariables.replace("mas1", pen1.mass);
+    fieldVariables.replace("mas2", pen2.mass);
+    fieldVariables.replace("a1_a", pen1.penAcc);
+    fieldVariables.replace("a2_a", pen2.penAcc);
+    fieldVariables.replace("length1", pen1.lengh);
+    fieldVariables.replace("length2", pen2.lengh);
+    fieldVariables.replace("a1_vel", pen1.penVel);
+    fieldVariables.replace("a2_vel", pen2.penVel);
+    fieldVariables.replace("radius1", pen1.radius); 
+    fieldVariables.replace("radius2", pen2.radius);
+    fieldVariables.replace("position[0].x", pen1.position.x);
+    fieldVariables.replace("position[0].y", pen1.position.y);
+    fieldVariables.replace("position[1].x", pen2.position.x);
+    fieldVariables.replace("position[1].y", pen2.position.y);
 
     return 3;
   }
@@ -247,23 +235,23 @@ class DoublePendulum {
     }
 
     //finding the smallest and largest limit values used to change the color of objects
-    colorDetermination.get(0).findingSmallestAndBiggestValue(a1_vel, a1_acc, a1);
-    colorDetermination.get(1).findingSmallestAndBiggestValue(a2_vel, a2_acc, a2);
+    colorDetermination.get(0).findingSmallestAndBiggestValue(pen1.penVel, pen1.penAcc, pen1.angle);
+    colorDetermination.get(1).findingSmallestAndBiggestValue(pen2.penVel, pen2.penAcc, pen2.angle);
 
     //drawing double pendulum
     strokeWeight(2);
     stroke(255, 255, 0);
     //drawing line conecting center to first ball, and to second
-    line(origin.x, origin.y, position[0].x, position[0].y);
-    line(position[0].x, position[0].y, position[1].x, position[1].y);
+    line(origin.x, origin.y, pen1.position.x, pen1.position.y);
+    line(pen1.position.x, pen1.position.y, pen2.position.x, pen2.position.y);
     //drawing first ball
     stroke(255, 0, 0);
-    fill(colorDetermination.get(0).valueMapping(0, a1_vel, 10, 255), colorDetermination.get(0).valueMapping(1, a1_acc, 10, 255), colorDetermination.get(0).valueMapping(2, a1, 10, 255));
-    circle(position[0].x, position[0].y, radius1 * 2);
+    fill(colorDetermination.get(0).valueMapping(0, pen1.penVel, 10, 255), colorDetermination.get(0).valueMapping(1, pen1.penAcc, 10, 255), colorDetermination.get(0).valueMapping(2, pen1.angle, 10, 255));
+    circle(pen1.position.x, pen1.position.y, pen1.radius * 2);
     //drawing second ball
     stroke(0, 0, 255);
-    fill(colorDetermination.get(1).valueMapping(0, a2_vel, 10, 255), colorDetermination.get(1).valueMapping(1, a2_acc, 10, 255), colorDetermination.get(1).valueMapping(2, a2, 10, 255));
-    circle(position[1].x, position[1].y, radius2 * 2);
+    fill(colorDetermination.get(1).valueMapping(0, pen2.penVel, 10, 255), colorDetermination.get(1).valueMapping(1, pen2.penAcc, 10, 255), colorDetermination.get(1).valueMapping(2, pen2.angle, 10, 255));
+    circle(pen2.position.x, pen2.position.y, pen2.radius * 2);
     stroke(0, 0, 255);
     fill(255, 0, 0);
     circle(origin.x, origin.y, 10);

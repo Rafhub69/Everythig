@@ -1,17 +1,19 @@
 class StrengeCircles
 {
+  float angle = 0.0001;  
+  float radius = 0.01, angleChange = 0.1;
   int amount = 1000, numberOfCircles = 30;
   PVector[]  point = new PVector[amount];
-  PVector[]  center = new PVector[numberOfCircles];
-  float radius = 0.01, angleChange = 0.1;
-  float angle = 0.0001;
+  PVector[]  center = new PVector[numberOfCircles];  
+  
   Function[] fun = new Function[3];
 
   StrengeCircles(float rad, float angleChange_, int amo)
   {
+    amount = amo;
     radius = rad;
     angleChange = angleChange_;
-    amount = amo;
+    
     for (int i = 0; i <numberOfCircles; i++)
     {
       center[i] = new PVector(0, 0);

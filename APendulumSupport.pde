@@ -30,10 +30,11 @@ void nPendulManagement()
 {
   for (int i= 0; i <nPend.size(); i++)
   {
-    if (stopStart)
+    if (nPendulumAction)
     {
       nPend.get(i).trace(i, ile);
     }
+    
     nPend.get(i).drawing();
   }
 }

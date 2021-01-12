@@ -25,9 +25,10 @@ class Curve {
   }
 
   void show() {
-    stroke(255);
-    strokeWeight(1);
     noFill();
+    stroke(255);
+    strokeWeight(1);  
+    
     beginShape();
     for (PVector v : path) {
       vertex(v.x, v.y);

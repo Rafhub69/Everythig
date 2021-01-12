@@ -2,8 +2,8 @@ class Complex
 {
   float re;
   float im;
-  float freq;
   float amp;
+  float freq;  
   float phase;
 
 
@@ -23,17 +23,17 @@ class Complex
   {
     re = r;
     im = i;
-    freq = f;
     amp = a;
+    freq = f;   
     phase = p;
   }
   
   void reset()
   {
     re = 0;
-    im = 0;
-    freq = 0;
+    im = 0;    
     amp = 0;
+    freq = 0;
     phase = 0;
   }
 
