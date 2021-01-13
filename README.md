@@ -7,3 +7,8 @@ The basic functionalities are:
 - Double and single pendulum
 - Balls having their own gravitational field
 - Balls in a gravitational field (like on Earth)
+
+If you want to run this program you should: 
+- Download processing: https://processing.org/download/ 
+- Download all files and put them in a folder named Everything2D_3, then click File - Open and select this folder, then click Everything2D_3.pde. 
+- In the processing click run.
