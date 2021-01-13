@@ -25,8 +25,8 @@ class StrengeCircles
     }
 
     fun[0] = new Function(angle, angle);
-    fun[1] = new Function(point[i].x, point[i].x);
-    fun[2] = new Function(point[i].y, point[i].y);
+    fun[1] = new Function(point[curIndex].x, point[curIndex].x);
+    fun[2] = new Function(point[curIndex].y, point[curIndex].y);
   }
 
   void strange()

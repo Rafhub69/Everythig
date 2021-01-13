@@ -15,7 +15,7 @@ class BonaciSequence
     many = control;
 
     fun[0] = new Function(scene + 1, scene - 1);
-    fun[1] = new Function(i, i);
+    fun[1] = new Function(curIndex, curIndex);
     fun[2] = new Function(tab[0], tab[0]);
   }
 
@@ -41,7 +41,7 @@ class BonaciSequence
     translate(width/2, height/2);
     noFill();
 
-    for (int i = 1; i <=much; i++)
+    for (int i = 1; i <= much; i++)
     {
       for (int j = 2; j < many; j++)
       {
@@ -62,10 +62,11 @@ class BonaciSequence
         stroke((map(scene, fun[0].smallestItem, fun[0].largestItem, 100, 200)), (map(i, fun[1].smallestItem, fun[1].largestItem, 50, 255)), (map(tab[j], fun[2].smallestItem, fun[2].largestItem, 100, 200)) );
         pushMatrix();
 
-        strokeWeight(10);
         rotate(j * (PI/2));
+
         rect(0, 0, scene * tab[j], scene * tab[j]);
-        
+        strokeWeight(10);
+
         popMatrix();
       }
 
@@ -97,11 +98,11 @@ class BonaciSequence
     
     if (nBonaciAction)
     {
-      if ( reflection == true)
+      if (reflection)
       {
 
         scene -=0.04000;
-      } else if (reflection == false)
+      } else if (!reflection)
       {
         scene +=0.04000;
       }

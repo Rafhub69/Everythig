@@ -2,6 +2,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import processing.sound.*;
 import java.util.Random;
+import java.util.List;
 import java.util.Map;
 import java.io.File;
 import controlP5.*;
@@ -14,36 +15,38 @@ boolean field = false;//true -  central field , false -  homogeneous field
 boolean pendul = false;//true - single pendulum , false - double pendulum
 boolean wholeScreen = false;// true - Lisajous table, false - nBonaci Sequence
 boolean cirOrNpendul = false;//true - Circle, false - N-pendulum
-boolean startMenu = true;
 boolean stopStart = false;//true - everything is working , false - everything is stoped
-boolean information = false;
-boolean isMouseOver = false;
-boolean centralAction = false, homogeneousAction = false, singleAction = false, doubleAction = false, lisajousAction = false, nBonaciAction = false, strangeCirclesAction = false, fourierTransformAction = false, nPendulumAction = false;
+boolean startMenu = true;
+boolean information = false, isMouseOver = false;
+boolean centralAction = false, singleAction = false, nPendulumAction = false;
+boolean doubleAction = false, nBonaciAction = false, homogeneousAction = false; 
+boolean lisajousAction = false, strangeCirclesAction = false, fourierTransformAction = false;
 boolean[] scrollMenuOpenByMouse = new boolean[6];
 boolean[] changePositionByMouse = new boolean[6];
 boolean[] contextMenuOpenByMouse = new boolean[6];
 String buttonName;
 PFont font, arialFont;
 long startedMillis = 0;
-int amo = 1000, currentIndex = 0, ile_pend = 1, start, current, pozX = 2;
-int doublePenIndex = 2, numberOfNpendulum = 1, degreeOfPendulum = 5, Multi = 10, MaxFar = 100;
-int centerX = 0, centerY = 0, button_height =30, button_width = 106, pozXSet = pozX + button_width;
-int control = 50, i, ile = 1, ile2 = ile, ile_pend2 = ile_pend, pozY, control2 = control, control3 = control2+1;
 float delta_time, now = System.nanoTime(), scrollMovement = 0;
-float pozYSet[] = new float[2], screenSizeX = 0, screenSizeY = 0;
-float length1, length2, mas1, mas2, a2, poz, rad = 10, angleChange_ = 0.01;
-float mass = 1000, radius = 20, density, G_const = 0.6673, a1 = 4*PI, w = 0.05;
+float pozYSet[] = new float[2], screenSizeX = 0, screenSizeY = 0, poz;
+float mass, radius = 20, density, G_const = 0.6673, a1 = 4*PI, w = 0.05;
+float length1, length2, mas1, mas2, a2, strCirRadius = 10, angleChange_ = 0.01;
+int strCirAmount = 1000, currentIndex = 0, ile_pend = 1, start, current, pozX = 2;
+int doublePenIndex = 2, numberOfNpendulum = 1, degreeOfPendulum = 5, Multi = 10, MaxFar = 100;
+int centerX = 0, centerY = 0, button_height = 30, button_width = 106, pozXSet = pozX + button_width;
+int control = 50, curIndex, ile = 1, ile2 = ile, ile_pend2 = ile_pend, pozY, control2 = control, control3 = control2+1;
+
 //Objects that occur individually
 SaveGame save;
 BonaciSequence seq;
 LisajousTable table;
 StrengeCircles strenCir;
 FourierTransform fourier;
-
-ArrayList<Circum> cir = new ArrayList<Circum>(control);
-ArrayList<Pendulum> singlePend = new ArrayList<Pendulum>(ile_pend);
-ArrayList<NPendulum> nPend = new ArrayList<NPendulum>(numberOfNpendulum);
-ArrayList<DoublePendulum> doublePend = new ArrayList<DoublePendulum>(ile);
+//Lists of objects
+List<Circum> cir = new ArrayList<Circum>(control);
+List<Pendulum> singlePend = new ArrayList<Pendulum>(ile_pend);
+List<NPendulum> nPend = new ArrayList<NPendulum>(numberOfNpendulum);
+List<DoublePendulum> doublePend = new ArrayList<DoublePendulum>(ile);
 HashMap<String, Character> shortcutTable = new HashMap<String, Character>(12);
 
 void settings() {
@@ -79,7 +82,7 @@ void creatingObjects()
   seq = new BonaciSequence();
   table = new LisajousTable(); 
   fourier = new FourierTransform(new Everything2D_4());
-  strenCir = new StrengeCircles( rad, angleChange_, amo);
+  strenCir = new StrengeCircles(strCirRadius, angleChange_, strCirAmount);
 
   //creating a random npendulum
   for (int i= 0; i <numberOfNpendulum; i++)
@@ -183,7 +186,7 @@ void resetToBegining()
       cir.remove(i);
     }
 
-    if ( field == true)
+    if (field)
     {
 
       for (int i = 0; i <control2; i++)
@@ -210,10 +213,9 @@ void resetToBegining()
         cir.get(i).velocity = new PVector(0.0000, 0.0000);
       }
       control = control2;
-    } else if ( field == false)
+    } else if (!field) 
     {
-
-      for (int i = 0; i<control2; i++)
+      for (int i = 0; i < control2; i++)
       {
         mass = 8 * randa.nextFloat() + 4;
         radius = mass  * 2;
@@ -242,7 +244,7 @@ void resetToBegining()
     break;
   case 2:
 
-    if (pendul == true)
+    if (pendul)
     {
       size = singlePend.size();
       for (int i = size - 1; i >= 0; i--)
@@ -259,7 +261,7 @@ void resetToBegining()
         a1 = PI / (randa.nextFloat() + 0.5);
         singlePend.add(new Pendulum(a1, singlePend.get(i - 1).position));
       }
-    } else if (pendul == false)
+    } else if (!pendul)
     {
       size = doublePend.size();
       for (int i = size - 1; i >= 0; i--)
@@ -327,7 +329,7 @@ void strangeCirclesManagement()
   popMatrix();
 }
 
-void calc_delta_time() {
+void calculate_delta_time() {
   delta_time = (System.nanoTime()- now)/100000000;
   now = System.nanoTime();
 }
@@ -336,11 +338,10 @@ void draw() {
 
   drawBorders();
   background(120);
-  calc_delta_time();
+  calculate_delta_time();
 
   switch(mode) {
-  case 1:
-
+  case 1: //1 - gravitation
     if (field)
     { 
       centralFieldManagement();
@@ -349,8 +350,7 @@ void draw() {
       homogeneousFieldManagement();
     }
     break;
-  case 2:
-
+  case 2: //2 - pendulum
     if (pendul)
     {
       singlePendulumManagement();
@@ -359,8 +359,7 @@ void draw() {
       dublePendulumManagement();
     }
     break;
-  case 3:
-
+  case 3: //3 - programs on whole screen
     background(0);
 
     if (wholeScreen)
@@ -373,7 +372,7 @@ void draw() {
     }
     fill(200, 200, 200);
     break;
-  case 4:
+  case 4: // 4 - strenge circles
     if (cirOrNpendul)
     {
       strangeCirclesManagement();
@@ -382,14 +381,13 @@ void draw() {
       nPendulManagement();
     }
     break;    
-  case 5:
-
+  case 5: // 5 - fourier transformation
     noFill();
     background(0);    
     fourier.show();
     break;
   }
-
+  
   textSize(20);
   fill(10, 10, 10);
 

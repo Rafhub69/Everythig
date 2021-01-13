@@ -1,8 +1,8 @@
 class Slope
 {
-  float a = 250, b = 200, c = 100;
-  float x1 = -8, y1 = (-b - 26), spot = 0;
-  float a1_a = 0, a1_vel = 0, g = 9.81, delta_t = 0.003; 
+  float sideA = 250, sideB = 200, sideC = 100;
+  float x1 = -8, y1 = (-sideB - 26), spot = 0;
+  float a1_acc = 0, a1_vel = 0, gravity = 9.81, delta_t = 0.003; 
 
   Slope()
   {
@@ -12,24 +12,24 @@ class Slope
   {
     delay(30);
 
-    a1_vel += a1_a;
-    x1 += (a1_vel * (a / c)) * delta_t;
-    y1 += (a1_vel * (b / c)) * delta_t;
+    a1_vel += a1_acc;
+    x1 += (a1_vel * (sideA / sideC)) * delta_t;
+    y1 += (a1_vel * (sideB / sideC)) * delta_t;
   }
 
   void drawing()
   {
-    a1_a = (5 * g * (a / c)) / 7;
-    triangle(spot, -b, spot, spot, a, spot);
-    line(-20, -b - 15, spot, -b);
-    line(a, spot, a + 30, spot);
+    a1_acc = (5 * gravity * (sideA / sideC)) / 7;
+    triangle(spot, -sideB, spot, spot, sideA, spot);
+    line(-20, -sideB - 15, spot, -sideB);
+    line(sideA, spot, sideA + 30, spot);
     kula();
 
-    if (x1 >= (a + 10) || y1 >= -15) 
+    if (x1 >= (sideA + 10) || y1 >= -15) 
     {
       x1 = -8;
-      y1 = (-b - 26);
-      a1_a = 0;
+      y1 = (-sideB - 26);
+      a1_acc = 0;
       a1_vel = 0;
       kula();
     }

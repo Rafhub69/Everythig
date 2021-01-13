@@ -17,7 +17,7 @@ class FourierTransform {
   PVector prev;
 
   //arrays and arraylists
-   ArrayList<Complex> x;
+  ArrayList<Complex> x;
   ArrayList<PVector> path;
   ArrayList<PVector> drawing;
   ArrayList<Complex> Fourier;
@@ -47,7 +47,7 @@ class FourierTransform {
 
       for (int j = i+1; j < n; j++)
       {
-        if (c.get(j).amp > c.get(mindex).amp)
+        if (c.get(j).amplitude > c.get(mindex).amplitude)
           mindex = j;
       }
       swap(c, mindex, i);
@@ -132,11 +132,12 @@ class FourierTransform {
       prev.y = pos.y;
 
       Complex epicycle = fourier.get(i);
-
-      frequency = epicycle.freq;
-      amplitude = epicycle.amp;
+   
       phase = epicycle.phase;
+      frequency = epicycle.frequency;  
+      amplitude = epicycle.amplitude;
       diameter = amplitude*2;
+      
 
       float theta = frequency * time + phase;
 

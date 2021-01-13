@@ -27,9 +27,9 @@ void creatingButtons(int he, PFont inputFont, PFont font_)
   hi++;
   cp5.addButton("Dual").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Podwójne wahadło").hide().setValue(2);
   hi++;
-  cp5.addButton("Homogen").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel(" Pole jednorodne").hide().setValue(1);
+  cp5.addButton("Homogen").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Pole jednorodne").hide().setValue(1);
   hi++;
-  cp5.addButton("Central").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel(" Pole centralne").hide().setValue(1);
+  cp5.addButton("Central").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Pole centralne").hide().setValue(1);
   hi++;
   cp5.addButton("Lisajous").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Tablica Lisajous ").hide().setValue(3);
   hi++;
@@ -366,7 +366,7 @@ void CentralButton(int n, boolean switches)
     break;
   }
 
-  mode  = n;
+  mode = n;
   resetToBegining();
 }
 
@@ -432,7 +432,7 @@ int inputChange(String theText)
 // automatically receives results from controller input
 void input(String theText) {
 
-  if (theText != null || true)
+  if (theText != null)
   {
     int amount = inputChange(theText);
 
@@ -462,7 +462,7 @@ void input(String theText) {
 
 void degreesOfPendulum(String theText) {
 
-  if (theText != null || true)
+  if (theText != null)
   {
     degreeOfPendulum = inputChange(theText);
 

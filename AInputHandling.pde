@@ -310,28 +310,28 @@ void keyPressed()
         information = !information;
       }  
 
-      if (mode == 1 & field == true)
+      if (mode == 1 & field)
       {
         pozYSet = cp5.getController("Central").getPosition();
-      } else if (mode == 1 & field == false)
+      } else if (mode == 1 & !field)
       {
         pozYSet = cp5.getController("Homogen").getPosition();
-      } else if (mode == 2 & pendul == true)
+      } else if (mode == 2 & pendul)
       {
         pozYSet = cp5.getController("Single").getPosition();
-      } else if (mode == 2 & pendul == false)
+      } else if (mode == 2 & !pendul)
       {
         pozYSet = cp5.getController("Dual").getPosition();
-      } else if (mode == 3 & wholeScreen == true)
+      } else if (mode == 3 & wholeScreen)
       {
         pozYSet = cp5.getController("Lisajous").getPosition();
-      } else if (mode == 3 & wholeScreen == false)
+      } else if (mode == 3 & !wholeScreen)
       {    
         //pozYSet = cp5.getController("Bonaci").getPosition();
-      } else if (mode == 4 && cirOrNpendul == true)
+      } else if (mode == 4 && cirOrNpendul)
       {
         pozYSet = cp5.getController("Circle").getPosition();
-      } else if (mode == 4 && cirOrNpendul == false)
+      } else if (mode == 4 && !cirOrNpendul)
       {
         pozYSet = cp5.getController("Npendul").getPosition();
       } else if (mode == 5)
@@ -403,170 +403,169 @@ void checkingIfMouseIsOver()
 
 void contextMenu(int currentIndex)
 {
-  i = currentIndex;
+  curIndex = currentIndex;
   float x = 0, y = 0;
   if (contextMenuOpenByMouse[0] || contextMenuOpenByMouse[1])
   {
-    cir.get(i).showingData();
-    y = cir.get(i).point.y;
-    x = cir.get(i).point.x + 156 + cir.get(i).radius> width ? cir.get(i).point.x - ((cir.get(i).point.x + 156) - width ) : cir.get(i).point.x + cir.get(i).radius;    
+    cir.get(curIndex).showingData();
+    y = cir.get(curIndex).point.y;
+    x = cir.get(curIndex).point.x + 156 + cir.get(curIndex).radius> width ? cir.get(curIndex).point.x - ((cir.get(curIndex).point.x + 156) - width ) : cir.get(curIndex).point.x + cir.get(curIndex).radius;    
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
 
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(cir.get(i).fieldVariables.get("mass")).setCaptionLabel("mass").setVisible(true); 
-    cp5.get(Slider.class, "Radius").setValue(cir.get(i).fieldVariables.get("radius")).setCaptionLabel("radius").setVisible(true); 
-    cp5.get(Slider.class, "Springness").setValue(cir.get(i).fieldVariables.get("springness")).setCaptionLabel("springness").setVisible(true);
+    cp5.get(Slider.class, "Mass").setValue(cir.get(curIndex).fieldVariables.get("mass")).setCaptionLabel("mass").setVisible(true); 
+    cp5.get(Slider.class, "Radius").setValue(cir.get(curIndex).fieldVariables.get("radius")).setCaptionLabel("radius").setVisible(true); 
+    cp5.get(Slider.class, "Springness").setValue(cir.get(curIndex).fieldVariables.get("springness")).setCaptionLabel("springness").setVisible(true);
   } else if (contextMenuOpenByMouse[2])
   {
-    singlePend.get(i).setingFieldVariables();
+    singlePend.get(curIndex).setingFieldVariables();
 
-    x = singlePend.get(i).position.x + 156 + cir.get(i).radius> width ? singlePend.get(i).position.x - ((singlePend.get(i).position.x + 156) - width ) : singlePend.get(i).position.x + singlePend.get(i).radius;
-    y = singlePend.get(i).position.y + 56 + cir.get(i).radius> height ? singlePend.get(i).position.y - ((singlePend.get(i).position.x + 56) - height ) : singlePend.get(i).position.y + singlePend.get(i).radius;
+    x = singlePend.get(curIndex).position.x + 156 + cir.get(curIndex).radius> width ? singlePend.get(curIndex).position.x - ((singlePend.get(curIndex).position.x + 156) - width ) : singlePend.get(curIndex).position.x + singlePend.get(curIndex).radius;
+    y = singlePend.get(curIndex).position.y + 56 + cir.get(curIndex).radius> height ? singlePend.get(curIndex).position.y - ((singlePend.get(curIndex).position.x + 56) - height ) : singlePend.get(curIndex).position.y + singlePend.get(curIndex).radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
 
     cp5.get(Slider.class, "Mass").setVisible(false);
-    cp5.get(Slider.class, "Radius").setValue(singlePend.get(i).fieldVariables.get("radius")).setCaptionLabel("radius").setVisible(true); 
-    cp5.get(Slider.class, "Gravity").setValue(singlePend.get(i).fieldVariables.get("gravity")).setCaptionLabel("gravity").setVisible(true); 
-    cp5.get(Slider.class, "Springness").setValue(singlePend.get(i).fieldVariables.get("damping")).setCaptionLabel("damping").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(singlePend.get(curIndex).fieldVariables.get("radius")).setCaptionLabel("radius").setVisible(true); 
+    cp5.get(Slider.class, "Gravity").setValue(singlePend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("gravity").setVisible(true); 
+    cp5.get(Slider.class, "Springness").setValue(singlePend.get(curIndex).fieldVariables.get("damping")).setCaptionLabel("damping").setVisible(true);
   } else if (contextMenuOpenByMouse[3])
   {
-    doublePend.get(i).setingFieldVariables();
+    doublePend.get(curIndex).setingFieldVariables();
 
-    x = doublePend.get(i).pen1.position.x + 156 + doublePend.get(i).pen1.radius> width ? doublePend.get(i).pen1.position.x - ((doublePend.get(i).pen1.position.x + 156) - width ) : doublePend.get(i).pen1.position.x + doublePend.get(i).pen1.radius;
-    y = doublePend.get(i).pen1.position.y + 56 + doublePend.get(i).pen1.radius> height ? doublePend.get(i).pen1.position.y - ((doublePend.get(i).pen1.position.y + 56) - height ) : doublePend.get(i).pen1.position.y + doublePend.get(i).pen1.radius;
+    x = doublePend.get(curIndex).pen1.position.x + 156 + doublePend.get(curIndex).pen1.radius> width ? doublePend.get(curIndex).pen1.position.x - ((doublePend.get(curIndex).pen1.position.x + 156) - width ) : doublePend.get(curIndex).pen1.position.x + doublePend.get(curIndex).pen1.radius;
+    y = doublePend.get(curIndex).pen1.position.y + 56 + doublePend.get(curIndex).pen1.radius> height ? doublePend.get(curIndex).pen1.position.y - ((doublePend.get(curIndex).pen1.position.y + 56) - height ) : doublePend.get(curIndex).pen1.position.y + doublePend.get(curIndex).pen1.radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
     doublePenIndex = 0;
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldVariables.get("mas1")).setCaptionLabel("mas1").setVisible(true);
-    cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true); 
+    cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas1")).setCaptionLabel("mas1").setVisible(true);
+    cp5.get(Slider.class, "Springness").setValue(doublePend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true); 
     
   } else if (contextMenuOpenByMouse[4])
   {
-    doublePend.get(i).setingFieldVariables();
+    doublePend.get(curIndex).setingFieldVariables();
 
-    x = doublePend.get(i).pen2.position.x + 156 + doublePend.get(i).pen2.radius> width ? doublePend.get(i).pen2.position.x - ((doublePend.get(i).pen2.position.x + 156) - width ) : doublePend.get(i).pen2.position.x + doublePend.get(i).pen2.radius;
-    y = doublePend.get(i).pen2.position.y + 56 + doublePend.get(i).pen2.radius> height ? doublePend.get(i).pen2.position.y - ((doublePend.get(i).pen2.position.y + 56) - height ) : doublePend.get(i).pen2.position.y + doublePend.get(i).pen2.radius;
+    x = doublePend.get(curIndex).pen2.position.x + 156 + doublePend.get(curIndex).pen2.radius> width ? doublePend.get(curIndex).pen2.position.x - ((doublePend.get(curIndex).pen2.position.x + 156) - width ) : doublePend.get(curIndex).pen2.position.x + doublePend.get(curIndex).pen2.radius;
+    y = doublePend.get(curIndex).pen2.position.y + 56 + doublePend.get(curIndex).pen2.radius> height ? doublePend.get(curIndex).pen2.position.y - ((doublePend.get(curIndex).pen2.position.y + 56) - height ) : doublePend.get(curIndex).pen2.position.y + doublePend.get(curIndex).pen2.radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
     doublePenIndex = 1;
     
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(doublePend.get(i).fieldVariables.get("mas2")).setCaptionLabel("mas2").setVisible(true); 
-    cp5.get(Slider.class, "Springness").setValue(doublePend.get(i).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(i).fieldVariables.get("radius2")).setCaptionLabel("radius2").setVisible(true); 
+    cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas2")).setCaptionLabel("mas2").setVisible(true); 
+    cp5.get(Slider.class, "Springness").setValue(doublePend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius2")).setCaptionLabel("radius2").setVisible(true); 
     
   } else if (contextMenuOpenByMouse[5])
   {
-    int index = nPend.get(i).index;
-    nPend.get(i).setingFieldVariables();
+    int index = nPend.get(curIndex).index;
+    nPend.get(curIndex).setingFieldVariables();
 
-    x = nPend.get(i).singlePen.get(index).position.x + 156 + nPend.get(i).singlePen.get(index).radius> width ? nPend.get(i).singlePen.get(index).position.x - ((nPend.get(i).singlePen.get(index).position.x + 156) - width ) 
-      : nPend.get(i).singlePen.get(index).position.x + nPend.get(i).singlePen.get(index).radius;
+    x = nPend.get(curIndex).singlePen.get(index).position.x + 156 + nPend.get(curIndex).singlePen.get(index).radius> width ? nPend.get(curIndex).singlePen.get(index).position.x - ((nPend.get(curIndex).singlePen.get(index).position.x + 156) - width ) 
+      : nPend.get(curIndex).singlePen.get(index).position.x + nPend.get(curIndex).singlePen.get(index).radius;
 
-    y = nPend.get(i).singlePen.get(index).position.y + 56 + nPend.get(i).singlePen.get(index).radius> height ? nPend.get(i).singlePen.get(index).position.y - ((nPend.get(i).singlePen.get(index).position.y + 56) - height ) 
-      : nPend.get(i).singlePen.get(index).position.y + nPend.get(i).singlePen.get(index).radius;
+    y = nPend.get(curIndex).singlePen.get(index).position.y + 56 + nPend.get(curIndex).singlePen.get(index).radius> height ? nPend.get(curIndex).singlePen.get(index).position.y - ((nPend.get(curIndex).singlePen.get(index).position.y + 56) - height ) 
+      : nPend.get(curIndex).singlePen.get(index).position.y + nPend.get(curIndex).singlePen.get(index).radius;
 
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
 
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Springness").setValue(nPend.get(i).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Mass").setValue(nPend.get(i).fieldVariables.get("mas" + index)).setCaptionLabel("mass").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(nPend.get(i).fieldVariables.get("radius" + index)).setCaptionLabel("radius").setVisible(true);     
+    cp5.get(Slider.class, "Springness").setValue(nPend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
+    cp5.get(Slider.class, "Mass").setValue(nPend.get(curIndex).fieldVariables.get("mas" + index)).setCaptionLabel("mass").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(nPend.get(curIndex).fieldVariables.get("radius" + index)).setCaptionLabel("radius").setVisible(true);     
   }
 }
 
 void changePositionByTheMouse(int currentIndex)
 {
-  i = currentIndex;
+  curIndex = currentIndex;
   PVector diff;
 
   if (changePositionByMouse[0] || changePositionByMouse[1])
   {
     //These booleans are false if the mouse is inside the window. 
-    boolean left = mouseX < cir.get(i).radius;
-    boolean right = mouseX >  width - cir.get(i).radius;
-    boolean top = mouseY  < cir.get(i).radius;
-    boolean bottom =  mouseY > height - cir.get(i).radius;
+    boolean left = mouseX < cir.get(curIndex).radius;
+    boolean right = mouseX >  width - cir.get(curIndex).radius;
+    boolean top = mouseY  < cir.get(curIndex).radius;
+    boolean bottom =  mouseY > height - cir.get(curIndex).radius;
 
     if (!left && !right && !top && !bottom) 
     {
-      cir.get(i).point.x = mouseX;
-      cir.get(i).point.y = mouseY;
+      cir.get(curIndex).point.x = mouseX;
+      cir.get(curIndex).point.y = mouseY;
     } else
     {
       if (!(left && top) || !(left && bottom) || !(right && top) || !(right && bottom))
       {
         if (left || right)
         {
-          cir.get(i).point.y = mouseY;
+          cir.get(curIndex).point.y = mouseY;
         }
 
         if (top || bottom)
         {
-          cir.get(i).point.x = mouseX;
+          cir.get(curIndex).point.x = mouseX;
         }
       }
     }
     if (changePositionByMouse[0])
     {
-      cir.get(i).velocity.mult(0);
+      cir.get(curIndex).velocity.mult(0);
     }
   } else if (changePositionByMouse[2])
   {
-    singlePend.get(i).position.x = mouseX;
-    singlePend.get(i).position.y = mouseY;
+    singlePend.get(curIndex).position.x = mouseX;
+    singlePend.get(curIndex).position.y = mouseY;
 
-    diff = PVector.sub(singlePend.get(i).origin, new PVector(mouseX, mouseY));      // Difference between 2 points
-    singlePend.get(i).angle = atan2(-1*diff.y, diff.x) - radians(90);                      // Angle relative to vertical axis
+    diff = PVector.sub(singlePend.get(curIndex).origin, new PVector(mouseX, mouseY));      // Difference between 2 points
+    singlePend.get(curIndex).angle = atan2(-1*diff.y, diff.x) - radians(90);                      // Angle relative to vertical axis
 
-    singlePend.get(i).lengh = diff.mag();
-    singlePend.get(i).penVel = 0;
+    singlePend.get(curIndex).lengh = diff.mag();
+    singlePend.get(curIndex).velocity = 0;
   } else if (changePositionByMouse[3])
   {
-    doublePend.get(i).pen1.position.x = mouseX;
-    doublePend.get(i).pen1.position.y = mouseY;
+    doublePend.get(curIndex).pen1.velocity = 0;
+    doublePend.get(curIndex).pen2.velocity = 0;
+    doublePend.get(curIndex).pen1.position.x = mouseX;
+    doublePend.get(curIndex).pen1.position.y = mouseY;
 
-    diff = PVector.sub(doublePend.get(i).origin, new PVector(mouseX, mouseY));     
-    doublePend.get(i).pen1.angle = atan2(-1*diff.y, diff.x)- radians(90);                         
-
-    doublePend.get(i).pen1.lengh = diff.mag();
-    PVector diff2 = PVector.sub(doublePend.get(i).pen1.position, doublePend.get(i).pen2.position);
-    doublePend.get(i).pen2.lengh = diff2.mag();
-    doublePend.get(i).pen1.penVel = 0;
-    doublePend.get(i).pen2.penVel = 0;
-    
+    diff = PVector.sub(doublePend.get(curIndex).origin, new PVector(mouseX, mouseY));     
+    doublePend.get(curIndex).pen1.angle = atan2(-1*diff.y, diff.x)- radians(90);                         
+   
+    doublePend.get(curIndex).pen1.lengh = diff.mag();
+    PVector diff2 = PVector.sub(doublePend.get(curIndex).pen1.position, doublePend.get(curIndex).pen2.position);
+    doublePend.get(curIndex).pen2.lengh = diff2.mag();      
   } else if (changePositionByMouse[4])
   {
-    doublePend.get(i).pen2.position.x = mouseX;
-    doublePend.get(i).pen2.position.y = mouseY;
+    doublePend.get(curIndex).pen2.position.x = mouseX;
+    doublePend.get(curIndex).pen2.position.y = mouseY;
 
-    diff = PVector.sub(doublePend.get(i).pen1.position, new PVector(mouseX, mouseY));     
-    doublePend.get(i).pen2.angle = atan2(-1*diff.y, diff.x)- radians(90);                              
+    diff = PVector.sub(doublePend.get(curIndex).pen1.position, new PVector(mouseX, mouseY));     
+    doublePend.get(curIndex).pen2.angle = atan2(-1*diff.y, diff.x)- radians(90);                              
 
-    doublePend.get(i).pen2.lengh = diff.mag();
-    doublePend.get(i).pen2.penVel = 0;
+    doublePend.get(curIndex).pen2.velocity = 0;
+    doublePend.get(curIndex).pen2.lengh = diff.mag();    
   } else if (changePositionByMouse[5])
   {
-    int index = nPend.get(i).index;
-    nPend.get(i).singlePen.get(index).position.x = mouseX;
-    nPend.get(i).singlePen.get(index).position.y = mouseY;
+    int index = nPend.get(curIndex).index;
+    nPend.get(curIndex).singlePen.get(index).position.x = mouseX;
+    nPend.get(curIndex).singlePen.get(index).position.y = mouseY;
 
     if (index > 1)
     {
-      diff = PVector.sub(nPend.get(i).singlePen.get(index - 1).position, new PVector(mouseX, mouseY));
+      diff = PVector.sub(nPend.get(curIndex).singlePen.get(index - 1).position, new PVector(mouseX, mouseY));
     } else
     {
-      diff = PVector.sub(nPend.get(i).singlePen.get(0).origin, new PVector(mouseX, mouseY));
+      diff = PVector.sub(nPend.get(curIndex).singlePen.get(0).origin, new PVector(mouseX, mouseY));
     }
 
-    nPend.get(i).singlePen.get(index).angle = atan2(-1*diff.y, diff.x)- radians(90);                              
+    nPend.get(curIndex).singlePen.get(index).angle = atan2(-1*diff.y, diff.x)- radians(90);                              
 
-    nPend.get(i).singlePen.get(index).lengh = diff.mag();
-    nPend.get(i).singlePen.get(index).penVel = 0;
+    nPend.get(curIndex).singlePen.get(index).lengh = diff.mag();
+    nPend.get(curIndex).singlePen.get(index).velocity = 0;
   }
 }

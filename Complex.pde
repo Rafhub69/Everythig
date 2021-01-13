@@ -2,10 +2,9 @@ class Complex
 {
   float re;
   float im;
-  float amp;
-  float freq;  
   float phase;
-
+  float amplitude;
+  float frequency;   
 
   Complex(float r, float i)
   {
@@ -22,19 +21,19 @@ class Complex
   Complex(float r, float i, float f, float a, float p)
   {
     re = r;
-    im = i;
-    amp = a;
-    freq = f;   
+    im = i;  
     phase = p;
+    frequency = f; 
+    amplitude = a;
   }
   
   void reset()
   {
     re = 0;
-    im = 0;    
-    amp = 0;
-    freq = 0;
+    im = 0;        
     phase = 0;
+    frequency = 0;
+    amplitude = 0;
   }
 
   Complex mult(Complex other)

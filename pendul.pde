@@ -1,6 +1,6 @@
 class Pendulum {
   
-  float penAcc, penVel, angle = PI;
+  float acceleration, velocity, angle = PI;
   LotsOfFunctions colorDetermination;
   float lengh = 250, radius = 24, mass = 1;
   PVector position; // position of pendulum ball
@@ -26,7 +26,7 @@ class Pendulum {
     angle = angle_;
     lengh = lengh_;
     radius = radius_;
-    penVel = penVel_;  
+    velocity = penVel_;  
     gravity = gravity_;
     damping = damping_;
 
@@ -38,12 +38,12 @@ class Pendulum {
     position = new PVector(lengh*sin(angle), lengh*cos(angle));
     position.add(origin_);
 
-    colorDetermination = new LotsOfFunctions(penVel, penAcc, angle);
+    colorDetermination = new LotsOfFunctions(velocity, acceleration, angle);
 
     fieldVariables.put("angle", angle);
-    fieldVariables.put("lengh", lengh);
-    fieldVariables.put("penVel", penVel);
+    fieldVariables.put("lengh", lengh);    
     fieldVariables.put("radius", radius);
+    fieldVariables.put("penVel", velocity);
     fieldVariables.put("gravity", gravity);
     fieldVariables.put("damping", damping);    
     fieldVariables.put("origin.x", origin.x);
@@ -54,45 +54,43 @@ class Pendulum {
   void update()
   {
 
-    penAcc = (-gravity / lengh) * sin(angle);
+    acceleration = (-gravity / lengh) * sin(angle);
 
-    penVel += penAcc * delta_time;
-    angle += penVel;
+    velocity += acceleration * delta_time;
+    angle += velocity;
 
     position.set(lengh*sin(angle), lengh*cos(angle));
     position.add(origin);   
-    penVel *= damping;
+    velocity *= damping;
   }
 
   void setSpeed(PVector force) {
     PVector f = force.copy();
-    penAcc = mag(PVector.div(f, mass).x, PVector.div(f, mass).y);
-    penVel += penAcc;
-    position.add(penVel, penVel);
+    acceleration = mag(PVector.div(f, mass).x, PVector.div(f, mass).y);
+    velocity += acceleration;
+    position.add(velocity, velocity);
   }
 
-  int setingFieldVariables()
+  void setingFieldVariables()
   {  
     fieldVariables.replace("angle", angle);
     fieldVariables.replace("lengh", lengh);
     fieldVariables.replace("radius", radius);
-    fieldVariables.replace("penVel", penVel);
+    fieldVariables.replace("penVel", velocity);
     fieldVariables.replace("gravity", gravity);
     fieldVariables.replace("damping", damping);    
     fieldVariables.replace("origin.x", origin.x);
     fieldVariables.replace("origin.y", origin.y);
-    
-    return 3;
   }
 
   void drawing()
   {
 
     //finding the smallest and largest limit values used to change the color of objects
-    colorDetermination.findingSmallestAndBiggestValue(penVel, penAcc, angle);
+    colorDetermination.findingSmallestAndBiggestValue(velocity, acceleration, angle);
 
     stroke(255);
-    fill(colorDetermination.valueMapping(0, penVel, 10, 255), colorDetermination.valueMapping(1, penAcc, 10, 255), colorDetermination.valueMapping(2, angle, 10, 255));
+    fill(colorDetermination.valueMapping(0, velocity, 10, 255), colorDetermination.valueMapping(1, acceleration, 10, 255), colorDetermination.valueMapping(2, angle, 10, 255));
     line(origin.x, origin.y, position.x, position.y);
     circle( position.x, position.y, 2 * radius);
   }

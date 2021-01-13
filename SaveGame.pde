@@ -53,7 +53,7 @@ class SaveGame
 
         for (int j = size - 1; j >= 0; j--)
         {
-          cir.remove(i);
+          cir.remove(curIndex);
         }
       } else if (fileName.contains("SinglePend"))
       {
@@ -61,7 +61,7 @@ class SaveGame
 
         for (int j = size - 1; j >= 0; j--)
         {
-          singlePend.remove(i);
+          singlePend.remove(curIndex);
         }
       } else if (fileName.contains("DoublePend"))
       {
@@ -69,7 +69,7 @@ class SaveGame
 
         for (int j = size - 1; j >= 0; j--)
         {
-          doublePend.remove(i);
+          doublePend.remove(curIndex);
         }
       } else if (fileName.contains("NPend"))
       {
@@ -88,7 +88,7 @@ class SaveGame
         if (name.equals("cir"))
         {
           cir.add(new Circum(new PVector(item.getFloat("point.x"), item.getFloat("point.y")), new PVector(item.getFloat("velocity.x"), 
-          item.getFloat("velocity.y")), new PVector(item.getFloat("acceleration.x"), item.getFloat("acceleration.y")), item.getFloat("radius"), item.getFloat("mass"), item.getFloat("springness"), item.getFloat("ref")));
+          item.getFloat("velocity.y")), new PVector(item.getFloat("acceleration.x"), item.getFloat("acceleration.y")), item.getFloat("radius"), item.getFloat("mass"), item.getFloat("springness")));
         } else if (name.equals("singlePend"))
         {
           singlePend.add(new Pendulum(new PVector(item.getFloat("origin.x"), item.getFloat("origin.y")), item.getFloat("radius"), item.getFloat("gravity"), item.getFloat("damping"), item.getFloat("angle"), item.getFloat("penVel"), item.getFloat("lengh")));

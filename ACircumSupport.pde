@@ -64,13 +64,13 @@ void centralFieldManagement()
 
   if (centralAction)
   {
-    for (int i = 0; i < cir.size(); i++)
+    for (int i = 0; i<cir.size(); i++)
     {
       reverseGravity.add(new PVector(0, 0));
     }
 
     for (int i = 0; i<cir.size(); i++)
-    {
+    {     
       //Calculation of the mass center
       dem += cir.get(i).mass;
       dividerx += cir.get(i).mass * cir.get(i).point.x;
@@ -113,7 +113,7 @@ void centralFieldManagement()
   for (int i = 0; i<cir.size(); i++)
   {   
     cir.get(i).drawing();
-    
+
     fill(50, 0, 255 );
     stroke(255, 0, 50);
     textAlign(CENTER, CENTER);
