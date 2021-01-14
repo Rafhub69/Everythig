@@ -21,14 +21,11 @@ class FourierTransform {
   ArrayList<PVector> path;
   ArrayList<PVector> drawing;
   ArrayList<Complex> Fourier;
-  
-  SinOsc sine;
 
-  FourierTransform(Everything2D_4 th)
+  FourierTransform()
   {
     pos = new PVector();
     prev = new PVector();
-    sine = new SinOsc(th);
     //initialize the ArrayLists
     x = new ArrayList<Complex>();
     path = new ArrayList<PVector>();
@@ -136,7 +133,7 @@ class FourierTransform {
       phase = epicycle.phase;
       frequency = epicycle.frequency;  
       amplitude = epicycle.amplitude;
-      diameter = amplitude*2;
+      diameter = amplitude * 2;
       
 
       float theta = frequency * time + phase;
@@ -148,7 +145,6 @@ class FourierTransform {
       //ellipse(prev.x, prev.y, diameter, diameter);
       stroke(255);
       line(prev.x, prev.y, pos.x, pos.y);
-      //sine.play(frequency - 100, map(amplitude,0.50,500.0,0,1), phase);
     }
     return new PVector(pos.x, pos.y);
   }
