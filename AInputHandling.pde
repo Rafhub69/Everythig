@@ -1,8 +1,3 @@
-void mouseWheel(MouseEvent event) {
-  start = millis();
-  scrollMovement = constrain(event.getCount()*Multi + scrollMovement, -MaxFar, MaxFar);
-}
-
 void mousePressed() {
 
   if (!stopStart)
@@ -340,7 +335,7 @@ void keyPressed()
       }
 
       cp5.get(Button.class, "Set").setPosition(pozXSet, pozYSet[1]).setVisible(true);
-      cp5.get(Textfield.class, "input").setPosition(pozXSet, pozYSet[1]+button_height).setVisible(true).setFocus(true);
+      cp5.get(Textfield.class, "input").setPosition(pozXSet, pozYSet[1] + 30).setVisible(true).setFocus(true);
       resetToBegining();
     }
   }

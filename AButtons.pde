@@ -1,6 +1,6 @@
-void creatingButtons(int he, PFont inputFont, PFont font_)
+void creatingButtons(PFont inputFont, PFont font_)
 {
-  int hi = 1;
+  int hi = 1, pozX = 2, button_height = 30, button_width = 106;
 
   //creating buttons
   Group menu = cp5.addGroup("contextMenu").disableCollapse().addCloseButton().setCaptionLabel("Informacje").hide();
@@ -19,28 +19,29 @@ void creatingButtons(int he, PFont inputFont, PFont font_)
   cp5.addButton("Set").setPosition(pozXSet, 63).setSize(70, button_height).setCaptionLabel("Ustawienia").hide();
 
   cp5.addButton("Menu").setPosition(pozX, 1).setSize(button_width, button_height).hide();
-  cp5.addButton("Reset").setPosition(pozX, he * hi).setSize(button_width, button_height).hide();
+  cp5.addButton("Reset").setPosition(pozX, button_height * hi).setSize(button_width, button_height).hide();
   hi++;
-  cp5.addButton("StartStop").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Uruchomienie programu").hide();
+  cp5.addButton("StartStop").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Uruchomienie programu").hide();
   hi++;
-  cp5.addButton("Single").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Pojedyncze wahadło").hide().setValue(2);
+  cp5.addButton("Single").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Pojedyncze wahadło").hide().setValue(2);
   hi++;
-  cp5.addButton("Dual").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Podwójne wahadło").hide().setValue(2);
+  cp5.addButton("Dual").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Podwójne wahadło").hide().setValue(2);
   hi++;
-  cp5.addButton("Homogen").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Pole jednorodne").hide().setValue(1);
+  cp5.addButton("Homogen").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Pole jednorodne").hide().setValue(1);
   hi++;
-  cp5.addButton("Central").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Pole centralne").hide().setValue(1);
+  cp5.addButton("Central").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Pole centralne").hide().setValue(1);
   hi++;
-  cp5.addButton("Lisajous").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Tablica Lisajous ").hide().setValue(3);
+  cp5.addButton("Lisajous").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Tablica Lisajous ").hide().setValue(3);
   hi++;
-  cp5.addButton("Bonaci").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Sekwencja fibonacziego").hide().setValue(3); 
+  cp5.addButton("Bonaci").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Sekwencja fibonacziego").hide().setValue(3); 
   hi++;
-  cp5.addButton("Circle").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Wzory").hide().setValue(4);
+  cp5.addButton("Circle").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Wzory").hide().setValue(4);
   hi++;
-  cp5.addButton("Npendul").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Wahadło n-tego stopnia").hide().setValue(4);
-  cp5.addTextfield("degreesOfPendulum").setPosition(pozX + 308, he * hi + button_height).setSize(200, 40).setFont(font_).setFocus(false).setCaptionLabel("What degree of pendulum?").setColor(color(255, 0, 0)).hide().align(pozX + 328, he * hi + button_height + 40, pozX + 328, he * hi + button_height);
+  cp5.addButton("Npendul").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Wahadło n-tego stopnia").hide().setValue(4);
+  cp5.addTextfield("degreesOfPendulum").setPosition(pozX + 308, button_height * hi + button_height).setSize(200, 40).setFont(font_).setFocus(false).hide()
+  .setCaptionLabel("What degree of pendulum?").setColor(color(255, 0, 0)).align(pozX + 328, button_height * hi + button_height + 40, pozX + 328, button_height * hi + button_height);
   hi++;
-  cp5.addButton("FourTrans").setPosition(pozX, he * hi).setSize(button_width, button_height).setCaptionLabel("Transformata fouriera").hide().setValue(5);
+  cp5.addButton("FourTrans").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Transformata fouriera").hide().setValue(5);
   hi++;
   cp5.addTextfield("input").setPosition(20, 100).setSize(200, 40).setFont(inputFont).setFocus(false).setCaptionLabel(" ").setColor(color(255, 0, 0)).hide();
 }
@@ -241,7 +242,7 @@ void Save()
 
   switch(mode) {
   case 1:
-    for (int i = 0; i<cir.size(); i++)
+    for (int i = 0; i < cir.size(); i++)
     {
       cir.get(i).showingData();
       jsonArray.add(new JSONObject());
@@ -258,7 +259,7 @@ void Save()
   case 2:
     if (pendul)
     {
-      for (int i = 0; i< singlePend.size(); i++)
+      for (int i = 0; i < singlePend.size(); i++)
       {
         singlePend.get(i).setingFieldVariables();
         jsonArray.add(new JSONObject());
@@ -273,7 +274,7 @@ void Save()
       objectName = "SinglePend";
     } else 
     {
-      for (int i = 0; i< doublePend.size(); i++)
+      for (int i = 0; i < doublePend.size(); i++)
       {
         doublePend.get(i).setingFieldVariables();
         jsonArray.add(new JSONObject());
@@ -400,7 +401,7 @@ void Disclosures_set(String name)
   cp5.getController("Set").setPosition(pozXSet, pozYSet[1]);
   cp5.getController("Load").setPosition(pozXSet + 70, pozYSet[1]);
   cp5.getController("Save").setPosition(pozXSet + 135, pozYSet[1]);
-  cp5.getController("input").setPosition(pozXSet, pozYSet[1]+button_height);  
+  cp5.getController("input").setPosition(pozXSet, pozYSet[1] + 30);  
   
   cp5.getController("Set").show();
   cp5.getController("Load").show();
@@ -438,16 +439,16 @@ void input(String theText) {
 
     if (buttonName == "Homogen")
     {
-      control2 = amount;
+      controlCopy = amount;
     } else if (buttonName.equals("Central"))
     {
-      control2 = amount;
+      controlCopy = amount;
     } else if (buttonName.equals("Dual"))
     {
-      ile2 = amount;
+      howManyDoublePenCopy = amount;
     } else if (buttonName.equals("Single"))
     {
-      ile_pend = amount;
+      howManySinglePend = amount;
     } else if (buttonName.equals("Lisajous"))
     {
       table.size = amount;

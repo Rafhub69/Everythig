@@ -1,10 +1,10 @@
 void creatingRandomCircles()
 {
-  float pozX = 0, pozY = 0;
+  float radius, mass, pozX, pozY;
 
-  for (int i = 0; i <control2; i++)
+  for (int i = 0; i <controlCopy; i++)
   {
-    float border= 10;
+    float border = 10;
     mass = 8 * randa.nextFloat() + 4;
     radius = mass * 2;
     pozX = width * new Random().nextFloat();
@@ -27,8 +27,9 @@ void creatingRandomCircles()
 
 void centralFieldManagement()
 {
-  float dem = 0, dividerx = 0, dividery = 0, Distance;
+
   PVector grav_atract = new PVector(0, 0);
+  float dem = 0, dividerx = 0, dividery = 0, Distance, G_const = 0.6673;
   ArrayList<PVector> reverseGravity = new ArrayList<PVector>(cir.size());
 
   if (centralAction)
@@ -49,8 +50,8 @@ void centralFieldManagement()
       {
 
         //calculating distance between object
-        PVector lengthFrom_i_to_j= PVector.sub( cir.get(j).point, cir.get(i).point);
-        PVector lengthFrom_j_to_i= PVector.sub( cir.get(i).point, cir.get(j).point);
+        PVector lengthFrom_i_to_j = PVector.sub( cir.get(j).point, cir.get(i).point);
+        PVector lengthFrom_j_to_i = PVector.sub( cir.get(i).point, cir.get(j).point);
 
         Distance = lengthFrom_i_to_j.mag();
         lengthFrom_i_to_j.normalize();
@@ -79,7 +80,7 @@ void centralFieldManagement()
 
   checkForCollision();
 
-  for (int i = 0; i<cir.size(); i++)
+  for (int i = 0; i < cir.size(); i++)
   {   
     cir.get(i).drawing();
 
@@ -100,18 +101,18 @@ void centralFieldManagement()
 
 void homogeneousFieldManagement()
 {
-  PVector  air_replica = new PVector(0.004, 0.004);
-  PVector  grav = new PVector(0.00, 9.00);
+  PVector air_replica = new PVector(0.004, 0.004);
+  PVector grav = new PVector(0.00, 9.00);
   PVector air;
 
   if (homogeneousAction)
   {
-    for (int i = 0; i<cir.size(); i++)
+    for (int i = 0; i < cir.size(); i++)
     {//Adding gravity
       cir.get(i).setSpeed(grav);
       air = air_replica.copy(); 
 
-      if (cir.get(i).velocity.x>0 ||cir.get(i).velocity.y>0)
+      if (cir.get(i).velocity.x > 0 ||cir.get(i).velocity.y > 0)
       {
         air.mult(-1);
       }
@@ -122,7 +123,7 @@ void homogeneousFieldManagement()
 
   checkForCollision();
 
-  for (int j = 0; j<cir.size(); j++)
+  for (int j = 0; j < cir.size(); j++)
   {
     cir.get(j).drawing();
     strokeWeight(6);

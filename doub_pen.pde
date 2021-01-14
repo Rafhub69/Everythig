@@ -117,16 +117,16 @@ class DoublePendulum {
 
     //calculation of acceleration, velocity and position of double pendulum
     counter[0] = -(g) * (2 * pen1.mass + pen2.mass) * sin(pen1.angle);
-    counter[1] = -mas2 * (g) * sin(pen1.angle - 2 * pen2.angle);
+    counter[1] = -pen2.mass * (g) * sin(pen1.angle - 2 * pen2.angle);
     counter[2] = -2 * sin(pen1.angle - pen2.angle) * pen2.mass;
     counter[3] = pen2.velocity * pen2.velocity * pen2.lengh + pen1.velocity * pen1.velocity * pen1.lengh * cos(pen1.angle - pen2.angle);
-    den = length1 * (2 * pen1.mass + pen2.mass - pen2.mass * cos(2 * pen1.angle - 2 * pen2.angle));
+    den = pen1.lengh * (2 * pen1.mass + pen2.mass - pen2.mass * cos(2 * pen1.angle - 2 * pen2.angle));
     pen1.acceleration = (counter[0] +  counter[1] + counter[2] * counter[3]) / den;
 
     counter[4] = 2 * sin(pen1.angle - pen2.angle);
     counter[5] = (pen1.velocity * pen1.velocity * pen1.lengh * (pen1.mass + pen2.mass));
     counter[6] = (g) * (pen1.mass + pen2.mass) * cos(pen1.angle);
-    counter[7] = pen2.velocity * pen2.velocity * length2 * pen2.mass * cos(pen1.angle - pen2.angle);
+    counter[7] = pen2.velocity * pen2.velocity * pen2.lengh * pen2.mass * cos(pen1.angle - pen2.angle);
     den2 = pen2.lengh * (2 * pen1.mass + pen2.mass - pen2.mass * cos(2 * pen1.angle - 2 * pen2.angle));
     pen2.acceleration = (counter[4] * (counter[5] + counter[6] + counter[7])) / den2;
 
@@ -153,12 +153,12 @@ class DoublePendulum {
     switch(number) {
 
     case 0:
-      pen1.acceleration = mag(PVector.div(f, mas1).x, PVector.div(f, mas1).y);
+      pen1.acceleration = mag(PVector.div(f, pen1.mass).x, PVector.div(f, pen1.mass).y);
       pen1.velocity += pen1.acceleration;
       pen1.position.add(pen1.velocity, pen1.velocity);
 
     case 1:
-      pen2.acceleration = mag(PVector.div(f, mas2).x, PVector.div(f, mas2).y);
+      pen2.acceleration = mag(PVector.div(f, pen2.mass).x, PVector.div(f, pen2.mass).y);
       pen2.velocity += pen2.acceleration;
       pen2.position.add(pen2.velocity, pen2.velocity);
     }

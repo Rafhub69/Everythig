@@ -10,7 +10,7 @@ ControlP5 cp5;
 Random randa = new Random();
 
 int mode = 0;//1 - gravitation , 2 - pendulum, 3 - programs on whole screen, 4 - strenge circles, 5 - fourier transformation
-boolean field = false;//true -  central field , false -  homogeneous field
+boolean field = false;//true - central field , false - homogeneous field
 boolean pendul = false;//true - single pendulum , false - double pendulum
 boolean wholeScreen = false;// true - Lisajous table, false - nBonaci Sequence
 boolean cirOrNpendul = false;//true - Circle, false - N-pendulum
@@ -26,14 +26,11 @@ boolean[] contextMenuOpenByMouse = new boolean[6];
 String buttonName;
 PFont font, arialFont;
 long startedMillis = 0;
-float delta_time, now = System.nanoTime(), scrollMovement = 0;
-float pozYSet[] = new float[2], screenSizeX = 0, screenSizeY = 0, poz;
-float mass, radius = 20, density, G_const = 0.6673, a1 = 4*PI, w = 0.05;
-float length1, length2, mas1, mas2, a2, strCirRadius = 10, angleChange_ = 0.01;
-int strCirAmount = 1000, currentIndex = 0, ile_pend = 1, start, current, pozX = 2;
-int doublePenIndex = 2, numberOfNpendulum = 1, degreeOfPendulum = 5, Multi = 10, MaxFar = 100;
-int centerX = 0, centerY = 0, button_height = 30, button_width = 106, pozXSet = pozX + button_width;
-int control = 50, curIndex, ile = 1, ile2 = ile, ile_pend2 = ile_pend, pozY, control2 = control, control3 = control2+1;
+float delta_time, now = System.nanoTime(), scrollMovement = 0, pozYSet[] = new float[2];
+float angleChange_ = 0.01, w = 0.05, screenSizeY = 0, strCirRadius = 10, screenSizeX = 0;
+int centerX = 0, centerY = 0, pozXSet = 108, howManySinglePend = 1,  currentIndex = 0, curIndex;
+int doublePenIndex = 2, control = 50, numberOfNpendulum = 1, degreeOfPendulum = 5, strCirAmount = 1000;
+int ilePendCopy = howManySinglePend, controlCopy = control, howManyDoublePen = 1, howManyDoublePenCopy = howManyDoublePen;
 
 //Objects that occur individually
 SaveGame save;
@@ -43,9 +40,9 @@ StrengeCircles strenCir;
 FourierTransform fourier;
 //Lists of objects
 List<Circum> cir = new ArrayList<Circum>(control);
-List<Pendulum> singlePend = new ArrayList<Pendulum>(ile_pend);
+List<Pendulum> singlePend = new ArrayList<Pendulum>(howManySinglePend);
 List<NPendulum> nPend = new ArrayList<NPendulum>(numberOfNpendulum);
-List<DoublePendulum> doublePend = new ArrayList<DoublePendulum>(ile);
+List<DoublePendulum> doublePend = new ArrayList<DoublePendulum>(howManyDoublePen);
 HashMap<String, Character> shortcutTable = new HashMap<String, Character>(12);
 
 void settings() {
@@ -53,16 +50,16 @@ void settings() {
   PJOGL.setIcon("icon5.png");
 }
 
-void setup() {  
+void setup() { 
 
   surface.setResizable(true);
   surface.setTitle("Projekt Rafała");
   stroke(255);
-  background(255);  
+  background(255); 
   font = createFont("arial", 10);
   arialFont = createFont("arial", 20);
-  centerX = (width/2) - (button_width/2);
-  centerY = (height/2) - (button_height/2); 
+  centerX = (width/2) - 53;
+  centerY = (height/2) - 15; 
 
   creatingShortcuts();
 
@@ -70,7 +67,7 @@ void setup() {
 
   cp5 = new ControlP5(this);
 
-  creatingButtons(button_height, arialFont, font);
+  creatingButtons(arialFont, font);
 }
 
 void creatingObjects()
@@ -127,8 +124,8 @@ void drawBorders()
   stroke(200, 0, 10);
   line(0, 0, width, 0);
   line(0, 0, 0, height);
-  line(width, 0, width, height);
-  line(0, height, width, height);  
+  line(width, 0, width, height);  
+  line(0, height, width, height); 
   strokeWeight(1);
 }
 
@@ -140,15 +137,15 @@ String formatMillis(long millis)
   int seconds = (int)((millis / 1000) % 60);
   long minutes = ((millis / 1000) / 60)% 60;
   long hour = ((millis / 1000) / 3600)% 60;
-  return "" + nf(hour, 2, 0) + ":"  + nf(minutes, 2, 0) + ":" + nf(seconds, 2, 0) + ":" + nf(milliseconds, 3, 0);
+  return "" + nf(hour, 2, 0) + ":" + nf(minutes, 2, 0) + ":" + nf(seconds, 2, 0) + ":" + nf(milliseconds, 3, 0);
 }
 
 void resetToBegining() 
 {
   switch(mode) {
-  case 1:  
+  case 1: 
 
-    cir.clear();  
+    cir.clear(); 
     creatingRandomCircles();
 
     if (field)
@@ -166,21 +163,21 @@ void resetToBegining()
       }
     }
 
-    control = control2;
+    control = controlCopy;
 
     break;
   case 2:
 
     if (pendul)
     {
-      singlePend.clear();      
-      ile_pend2 = ile_pend;
-      creatingRandomPendulums();            
+      singlePend.clear();  
+      ilePendCopy = howManySinglePend;
+      creatingRandomPendulums();
     } else
     {
-      ile = ile2;
-      doublePend.clear();       
-      creatingRandomDoublePendulums();      
+      howManyDoublePen = howManyDoublePenCopy;
+      doublePend.clear();  
+      creatingRandomDoublePendulums();
     }
     break;
   case 3:
@@ -199,7 +196,7 @@ void resetToBegining()
       strenCir.reset();
     } else
     {
-      nPend.clear();      
+      nPend.clear();  
       creatingRandomNPendulums();
     }
     break; 
@@ -216,8 +213,8 @@ void strangeCirclesManagement()
   pushMatrix();
   background(0);
   strokeWeight(5);
-  translate(width / 2, height/2);  
-  point(0, 0);  
+  translate(width / 2, height/2); 
+  point(0, 0); 
   noFill();
   strokeWeight(2);
   circle(0, 0, 100);
@@ -231,7 +228,7 @@ void calculate_delta_time() {
 }
 
 void draw() {
-  
+
   calculate_delta_time();
   background(120);
   drawBorders(); 
@@ -245,6 +242,7 @@ void draw() {
     {
       homogeneousFieldManagement();
     }
+    
     break;
   case 2: //2 - pendulum
     if (pendul)
@@ -276,10 +274,10 @@ void draw() {
     {
       nPendulManagement();
     }
-    break;    
+    break; 
   case 5: // 5 - fourier transformation
     noFill();
-    background(0);    
+    background(0); 
     fourier.show();
     break;
   }
