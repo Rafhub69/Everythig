@@ -1,30 +1,36 @@
-class Curve {
-
+class Curve 
+{
   ArrayList<PVector> path;
   PVector current = new PVector(0,0);
 
-  Curve() {
+  Curve() 
+  {
     path = new ArrayList<PVector>();
     current = new PVector();
   }
 
-  void setX(float x) {
+  void setX(float x) 
+  {
     current.x = x;
   }
 
-  void setY(float y) {
+  void setY(float y) 
+  {
     current.y = y;
   }
 
-  void addPoint() {
+  void addPoint() 
+  {
     path.add(current);
   }
 
-  void reset() {
+  void reset() 
+  {
     path.clear();
   }
 
-  void show() {
+  void show() 
+  {
     noFill();
     stroke(255);
     strokeWeight(1);  

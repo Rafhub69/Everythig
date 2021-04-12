@@ -1,15 +1,16 @@
 class Circum {
   int max_velocity = 15;    
-  PVector  point = new PVector(0, 0);
-  PVector accToDraw = new PVector(0, 0);  
-  PVector  acceleration = new PVector(0, 0);
+  PVector point = new PVector(0, 0);
+  PVector accelToDraw = new PVector(0, 0);  
+  PVector acceleration = new PVector(0, 0);
   float radius, mass, springness = 0.9999;
   HashMap<String, Float> fieldVariables = new HashMap<String, Float>(10);
   PVector  velocity = new PVector(new Random().nextInt(max_velocity) + 0.05, -1 * (new Random().nextInt(max_velocity) + 0.05));  
   
   Function[] fun = new Function[6];
 
-  Circum() {
+  Circum() 
+  {
     mass = 5 * new Random().nextFloat() + 1;
     radius = mass * 4;
     point.x = (width * new Random().nextFloat()) - radius;
@@ -18,8 +19,8 @@ class Circum {
     inicialization();
   }
 
-  Circum(float x_, float y_, float radius_, float mass_) {
-    this();
+  Circum(float x_, float y_, float radius_, float mass_) 
+  {
     point.x = x_;
     point.y = y_;
     mass = mass_;
@@ -43,10 +44,10 @@ class Circum {
   void inicialization()
   {
     fun[0] = new Function(velocity.y - 1, velocity.y + 1);
-    fun[1] = new Function(accToDraw.y + 0.005, accToDraw.y - 0.005);
+    fun[1] = new Function(accelToDraw.y + 0.005, accelToDraw.y - 0.005);
     fun[2] = new Function(point.y - 0.05, point.y + 0.1);
     fun[3] = new Function(point.x - 0.1, point.x + 0.1);
-    fun[4] = new Function(accToDraw.x + 0.005, accToDraw.x - 0.005);
+    fun[4] = new Function(accelToDraw.x + 0.005, accelToDraw.x - 0.005);
     fun[5] = new Function(velocity.x - 0.01, max_velocity);
 
     fieldVariables.put("mass", mass);   
@@ -60,13 +61,14 @@ class Circum {
     fieldVariables.put("acceleration.y", acceleration.y);
   }
 
-  void setSpeed(PVector force) {
+  void setSpeed(PVector force) 
+  {
     PVector f = force.copy();
     acceleration.add(PVector.div( f, mass));
     acceleration.mult(delta_time);
     velocity.add(acceleration);
     point.add(velocity);
-    accToDraw = acceleration.copy();
+    accelToDraw = acceleration.copy();
 
     // If out of bounds
     if (point.y - radius <= 0) 
@@ -103,18 +105,18 @@ class Circum {
     fieldVariables.replace("acceleration.y", acceleration.y);
   }
 
-  void drawing() {
-
+  void drawing() 
+  {
     //finding the smallest and largest limit values used to change the color of objects
     fun[0].findingTheItem(velocity.y);
-    fun[1].findingTheItem(accToDraw.y);
+    fun[1].findingTheItem(accelToDraw.y);
     fun[2].findingTheItem(point.y);
     fun[3].findingTheItem(point.x);
-    fun[4].findingTheItem(accToDraw.x);
+    fun[4].findingTheItem(accelToDraw.x);
     fun[5].findingTheItem(velocity.x);
 
-    fill((map(velocity.y, fun[0].smallestItem - 0.01, fun[0].largestItem + 0.01, 60, 255)), (map(accToDraw.y, fun[1].smallestItem - 0.01, fun[1].largestItem + 0.01, 50, 100)), (map(point.y, fun[2].smallestItem - 0.01, fun[2].largestItem + 0.01, 1, 255)) );
-    stroke((map(point.x, fun[3].smallestItem - 0.01, fun[3].largestItem + 0.01, 100, 255)), (map(accToDraw.x, fun[4].smallestItem - 0.01, fun[4].largestItem + 0.01, 60, 110)), (map(velocity.x, fun[5].smallestItem - 0.01, fun[5].largestItem + 0.01, 50, 255)));
+    fill((map(velocity.y, fun[0].smallestItem - 0.01, fun[0].largestItem + 0.01, 60, 255)), (map(accelToDraw.y, fun[1].smallestItem - 0.01, fun[1].largestItem + 0.01, 50, 100)), (map(point.y, fun[2].smallestItem - 0.01, fun[2].largestItem + 0.01, 1, 255)) );
+    stroke((map(point.x, fun[3].smallestItem - 0.01, fun[3].largestItem + 0.01, 100, 255)), (map(accelToDraw.x, fun[4].smallestItem - 0.01, fun[4].largestItem + 0.01, 60, 110)), (map(velocity.x, fun[5].smallestItem - 0.01, fun[5].largestItem + 0.01, 50, 255)));
     circle(point.x, point.y, 2 * radius);
 
     strokeWeight(2);

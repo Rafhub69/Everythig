@@ -101,10 +101,10 @@ class BonaciSequence
       if (reflection)
       {
 
-        scene -=0.04000;
+        scene -= 0.04000;
       } else if (!reflection)
       {
-        scene +=0.04000;
+        scene += 0.04000;
       }
     }
     popMatrix();

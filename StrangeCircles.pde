@@ -5,7 +5,7 @@ class StrengeCircles
   int amount = 1000, numberOfCircles = 30;
   PVector[]  point = new PVector[amount];
   PVector[]  center = new PVector[numberOfCircles];  
-  
+
   Function[] fun = new Function[3];
 
   StrengeCircles(float rad, float angleChange_, int amo)
@@ -13,13 +13,13 @@ class StrengeCircles
     amount = amo;
     radius = rad;
     angleChange = angleChange_;
-    
-    for (int i = 0; i <numberOfCircles; i++)
+
+    for (int i = 0; i < numberOfCircles; i++)
     {
       center[i] = new PVector(0, 0);
     }
 
-    for (int i = 0; i<amount; i++)
+    for (int i = 0; i < amount; i++)
     {
       point[i] = new PVector(1, 1);
     }
@@ -31,20 +31,18 @@ class StrengeCircles
 
   void strange()
   {
-    if (strangeCirclesAction)
+
+    for (int i = 0; i < amount; i++)
     {
-      for (int i = 0; i <amount; i++)
+      if (strangeCirclesAction)
       {
         point[i].x = radius * cos(angle);
         point[i].y = radius * sin(angle);
         angle+=angleChange;
       }
-    }
 
-    for (int i = 0; i <amount; i++)
-    {
       translate(point[i].y, point[i].x);
-      
+
       //finding the smallest and largest limit values used to change the color of objects
       fun[0].findingTheItem(angle);
       fun[1].findingTheItem(point[i].x);

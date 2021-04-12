@@ -1,26 +1,14 @@
 class FourierTransform {
 
-  int USER = 0;
-  int FOURIER = 1;
-  int state = -1;
-  int epicycles;
-
-  float time;
-  float phase;
-  float diameter;
-  float interval;
-  float frequency;
-  float amplitude;  
-
-  //PVector variables
-  PVector pos;
-  PVector prev;
-
-  //arrays and arraylists
-  ArrayList<Complex> x;
-  ArrayList<PVector> path;
-  ArrayList<PVector> drawing;
-  ArrayList<Complex> Fourier;
+  PVector pos, prev;
+  int User = 0, FOURIER = 1;
+  int state = -1, epicycles;
+  
+  float interval, phase, diameter;
+  float time, frequency, amplitude;
+  
+  ArrayList<Complex> x, Fourier;
+  ArrayList<PVector> path, drawing;
 
   FourierTransform()
   {
@@ -152,7 +140,7 @@ class FourierTransform {
   void mousePress()
   {
     x.clear();
-    state = USER; 
+    state = User; 
     path.clear();
     drawing.clear();   
     time = 0;
@@ -186,8 +174,11 @@ class FourierTransform {
 
   void show()
   {
+    noFill();
+    background(0);
+    
     //if the user is drawing
-    if (state == USER)
+    if (state == User)
     {
       PVector point = new PVector(mouseX-(width/2), mouseY-(height/2));
       drawing.add(point);

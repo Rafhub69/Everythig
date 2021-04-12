@@ -1,12 +1,13 @@
-void mousePressed() {
-
+void mousePressed() 
+{
   if (!stopStart)
   {
-    switch(mode) {
+    switch(mode) 
+    {
     case 1:
       if (field)
       { 
-        for (int i = 0; i<cir.size(); i++)
+        for (int i = 0; i < cir.size(); i++)
         {
           float d = dist(mouseX, mouseY, cir.get(i).point.x, cir.get(i).point.y);
           if (d <= cir.get(i).radius ) 
@@ -26,7 +27,7 @@ void mousePressed() {
         }
       } else 
       {
-        for (int j = 0; j<cir.size(); j++)
+        for (int j = 0; j < cir.size(); j++)
         {
           float d = dist(mouseX, mouseY, cir.get(j).point.x, cir.get(j).point.y);
           if (d <= cir.get(j).radius) 
@@ -49,7 +50,7 @@ void mousePressed() {
     case 2:
       if (pendul)
       {
-        for (int k = 0; k< singlePend.size(); k++)
+        for (int k = 0; k < singlePend.size(); k++)
         {
           float d = dist(mouseX, mouseY, singlePend.get(k).position.x, singlePend.get(k).position.y);
 
@@ -71,12 +72,12 @@ void mousePressed() {
         }
       } else 
       {
-        for (int l = 0; l< doublePend.size(); l++)
+        for (int l = 0; l < doublePend.size(); l++)
         {
-          float d1 = dist(mouseX, mouseY, doublePend.get(l).pen1.position.x, doublePend.get(l).pen1.position.y);
-          float d2 = dist(mouseX, mouseY, doublePend.get(l).pen2.position.x, doublePend.get(l).pen2.position.y);
+          float d1 = dist(mouseX, mouseY, doublePend.get(l).pendul0.position.x, doublePend.get(l).pendul0.position.y);
+          float d2 = dist(mouseX, mouseY, doublePend.get(l).pendul1.position.x, doublePend.get(l).pendul1.position.y);
 
-          if (d1 <= doublePend.get(l).pen1.radius) 
+          if (d1 <= doublePend.get(l).pendul0.radius) 
           {
             currentIndex = l;
 
@@ -90,7 +91,7 @@ void mousePressed() {
             {
               scrollMenuOpenByMouse[3] = true;
             }
-          } else if (d2 <= doublePend.get(l).pen2.radius) 
+          } else if (d2 <= doublePend.get(l).pendul1.radius) 
           {
             currentIndex = l;
 
@@ -113,9 +114,9 @@ void mousePressed() {
       {
         for (int i = 0; i < nPend.get(m).tier; i++)
         {
-          float distance = dist(mouseX, mouseY, nPend.get(m).singlePen.get(i).position.x, nPend.get(m).singlePen.get(i).position.y);
+          float distance = dist(mouseX, mouseY, nPend.get(m).singlePendulum.get(i).position.x, nPend.get(m).singlePendulum.get(i).position.y);
 
-          if (distance <= nPend.get(m).singlePen.get(i).radius) 
+          if (distance <= nPend.get(m).singlePendulum.get(i).radius) 
           {
             currentIndex = m;
             nPend.get(currentIndex).index = i;
@@ -141,10 +142,12 @@ void mousePressed() {
   }
 }
 
-void mouseReleased() {
+void mouseReleased() 
+{
   if (!stopStart)
   {
-    switch(mode) {
+    switch(mode) 
+    {
     case 1:
       if (field)
       { 
@@ -398,8 +401,9 @@ void checkingIfMouseIsOver()
 
 void contextMenu(int currentIndex)
 {
-  curIndex = currentIndex;
   float x = 0, y = 0;
+  curIndex = currentIndex;
+  
   if (contextMenuOpenByMouse[0] || contextMenuOpenByMouse[1])
   {
     cir.get(curIndex).showingData();
@@ -429,8 +433,8 @@ void contextMenu(int currentIndex)
   {
     doublePend.get(curIndex).setingFieldVariables();
 
-    x = doublePend.get(curIndex).pen1.position.x + 156 + doublePend.get(curIndex).pen1.radius> width ? doublePend.get(curIndex).pen1.position.x - ((doublePend.get(curIndex).pen1.position.x + 156) - width ) : doublePend.get(curIndex).pen1.position.x + doublePend.get(curIndex).pen1.radius;
-    y = doublePend.get(curIndex).pen1.position.y + 56 + doublePend.get(curIndex).pen1.radius> height ? doublePend.get(curIndex).pen1.position.y - ((doublePend.get(curIndex).pen1.position.y + 56) - height ) : doublePend.get(curIndex).pen1.position.y + doublePend.get(curIndex).pen1.radius;
+    x = doublePend.get(curIndex).pendul0.position.x + 156 + doublePend.get(curIndex).pendul0.radius> width ? doublePend.get(curIndex).pendul0.position.x - ((doublePend.get(curIndex).pendul0.position.x + 156) - width ) : doublePend.get(curIndex).pendul0.position.x + doublePend.get(curIndex).pendul0.radius;
+    y = doublePend.get(curIndex).pendul0.position.y + 56 + doublePend.get(curIndex).pendul0.radius> height ? doublePend.get(curIndex).pendul0.position.y - ((doublePend.get(curIndex).pendul0.position.y + 56) - height ) : doublePend.get(curIndex).pendul0.position.y + doublePend.get(curIndex).pendul0.radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
     doublePenIndex = 0;
@@ -443,8 +447,8 @@ void contextMenu(int currentIndex)
   {
     doublePend.get(curIndex).setingFieldVariables();
 
-    x = doublePend.get(curIndex).pen2.position.x + 156 + doublePend.get(curIndex).pen2.radius> width ? doublePend.get(curIndex).pen2.position.x - ((doublePend.get(curIndex).pen2.position.x + 156) - width ) : doublePend.get(curIndex).pen2.position.x + doublePend.get(curIndex).pen2.radius;
-    y = doublePend.get(curIndex).pen2.position.y + 56 + doublePend.get(curIndex).pen2.radius> height ? doublePend.get(curIndex).pen2.position.y - ((doublePend.get(curIndex).pen2.position.y + 56) - height ) : doublePend.get(curIndex).pen2.position.y + doublePend.get(curIndex).pen2.radius;
+    x = doublePend.get(curIndex).pendul1.position.x + 156 + doublePend.get(curIndex).pendul1.radius> width ? doublePend.get(curIndex).pendul1.position.x - ((doublePend.get(curIndex).pendul1.position.x + 156) - width ) : doublePend.get(curIndex).pendul1.position.x + doublePend.get(curIndex).pendul1.radius;
+    y = doublePend.get(curIndex).pendul1.position.y + 56 + doublePend.get(curIndex).pendul1.radius> height ? doublePend.get(curIndex).pendul1.position.y - ((doublePend.get(curIndex).pendul1.position.y + 56) - height ) : doublePend.get(curIndex).pendul1.position.y + doublePend.get(curIndex).pendul1.radius;
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
     doublePenIndex = 1;
@@ -459,11 +463,11 @@ void contextMenu(int currentIndex)
     int index = nPend.get(curIndex).index;
     nPend.get(curIndex).setingFieldVariables();
 
-    x = nPend.get(curIndex).singlePen.get(index).position.x + 156 + nPend.get(curIndex).singlePen.get(index).radius> width ? nPend.get(curIndex).singlePen.get(index).position.x - ((nPend.get(curIndex).singlePen.get(index).position.x + 156) - width ) 
-      : nPend.get(curIndex).singlePen.get(index).position.x + nPend.get(curIndex).singlePen.get(index).radius;
+    x = nPend.get(curIndex).singlePendulum.get(index).position.x + 156 + nPend.get(curIndex).singlePendulum.get(index).radius> width ? nPend.get(curIndex).singlePendulum.get(index).position.x - ((nPend.get(curIndex).singlePendulum.get(index).position.x + 156) - width ) 
+      : nPend.get(curIndex).singlePendulum.get(index).position.x + nPend.get(curIndex).singlePendulum.get(index).radius;
 
-    y = nPend.get(curIndex).singlePen.get(index).position.y + 56 + nPend.get(curIndex).singlePen.get(index).radius> height ? nPend.get(curIndex).singlePen.get(index).position.y - ((nPend.get(curIndex).singlePen.get(index).position.y + 56) - height ) 
-      : nPend.get(curIndex).singlePen.get(index).position.y + nPend.get(curIndex).singlePen.get(index).radius;
+    y = nPend.get(curIndex).singlePendulum.get(index).position.y + 56 + nPend.get(curIndex).singlePendulum.get(index).radius> height ? nPend.get(curIndex).singlePendulum.get(index).position.y - ((nPend.get(curIndex).singlePendulum.get(index).position.y + 56) - height ) 
+      : nPend.get(curIndex).singlePendulum.get(index).position.y + nPend.get(curIndex).singlePendulum.get(index).radius;
 
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
@@ -476,9 +480,9 @@ void contextMenu(int currentIndex)
 }
 
 void changePositionByTheMouse(int currentIndex)
-{
-  curIndex = currentIndex;
+{  
   PVector diff;
+  curIndex = currentIndex;
 
   if (changePositionByMouse[0] || changePositionByMouse[1])
   {
@@ -523,44 +527,44 @@ void changePositionByTheMouse(int currentIndex)
     singlePend.get(curIndex).velocity = 0;
   } else if (changePositionByMouse[3])
   {
-    doublePend.get(curIndex).pen1.velocity = 0;
-    doublePend.get(curIndex).pen2.velocity = 0;
-    doublePend.get(curIndex).pen1.position.x = mouseX;
-    doublePend.get(curIndex).pen1.position.y = mouseY;
+    doublePend.get(curIndex).pendul0.velocity = 0;
+    doublePend.get(curIndex).pendul1.velocity = 0;
+    doublePend.get(curIndex).pendul0.position.x = mouseX;
+    doublePend.get(curIndex).pendul0.position.y = mouseY;
 
     diff = PVector.sub(doublePend.get(curIndex).origin, new PVector(mouseX, mouseY));     
-    doublePend.get(curIndex).pen1.angle = atan2(-1*diff.y, diff.x)- radians(90);                         
+    doublePend.get(curIndex).pendul0.angle = atan2(-1*diff.y, diff.x)- radians(90);                         
    
-    doublePend.get(curIndex).pen1.lengh = diff.mag();
-    PVector diff2 = PVector.sub(doublePend.get(curIndex).pen1.position, doublePend.get(curIndex).pen2.position);
-    doublePend.get(curIndex).pen2.lengh = diff2.mag();      
+    doublePend.get(curIndex).pendul0.lengh = diff.mag();
+    PVector diff2 = PVector.sub(doublePend.get(curIndex).pendul0.position, doublePend.get(curIndex).pendul1.position);
+    doublePend.get(curIndex).pendul1.lengh = diff2.mag();      
   } else if (changePositionByMouse[4])
   {
-    doublePend.get(curIndex).pen2.position.x = mouseX;
-    doublePend.get(curIndex).pen2.position.y = mouseY;
+    doublePend.get(curIndex).pendul1.position.x = mouseX;
+    doublePend.get(curIndex).pendul1.position.y = mouseY;
 
-    diff = PVector.sub(doublePend.get(curIndex).pen1.position, new PVector(mouseX, mouseY));     
-    doublePend.get(curIndex).pen2.angle = atan2(-1*diff.y, diff.x)- radians(90);                              
+    diff = PVector.sub(doublePend.get(curIndex).pendul0.position, new PVector(mouseX, mouseY));     
+    doublePend.get(curIndex).pendul1.angle = atan2(-1*diff.y, diff.x)- radians(90);                              
 
-    doublePend.get(curIndex).pen2.velocity = 0;
-    doublePend.get(curIndex).pen2.lengh = diff.mag();    
+    doublePend.get(curIndex).pendul1.velocity = 0;
+    doublePend.get(curIndex).pendul1.lengh = diff.mag();    
   } else if (changePositionByMouse[5])
   {
     int index = nPend.get(curIndex).index;
-    nPend.get(curIndex).singlePen.get(index).position.x = mouseX;
-    nPend.get(curIndex).singlePen.get(index).position.y = mouseY;
+    nPend.get(curIndex).singlePendulum.get(index).position.x = mouseX;
+    nPend.get(curIndex).singlePendulum.get(index).position.y = mouseY;
 
     if (index > 1)
     {
-      diff = PVector.sub(nPend.get(curIndex).singlePen.get(index - 1).position, new PVector(mouseX, mouseY));
+      diff = PVector.sub(nPend.get(curIndex).singlePendulum.get(index - 1).position, new PVector(mouseX, mouseY));
     } else
     {
-      diff = PVector.sub(nPend.get(curIndex).singlePen.get(0).origin, new PVector(mouseX, mouseY));
+      diff = PVector.sub(nPend.get(curIndex).singlePendulum.get(0).origin, new PVector(mouseX, mouseY));
     }
 
-    nPend.get(curIndex).singlePen.get(index).angle = atan2(-1*diff.y, diff.x)- radians(90);                              
+    nPend.get(curIndex).singlePendulum.get(index).angle = atan2(-1*diff.y, diff.x)- radians(90);                              
 
-    nPend.get(curIndex).singlePen.get(index).lengh = diff.mag();
-    nPend.get(curIndex).singlePen.get(index).velocity = 0;
+    nPend.get(curIndex).singlePendulum.get(index).lengh = diff.mag();
+    nPend.get(curIndex).singlePendulum.get(index).velocity = 0;
   }
 }

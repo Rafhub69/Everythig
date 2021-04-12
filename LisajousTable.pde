@@ -1,13 +1,12 @@
 class LisajousTable {
 
   int size = 100, cols, rows;
-  float cx = 0, cy = 0, x = 0, y = 0;  
+  float centerX = 0, centerY = 0, x = 0, y = 0;  
   ArrayList<ArrayList<Curve>> curves = new ArrayList<ArrayList<Curve>>();
   boolean whatLine = true; //true - horizontal line, false - vertical line
-  float angle = 0, angleChange1 = 0.05, angleChange2 = 0.05, offset = size/2, diameter = size - 0.2 * size, radius = diameter/2;    
- 
-
-
+  float angle = 0, angleChange1 = 0.05, angleChange2 = 0.05;    
+  float diameter = size - 0.2 * size, radius = diameter/2, offset = size/2;
+  
   LisajousTable()
   {
     //Calculation of the number of circles vertically and horizontally
@@ -61,12 +60,12 @@ class LisajousTable {
     {
       line1 = cols;
       line2 = rows;
-      plane = height;     
+      plane = height;
     } else
     {
       line1 = rows;
       line2 = cols;
-      plane = width;     
+      plane = width;
     }
 
 
@@ -75,12 +74,12 @@ class LisajousTable {
 
       if (whatLine)
       {
-        cy = offset;
-        cx = size + i * size + offset;      
+        centerY = offset;
+        centerX = size + i * size + offset;
       } else
       {
-        cx = offset;
-        cy = size + i * size + offset;
+        centerX = offset;
+        centerY = size + i * size + offset;
       }
 
       x = radius * cos(angle * (i + 1) - HALF_PI);
@@ -91,34 +90,34 @@ class LisajousTable {
 
         if (whatLine)
         {
-          curves.get(j).get(i).setX(cx + x);
+          curves.get(j).get(i).setX(centerX + x);
         } else
         {
-          curves.get(i).get(j).setY(cy + y);
+          curves.get(i).get(j).setY(centerY + y);
         }
       }
 
       strokeWeight(1);
       stroke(255, 230);
-      ellipse(cx, cy, diameter, diameter);
+      ellipse(centerX, centerY, diameter, diameter);
       strokeWeight(8);
-      point(cx + x, cy + y);
+      point(centerX + x, centerY + y);
       stroke(255, 150);
       strokeWeight(1);
 
       if (whatLine)
       {
-        line(cx + x, 0, cx + x, plane);
+        line(centerX + x, 0, centerX + x, plane);
       } else
       {
-        line(0, cy + y, plane, cy + y);
+        line(0, centerY + y, plane, centerY + y);
       }
     }
   }
 
   void show()
   {
-
+    noFill();
     if (lisajousAction )
     {
       angleChange1 = angleChange2;
@@ -127,7 +126,7 @@ class LisajousTable {
       angleChange1 = 0;
     }
 
-    for (int i = 0; i <2; i++)
+    for (int i = 0; i < 2; i++)
     {
       calculations();
       whatLine = !whatLine;
@@ -137,9 +136,9 @@ class LisajousTable {
       for (int i = 0; i < cols; i++) {
         if (lisajousAction )
         {
-         curves.get(j).get(i).addPoint();
+          curves.get(j).get(i).addPoint();
         }
-        
+
         curves.get(j).get(i).show();
       }
     }

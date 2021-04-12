@@ -1,19 +1,21 @@
 class Pendulum {
-  
-  float acceleration, velocity, angle = PI;
+    
   LotsOfFunctions colorDetermination;
   float lengh = 250, radius = 24, mass = 1;
+  float acceleration, velocity, angle = PI;
   PVector position; // position of pendulum ball
   PVector origin = new PVector(width / 2, height/3); 
   float gravity = 1.9620000000000000, damping = 0.998; 
   HashMap<String, Float> fieldVariables = new HashMap<String, Float>(8);
 
-  Pendulum(float a1_, PVector origin_) {
+  Pendulum(float a1_, PVector origin_) 
+  {
     angle = a1_;
     inicjalization(origin_);
   }
   
-  Pendulum(float a1_, float lengh_, float mass_, PVector origin_) {
+  Pendulum(float a1_, float lengh_, float mass_, PVector origin_) 
+  {
 
     angle = a1_;
     mass = mass_;
@@ -35,7 +37,7 @@ class Pendulum {
 
   void inicjalization(PVector origin_)
   {
-    position = new PVector(lengh*sin(angle), lengh*cos(angle));
+    position = new PVector(lengh * sin(angle), lengh * cos(angle));
     position.add(origin_);
 
     colorDetermination = new LotsOfFunctions(velocity, acceleration, angle);
@@ -59,12 +61,13 @@ class Pendulum {
     velocity += acceleration * delta_time;
     angle += velocity;
 
-    position.set(lengh*sin(angle), lengh*cos(angle));
+    position.set(lengh * sin(angle), lengh * cos(angle));
     position.add(origin);   
     velocity *= damping;
   }
 
-  void setSpeed(PVector force) {
+  void setSpeed(PVector force) 
+  {
     PVector f = force.copy();
     acceleration = mag(PVector.div(f, mass).x, PVector.div(f, mass).y);
     velocity += acceleration;

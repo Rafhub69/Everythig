@@ -1,20 +1,20 @@
-void creatingRandomPendulums()
+void creatingRandomPendulums(int howManySinglePendulum)
 {
   float a1 = PI / (4 * randa.nextFloat() + 0.5);
   singlePend.add(new Pendulum(a1, new PVector(width / 2, height/3)));
 
-  for (int i = 1; i < howManySinglePend; i++)
+  for (int i = 1; i < howManySinglePendulum; i++)
   {
     a1 = PI / (randa.nextFloat() + 0.5);
     singlePend.add(new Pendulum(a1, singlePend.get(i - 1).position));
   }
 }
 
-void creatingRandomDoublePendulums()
+void creatingRandomDoublePendulums(int howManyDoublePendulum)
 {
   float length1 = 350, length2 = 200, mas1 = 40, mas2 = 20, a1, a2;
-  
-  for (int i = 0; i < howManyDoublePen; i++)
+
+  for (int i = 0; i < howManyDoublePendulum; i++)
   {
     a1 = PI / (randa.nextFloat() + 1);
     a2 = PI / (randa.nextFloat() + 3); 
@@ -30,12 +30,21 @@ void creatingRandomNPendulums()
   }
 }
 
+void pendulumManagement()
+{
+  if (pendul) {
+    singlePendulumManagement();
+  } else {
+    dublePendulumManagement();
+  }
+}
+
 void singlePendulumManagement()
 {
 
   for (int i = 0; i < singlePend.size(); i++)
   {
-    if (singleAction)
+    if (singleAction) 
     {
       singlePend.get(i).update();
     }
@@ -49,7 +58,11 @@ void dublePendulumManagement()
 
   for (int i = 0; i < doublePend.size(); i++)
   { 
-    doublePend.get(i).drowing(i, howManyDoublePen);
+    if (doubleAction) 
+    {
+      doublePend.get(i).trace(i, howManyDoublePen);
+    }    
+    doublePend.get(i).drawing();
   }
   //drawing center ball
   fill(82, 0, 14);
@@ -63,9 +76,8 @@ void nPendulManagement()
   {
     if (nPendulumAction)
     {
-      nPend.get(i).trace(i, howManyDoublePen);
+      nPend.get(i).trace(i, numberOfNpendulum);
     }
-
     nPend.get(i).drawing();
   }
 }

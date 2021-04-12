@@ -1,10 +1,7 @@
 class Complex
 {
-  float re;
-  float im;
-  float phase;
-  float amplitude;
-  float frequency;   
+  float phase, amplitude;
+  float re, im, frequency;  
 
   Complex(float r, float i)
   {

@@ -1,6 +1,7 @@
 void creatingButtons(PFont inputFont, PFont font_)
 {
-  int hi = 1, pozX = 2, button_height = 30, button_width = 106;
+  int centerX = (width/2) - 53, centerY = (height/2) - 15;
+  int factor = 1, pozX = 2, button_height = 30, button_width = 106; 
 
   //creating buttons
   Group menu = cp5.addGroup("contextMenu").disableCollapse().addCloseButton().setCaptionLabel("Informacje").hide();
@@ -11,7 +12,7 @@ void creatingButtons(PFont inputFont, PFont font_)
 
 
   cp5.addButton("Start").setPosition(centerX, centerY).setSize(200, 60).setCaptionLabel("Start");
-  cp5.addButton("Settings").setPosition(centerX, centerY+ 60).setSize(200, 60).setCaptionLabel("Ustawienia");
+  cp5.addButton("Settings").setPosition(centerX, centerY + 60).setSize(200, 60).setCaptionLabel("Ustawienia");
   cp5.addButton("Exit").setPosition(centerX, centerY + 120).setSize(200, 60).setCaptionLabel("Wyjscie z programu");
 
   cp5.addButton("Save").setPosition(pozXSet, 63).setSize(65, button_height).setCaptionLabel("Zapis").hide();
@@ -19,30 +20,30 @@ void creatingButtons(PFont inputFont, PFont font_)
   cp5.addButton("Set").setPosition(pozXSet, 63).setSize(70, button_height).setCaptionLabel("Ustawienia").hide();
 
   cp5.addButton("Menu").setPosition(pozX, 1).setSize(button_width, button_height).hide();
-  cp5.addButton("Reset").setPosition(pozX, button_height * hi).setSize(button_width, button_height).hide();
-  hi++;
-  cp5.addButton("StartStop").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Uruchomienie programu").hide();
-  hi++;
-  cp5.addButton("Single").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Pojedyncze wahadło").hide().setValue(2);
-  hi++;
-  cp5.addButton("Dual").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Podwójne wahadło").hide().setValue(2);
-  hi++;
-  cp5.addButton("Homogen").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Pole jednorodne").hide().setValue(1);
-  hi++;
-  cp5.addButton("Central").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Pole centralne").hide().setValue(1);
-  hi++;
-  cp5.addButton("Lisajous").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Tablica Lisajous ").hide().setValue(3);
-  hi++;
-  cp5.addButton("Bonaci").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Sekwencja fibonacziego").hide().setValue(3); 
-  hi++;
-  cp5.addButton("Circle").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Wzory").hide().setValue(4);
-  hi++;
-  cp5.addButton("Npendul").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Wahadło n-tego stopnia").hide().setValue(4);
-  cp5.addTextfield("degreesOfPendulum").setPosition(pozX + 308, button_height * hi + button_height).setSize(200, 40).setFont(font_).setFocus(false).hide()
-  .setCaptionLabel("What degree of pendulum?").setColor(color(255, 0, 0)).align(pozX + 328, button_height * hi + button_height + 40, pozX + 328, button_height * hi + button_height);
-  hi++;
-  cp5.addButton("FourTrans").setPosition(pozX, button_height * hi).setSize(button_width, button_height).setCaptionLabel("Transformata fouriera").hide().setValue(5);
-  hi++;
+  cp5.addButton("Reset").setPosition(pozX, button_height * factor).setSize(button_width, button_height).hide();
+  factor++;
+  cp5.addButton("StartStop").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Uruchomienie programu").hide();
+  factor++;
+  cp5.addButton("Single").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Pojedyncze wahadło").hide().setValue(2);
+  factor++;
+  cp5.addButton("Dual").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Podwójne wahadło").hide().setValue(2);
+  factor++;
+  cp5.addButton("Homogen").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Pole jednorodne").hide().setValue(1);
+  factor++;
+  cp5.addButton("Central").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Pole centralne").hide().setValue(1);
+  factor++;
+  cp5.addButton("Lisajous").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Tablica lisajous").hide().setValue(3);
+  factor++;
+  cp5.addButton("Bonaci").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Sekwencja fibonacziego").hide().setValue(3); 
+  factor++;
+  cp5.addButton("Circle").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Wzory").hide().setValue(4);
+  factor++;
+  cp5.addButton("Npendul").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Wahadło n-tego stopnia").hide().setValue(4);
+  cp5.addTextfield("degreesOfPendulum").setPosition(pozX + 308, button_height * factor + button_height).setSize(200, 40).setFont(font_).setFocus(false).hide()
+    .setCaptionLabel("What degree of pendulum?").setColor(color(255, 0, 0)).align(pozX + 328, button_height * factor + button_height + 40, pozX + 328, button_height * factor + button_height);
+  factor++;
+  cp5.addButton("FourierTrans").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Transformata fouriera").hide().setValue(5);
+  factor++;
   cp5.addTextfield("input").setPosition(20, 100).setSize(200, 40).setFont(inputFont).setFocus(false).setCaptionLabel(" ").setColor(color(255, 0, 0)).hide();
 }
 
@@ -50,7 +51,8 @@ void creatingButtons(PFont inputFont, PFont font_)
 void Settings() {
 }
 
-void Exit() {
+void Exit() 
+{
   exit();
 }
 
@@ -59,47 +61,48 @@ void Set()
   resetToBegining();
 }
 
-void Homogen(int n) {
-
+void Homogen(int n) 
+{
   CentralButton(n, false);
 }
 
-void Circle(int n) {
-
+void Circle(int n) 
+{
   CentralButton(n, true);
 }
 
-void Lisajous(int n) {
-
+void Lisajous(int n) 
+{
   CentralButton(n, true);
 }
 
-void Bonaci(int n) {
-
+void Bonaci(int n) 
+{
   CentralButton(n, false);
 }
 
-void Central(int n) {
-
+void Central(int n) 
+{
   CentralButton(n, true);
 }
 
-void Single(int n) {
-
+void Single(int n) 
+{
   CentralButton(n, true);
 }
 
-void Dual(int n) {
-
-  CentralButton(n, false);
-}
-void Npendul(int n) {
-
+void Dual(int n) 
+{
   CentralButton(n, false);
 }
 
-void FourTrans(int n) {
+void Npendul(int n) 
+{
+  CentralButton(n, false);
+}
 
+void FourierTrans(int n) 
+{
   CentralButton(n, true);
 }
 
@@ -129,17 +132,17 @@ void Radius(float theValue)
     {
       if (doublePenIndex == 0)
       {
-        doublePend.get(currentIndex).pen1.radius = theValue;
+        doublePend.get(currentIndex).pendul0.radius = theValue;
       } else if (doublePenIndex == 1)
       {
-        doublePend.get(currentIndex).pen2.radius = theValue;
+        doublePend.get(currentIndex).pendul1.radius = theValue;
       }
     }
   } else if (mode == 4)
   {
     int index = nPend.get(currentIndex).index;
 
-    nPend.get(currentIndex).singlePen.get(index).radius = theValue;
+    nPend.get(currentIndex).singlePendulum.get(index).radius = theValue;
   }
 }
 
@@ -153,16 +156,16 @@ void Mass(float theValue)
   {
     if (doublePenIndex == 0)
     {
-      doublePend.get(currentIndex).pen1.mass = theValue;
+      doublePend.get(currentIndex).pendul0.mass = theValue;
     } else if (doublePenIndex == 1)
     {
-      doublePend.get(currentIndex).pen2.mass = theValue;
+      doublePend.get(currentIndex).pendul1.mass = theValue;
     }
   } else if (mode == 4)
   {
     int index = nPend.get(currentIndex).index;
 
-    nPend.get(currentIndex).singlePen.get(index).radius = theValue;
+    nPend.get(currentIndex).singlePendulum.get(index).radius = theValue;
   }
 }
 
@@ -173,7 +176,7 @@ void Gravity(float theValue)
     singlePend.get(currentIndex).gravity = theValue;
   } else 
   {
-    doublePend.get(currentIndex).g = theValue;
+    doublePend.get(currentIndex).gravity = theValue;
   }
 }
 
@@ -188,12 +191,12 @@ void Springness(float theValue)
     singlePend.get(currentIndex).damping = theValue;
   } else if (mode == 4)
   {
-    nPend.get(currentIndex).g = theValue;
+    nPend.get(currentIndex).gravity = theValue;
   }
 }
-//A function that manages what happens when the program is stopped and started.
-void StartStop() {
-
+//Function that manages what happens when the program is stopped and started.
+void StartStop() 
+{
   stopStart = !stopStart;
 
   singleAction = stopStart; 
@@ -220,7 +223,8 @@ void StartStop() {
   }
 }
 
-void Start() {
+void Start() 
+{
   cp5.get(Button.class, "Exit").hide();
   cp5.get(Button.class, "Start").hide();  
   cp5.get(Button.class, "Settings").hide();
@@ -235,7 +239,6 @@ void Start() {
 
 void Save()
 {  
-  
   String objectName = null;
   JSONArray values = new JSONArray();
   ArrayList<JSONObject> jsonArray = new ArrayList<JSONObject>();
@@ -292,7 +295,7 @@ void Save()
   case 4:
     if (!cirOrNpendul)
     {
-      for (int i = 0; i< nPend.size(); i++)
+      for (int i = 0; i < nPend.size(); i++)
       {
         nPend.get(i).setingFieldVariables();
         jsonArray.add(new JSONObject());
@@ -351,8 +354,8 @@ void CentralButton(int n, boolean switches)
   switch(n)
   {
   case 1:
-    field = switches;
 
+    field = switches;
     break;
   case 2:
 
@@ -363,6 +366,7 @@ void CentralButton(int n, boolean switches)
     wholeScreen = switches;
     break;
   case 4:
+
     cirOrNpendul = switches;
     break;
   }
@@ -379,7 +383,6 @@ void ButtonManagement()
     text(frameRate, width - 80, 40);
     long DurationMillis = millis() - startedMillis;
     text(formatMillis(DurationMillis), width - 136, 20);
-    
   }
 
   cp5.get(Button.class, "Dual").setVisible(information);
@@ -390,8 +393,7 @@ void ButtonManagement()
   cp5.get(Button.class, "Central").setVisible(information);
   cp5.get(Button.class, "Npendul").setVisible(information);
   cp5.get(Button.class, "Lisajous").setVisible(information);
-  cp5.get(Button.class, "FourTrans").setVisible(information);
-
+  cp5.get(Button.class, "FourierTrans").setVisible(information);
 }
 
 void Disclosures_set(String name)
@@ -402,7 +404,7 @@ void Disclosures_set(String name)
   cp5.getController("Load").setPosition(pozXSet + 70, pozYSet[1]);
   cp5.getController("Save").setPosition(pozXSet + 135, pozYSet[1]);
   cp5.getController("input").setPosition(pozXSet, pozYSet[1] + 30);  
-  
+
   cp5.getController("Set").show();
   cp5.getController("Load").show();
   cp5.getController("Save").show();
@@ -431,8 +433,8 @@ int inputChange(String theText)
 }
 
 // automatically receives results from controller input
-void input(String theText) {
-
+void input(String theText) 
+{
   if (theText != null)
   {
     int amount = inputChange(theText);
@@ -445,7 +447,7 @@ void input(String theText) {
       controlCopy = amount;
     } else if (buttonName.equals("Dual"))
     {
-      howManyDoublePenCopy = amount;
+      howManyDoublePen = amount;
     } else if (buttonName.equals("Single"))
     {
       howManySinglePend = amount;
@@ -461,8 +463,8 @@ void input(String theText) {
   }
 }
 
-void degreesOfPendulum(String theText) {
-
+void degreesOfPendulum(String theText) 
+{
   if (theText != null)
   {
     degreeOfPendulum = inputChange(theText);
