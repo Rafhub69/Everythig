@@ -10,5 +10,6 @@ The basic functionalities are:
 
 If you want to run this program you should: 
 - Download processing: https://processing.org/download/ 
-- Download all files and put them in a folder named Everything2D_3, then click File - Open and select this folder, then click Everything2D_3.pde. 
+- Download all files and delate file Everything2D_3
+- Put all of files in a folder named Everything2D_4, then click File - Open and select this folder, then click Everything2D_4.pde. 
 - In the processing click run.
