@@ -69,7 +69,7 @@ void creatingObjects()
 {
   int strCirAmount = 1000;
   float angleChange_ = 0.01, strCirRadius = 10;
-  
+
   //creating individual objects
   save = new SaveGame();
   seq = new BonaciSequence();
@@ -133,7 +133,7 @@ String formatMillis(long millis)
   int seconds = (int)((millis / 1000) % 60);
   long hour = ((millis / 1000) / 3600) % 60;
   long minutes = ((millis / 1000) / 60) % 60;
-  return "" + nf(hour, 2, 0) + ":" + nf(minutes, 2, 0) + ":" + nf(seconds, 2, 0) + ":" + nf(milliseconds, 3, 0);
+  return nf(hour, 2, 0) + ":" + nf(minutes, 2, 0) + ":" + nf(seconds, 2, 0) + ":" + nf(milliseconds, 3, 0);
 }
 
 void resetToBegining() 
@@ -213,7 +213,12 @@ void strangeCirclesManagement()
   noFill();
   strokeWeight(2);
   circle(0, 0, 100);
-  strenCir.strange();
+
+  if (strangeCirclesAction)
+  {
+    strenCir.calculations();
+  }
+  strenCir.drawing();
   popMatrix();
 }
 
@@ -243,9 +248,25 @@ void cirOrNpendulManagement()
 
 void draw() 
 {
-  calculate_delta_time();
-  background(120);
-  drawBorders(); 
+  calculate_delta_time(); 
+  drawBorders();
+
+  switch(mode) 
+  {
+  case 1:
+  case 2:
+    fill(10, 10, 10);
+    background(100);
+    break;
+  case 3:
+  case 4:
+  case 5:
+    fill(200, 200, 200);
+    background(0);
+    break;   
+  default:
+    background(255, 0, 0);
+  }
 
   switch(mode) 
   {
@@ -256,7 +277,6 @@ void draw()
     pendulumManagement();
     break;
   case 3: //3 - programs on whole screen
-    background(0);
     wholeScreenManagement();
     break;
   case 4: // 4 - strenge circles
@@ -265,14 +285,8 @@ void draw()
   case 5: // 5 - fourier transformation 
     fourier.show();
     break;
-  }
-
-  if (mode == 3 || mode == 4 || mode == 5)
-  { 
-    fill(200, 200, 200);
-  } else
-  {
-    fill(10, 10, 10);
+  default:
+    text("       Error\n Wrong mode", width/2, height/2);
   }
 
   textSize(20);  

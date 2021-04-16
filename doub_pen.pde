@@ -2,7 +2,7 @@ class DoublePendulum {
 
   float gravity = 3.924;
   Pendulum pendul0, pendul1;
-  int traceIterator = 0, currentPoint = traceIterator, iko = 0;
+  int traceIterator = 0, currentPoint = traceIterator;
   PVector[]  point = new PVector[500];
   PVector[]  position = new PVector[2];
   ArrayList<LotsOfFunctions> colorDetermination;
@@ -25,15 +25,8 @@ class DoublePendulum {
 
   DoublePendulum(float a1_, float a2_, float a1_vel_, float a2_vel_, float a1_acc_, float a2_acc_, float length1_, float length2_, float mas1_, float mas2_, float radius1_, float radius2_, float g_, PVector position0, PVector position1)
   {
-    pendul0 = new Pendulum(origin, radius1_, g_, 0.998, a1_, a1_vel_, length1_);
-    pendul1 = new Pendulum(origin, radius2_, g_, 0.998, a2_, a2_vel_, length2_);
-
-    pendul0.radius = 30;
-    pendul1.radius = 20;
-    pendul0.mass = mas1_;
-    pendul1.mass = mas2_;
-    pendul0.acceleration = a1_acc_;
-    pendul1.acceleration = a2_acc_;  
+    pendul0 = new Pendulum(origin, radius1_, g_, 0.998, a1_, a1_vel_, a1_acc_, length1_, mas1_);
+    pendul1 = new Pendulum(origin, radius2_, g_, 0.998, a2_, a2_vel_, a2_acc_, length2_, mas2_);
 
     pendul0.position = new PVector(position0.x, position0.y);
     pendul1.position = new PVector(position1.x, position1.y);
@@ -90,8 +83,7 @@ class DoublePendulum {
 
     for (int j = 0; j < point.length; j++)
     {
-      point[j].x = pendul1.position.x;
-      point[j].y = pendul1.position.y;
+      point[j].set(pendul1.position);
     }
 
     pendul0.velocity = 0;
@@ -156,10 +148,8 @@ class DoublePendulum {
 
   void trace(int k, int ile)
   {
-    iko = k;
     update();
-    point[traceIterator].x = pendul1.position.x;
-    point[traceIterator].y = pendul1.position.y;
+    point[traceIterator].set(pendul1.position);
 
     traceIterator++;
 
@@ -185,7 +175,7 @@ class DoublePendulum {
         currentPoint = 0;
       }
 
-      stroke((map(j, 0, point.length, 50, 255)), (map(iko, 0, ile, 50, 255)), (map(currentPoint, 0, point.length, 50, 255)));
+      stroke((map(j, 0, point.length, 10, 255)), (map(k, 0, ile, 10, 255)), (map(currentPoint, 10, point.length, 0, 255)));
 
       curveVertex(point[currentPoint].x, point[currentPoint].y);
     }

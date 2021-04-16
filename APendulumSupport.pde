@@ -1,6 +1,6 @@
 void creatingRandomPendulums(int howManySinglePendulum)
 {
-  float a1 = PI / (4 * randa.nextFloat() + 0.5);
+  float a1 = PI / (randa.nextFloat() + 0.5);;
   singlePend.add(new Pendulum(a1, new PVector(width / 2, height/3)));
 
   for (int i = 1; i < howManySinglePendulum; i++)
@@ -72,6 +72,8 @@ void dublePendulumManagement()
 
 void nPendulManagement()
 {
+  background(120);
+  
   for (int i= 0; i < nPend.size(); i++)
   {
     if (nPendulumAction)

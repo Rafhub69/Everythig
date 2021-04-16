@@ -91,7 +91,8 @@ class SaveGame
           item.getFloat("velocity.y")), new PVector(item.getFloat("acceleration.x"), item.getFloat("acceleration.y")), item.getFloat("radius"), item.getFloat("mass"), item.getFloat("springness")));
         } else if (name.equals("singlePend"))
         {
-          singlePend.add(new Pendulum(new PVector(item.getFloat("origin.x"), item.getFloat("origin.y")), item.getFloat("radius"), item.getFloat("gravity"), item.getFloat("damping"), item.getFloat("angle"), item.getFloat("penVel"), item.getFloat("lengh")));
+          singlePend.add(new Pendulum(new PVector(item.getFloat("origin.x"), item.getFloat("origin.y")), item.getFloat("radius"), item.getFloat("gravity"),
+          item.getFloat("damping"), item.getFloat("angle"), item.getFloat("penVel"), 0, item.getFloat("lengh"), item.getFloat("mass")));
         } else if (name.equals("doublePend"))
         {
           doublePend.add(new DoublePendulum(item.getFloat("a0"), item.getFloat("a1"), item.getFloat("a0_vel"), item.getFloat("a1_vel"), item.getFloat("a0_a"), 

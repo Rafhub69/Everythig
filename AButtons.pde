@@ -377,12 +377,14 @@ void CentralButton(int n, boolean switches)
 
 void ButtonManagement()
 {
+  
   if (information)
   {
+    fill(255);
     textAlign(LEFT, BOTTOM);
-    text(frameRate, width - 80, 40);
+    text(frameRate, width - 80, 50);
     long DurationMillis = millis() - startedMillis;
-    text(formatMillis(DurationMillis), width - 136, 20);
+    text(formatMillis(DurationMillis), width - 130, 30);
   }
 
   cp5.get(Button.class, "Dual").setVisible(information);
@@ -410,7 +412,7 @@ void Disclosures_set(String name)
   cp5.getController("Save").show();
   cp5.getController("input").show();
 
-  if (buttonName == "Npendul")
+  if (buttonName.equals("Npendul"))
   {
     cp5.getController("degreesOfPendulum").show();
   } else
@@ -419,11 +421,11 @@ void Disclosures_set(String name)
   }
 }
 
-int inputChange(String theText) 
+int inputChange(String input) 
 {
   Pattern numbers = Pattern.compile("[0-9]+");
-  theText.replaceAll("^\\D+", "").split("\\D+");
-  Matcher matcher = numbers.matcher(theText);
+  input.replaceAll("^\\D+", "").split("\\D+");
+  Matcher matcher = numbers.matcher(input);
   int sum = 0;
   while (matcher.find()) {
     sum += Integer.parseInt(matcher.group());
@@ -439,7 +441,7 @@ void input(String theText)
   {
     int amount = inputChange(theText);
 
-    if (buttonName == "Homogen")
+    if (buttonName.equals("Homogen"))
     {
       controlCopy = amount;
     } else if (buttonName.equals("Central"))
@@ -463,11 +465,11 @@ void input(String theText)
   }
 }
 
-void degreesOfPendulum(String theText) 
+void degreesOfPendulum(String degree) 
 {
-  if (theText != null)
+  if (degree != null)
   {
-    degreeOfPendulum = inputChange(theText);
+    degreeOfPendulum = inputChange(degree);
 
     resetToBegining();
   }

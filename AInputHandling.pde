@@ -356,17 +356,18 @@ void checkingIfMouseIsOver()
     }
 
     if (cp5.isMouseOver(cp5.getController("Menu"))) {
-      textFont(arialFont, 20);
-      textLeading(18);
+      fill(255);
       textAlign(LEFT);
+      textLeading(18);
+      textFont(arialFont, 20);
+
       String advice = " Nie ma znaczenia jaka jest wielkość liter.\n " + shortcutTable.get("shortcutHomogenField") + " - pole jednorodne\n " 
-      + shortcutTable.get("shortcutCentralField") + " - pole centralne\n " + shortcutTable.get("shortcutSinglePendulum") + " - pojedyncze wahadło\n "
-      + shortcutTable.get("shortcutDoublePendulum") + " - podwójne wahadło\n " + shortcutTable.get("shortcutBonaciSeqense") + " - sekwencja fibonacziego\n "
-      + shortcutTable.get("shortcutLisajousTable")  + " - tablica Lisajous\n " + shortcutTable.get("shortcutFourierTransform") + " - transformata furiera\n "
-      + shortcutTable.get("shortcutNpendulum") +" - wahadło z n kół\n " + shortcutTable.get("shortcutStrangeCircles") + " - dziwne koła\n K - zmiana ilości obiektów\n "  
-      + shortcutTable.get("shortcutReset") + " - reset\n " + shortcutTable.get("shortcutDisableEnableAll") + " - Wyłączenie pokazywania menu\n " + shortcutTable.get("shortcutStopStartAll") + " - Zatrzymanie obiektów\n "; 
+        + shortcutTable.get("shortcutCentralField") + " - pole centralne\n " + shortcutTable.get("shortcutSinglePendulum") + " - pojedyncze wahadło\n "
+        + shortcutTable.get("shortcutDoublePendulum") + " - podwójne wahadło\n " + shortcutTable.get("shortcutBonaciSeqense") + " - sekwencja fibonacziego\n "
+        + shortcutTable.get("shortcutLisajousTable")  + " - tablica Lisajous\n " + shortcutTable.get("shortcutFourierTransform") + " - transformata furiera\n "
+        + shortcutTable.get("shortcutNpendulum") +" - wahadło z n kół\n " + shortcutTable.get("shortcutStrangeCircles") + " - dziwne koła\n K - zmiana ilości obiektów\n "  
+        + shortcutTable.get("shortcutReset") + " - reset\n " + shortcutTable.get("shortcutDisableEnableAll") + " - Wyłączenie pokazywania menu\n " + shortcutTable.get("shortcutStopStartAll") + " - Zatrzymanie obiektów\n "; 
       text(advice, 110, 20, 660, 330);
-      
     } else if (cp5.isMouseOver(cp5.getController("Lisajous")))
     {
       Disclosures_set("Lisajous");
@@ -403,7 +404,7 @@ void contextMenu(int currentIndex)
 {
   float x = 0, y = 0;
   curIndex = currentIndex;
-  
+
   if (contextMenuOpenByMouse[0] || contextMenuOpenByMouse[1])
   {
     cir.get(curIndex).showingData();
@@ -441,8 +442,7 @@ void contextMenu(int currentIndex)
     cp5.get(Slider.class, "Gravity").setVisible(false);
     cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas1")).setCaptionLabel("mas1").setVisible(true);
     cp5.get(Slider.class, "Springness").setValue(doublePend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true); 
-    
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true);
   } else if (contextMenuOpenByMouse[4])
   {
     doublePend.get(curIndex).setingFieldVariables();
@@ -452,12 +452,11 @@ void contextMenu(int currentIndex)
     cp5.get("contextMenu").setPosition(x, y);
     cp5.get("contextMenu").show();
     doublePenIndex = 1;
-    
+
     cp5.get(Slider.class, "Gravity").setVisible(false);
     cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas2")).setCaptionLabel("mas2").setVisible(true); 
     cp5.get(Slider.class, "Springness").setValue(doublePend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius2")).setCaptionLabel("radius2").setVisible(true); 
-    
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius2")).setCaptionLabel("radius2").setVisible(true);
   } else if (contextMenuOpenByMouse[5])
   {
     int index = nPend.get(curIndex).index;
@@ -475,7 +474,7 @@ void contextMenu(int currentIndex)
     cp5.get(Slider.class, "Gravity").setVisible(false);
     cp5.get(Slider.class, "Springness").setValue(nPend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
     cp5.get(Slider.class, "Mass").setValue(nPend.get(curIndex).fieldVariables.get("mas" + index)).setCaptionLabel("mass").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(nPend.get(curIndex).fieldVariables.get("radius" + index)).setCaptionLabel("radius").setVisible(true);     
+    cp5.get(Slider.class, "Radius").setValue(nPend.get(curIndex).fieldVariables.get("radius" + index)).setCaptionLabel("radius").setVisible(true);
   }
 }
 
@@ -520,8 +519,8 @@ void changePositionByTheMouse(int currentIndex)
     singlePend.get(curIndex).position.x = mouseX;
     singlePend.get(curIndex).position.y = mouseY;
 
-    diff = PVector.sub(singlePend.get(curIndex).origin, new PVector(mouseX, mouseY));      // Difference between 2 points
-    singlePend.get(curIndex).angle = atan2(-1*diff.y, diff.x) - radians(90);                      // Angle relative to vertical axis
+    diff = PVector.sub(singlePend.get(curIndex).origin, new PVector(mouseX, mouseY));// Difference between 2 points
+    singlePend.get(curIndex).angle = atan2(-1*diff.y, diff.x) - radians(90);     // Angle relative to vertical axis
 
     singlePend.get(curIndex).lengh = diff.mag();
     singlePend.get(curIndex).velocity = 0;
@@ -534,10 +533,10 @@ void changePositionByTheMouse(int currentIndex)
 
     diff = PVector.sub(doublePend.get(curIndex).origin, new PVector(mouseX, mouseY));     
     doublePend.get(curIndex).pendul0.angle = atan2(-1*diff.y, diff.x)- radians(90);                         
-   
+
     doublePend.get(curIndex).pendul0.lengh = diff.mag();
     PVector diff2 = PVector.sub(doublePend.get(curIndex).pendul0.position, doublePend.get(curIndex).pendul1.position);
-    doublePend.get(curIndex).pendul1.lengh = diff2.mag();      
+    doublePend.get(curIndex).pendul1.lengh = diff2.mag();
   } else if (changePositionByMouse[4])
   {
     doublePend.get(curIndex).pendul1.position.x = mouseX;
@@ -547,7 +546,7 @@ void changePositionByTheMouse(int currentIndex)
     doublePend.get(curIndex).pendul1.angle = atan2(-1*diff.y, diff.x)- radians(90);                              
 
     doublePend.get(curIndex).pendul1.velocity = 0;
-    doublePend.get(curIndex).pendul1.lengh = diff.mag();    
+    doublePend.get(curIndex).pendul1.lengh = diff.mag();
   } else if (changePositionByMouse[5])
   {
     int index = nPend.get(curIndex).index;

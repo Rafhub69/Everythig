@@ -6,7 +6,7 @@ class Pendulum {
   PVector position; // position of pendulum ball
   PVector origin = new PVector(width / 2, height/3); 
   float gravity = 1.9620000000000000, damping = 0.998; 
-  HashMap<String, Float> fieldVariables = new HashMap<String, Float>(8);
+  HashMap<String, Float> fieldVariables = new HashMap<String, Float>(9);
 
   Pendulum(float a1_, PVector origin_) 
   {
@@ -23,14 +23,16 @@ class Pendulum {
     inicjalization(origin_);
   }
 
-  Pendulum(PVector origin_, float radius_, float gravity_, float damping_, float angle_, float penVel_, float lengh_)
+  Pendulum(PVector origin_, float radius_, float gravity_, float damping_, float angle_, float penVel_, float penAcc_, float lengh_, float mass_)
   {
+    mass = mass_;
     angle = angle_;
     lengh = lengh_;
     radius = radius_;
     velocity = penVel_;  
     gravity = gravity_;
     damping = damping_;
+    acceleration = penAcc_;    
 
     inicjalization(origin_);
   }
@@ -41,7 +43,8 @@ class Pendulum {
     position.add(origin_);
 
     colorDetermination = new LotsOfFunctions(velocity, acceleration, angle);
-
+    
+    fieldVariables.put("mass", mass);
     fieldVariables.put("angle", angle);
     fieldVariables.put("lengh", lengh);    
     fieldVariables.put("radius", radius);

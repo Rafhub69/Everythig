@@ -29,18 +29,29 @@ class StrengeCircles
     fun[2] = new Function(point[curIndex].y, point[curIndex].y);
   }
 
-  void strange()
+  void reset()
   {
+    angle = 0.0000;
+    for (int i = 0; i<point.length; i++)
+    {
+      point[i] = new PVector(0, 0);
+    }
+  }
 
+  void calculations()
+  {
     for (int i = 0; i < amount; i++)
     {
-      if (strangeCirclesAction)
-      {
-        point[i].x = radius * cos(angle);
-        point[i].y = radius * sin(angle);
-        angle+=angleChange;
-      }
+      point[i].x = radius * cos(angle);
+      point[i].y = radius * sin(angle);
+      angle += angleChange;
+    }
+  }
 
+  void drawing()
+  {
+    for (int i = 0; i < amount; i++)
+    {
       translate(point[i].y, point[i].x);
 
       //finding the smallest and largest limit values used to change the color of objects
@@ -50,15 +61,6 @@ class StrengeCircles
 
       stroke((map(angle, fun[0].smallestItem, fun[0].largestItem, 10, 255)), (map(point[i].x, fun[1].smallestItem, fun[1].largestItem, 10, 255)), (map(point[i].y, fun[2].smallestItem, fun[2].largestItem, 10, 255)));
       point(point[i].x, point[i].y);
-    }
-  }
-
-  void reset()
-  {
-    angle = 0.0000;
-    for (int i = 0; i<point.length; i++)
-    {
-      point[i] = new PVector(0, 0);
     }
   }
 }
