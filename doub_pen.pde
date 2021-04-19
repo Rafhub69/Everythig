@@ -46,18 +46,18 @@ class DoublePendulum {
     colorDetermination.add(new LotsOfFunctions(pendul1.velocity, pendul1.acceleration, pendul1.angle));
 
     fieldVariables.put("gravity", gravity);
-    fieldVariables.put("a1", pendul0.angle);
-    fieldVariables.put("a2", pendul1.angle);
-    fieldVariables.put("mas1", pendul0.mass);
-    fieldVariables.put("mas2", pendul1.mass);       
-    fieldVariables.put("length1", pendul0.lengh);
-    fieldVariables.put("length2", pendul1.lengh);   
-    fieldVariables.put("radius1", pendul0.radius);
-    fieldVariables.put("radius2", pendul1.radius);  
-    fieldVariables.put("a1_vel", pendul0.velocity);
-    fieldVariables.put("a2_vel", pendul1.velocity);
-    fieldVariables.put("a1_a", pendul0.acceleration);
-    fieldVariables.put("a2_a", pendul1.acceleration);
+    fieldVariables.put("a0", pendul0.angle);
+    fieldVariables.put("a1", pendul1.angle);
+    fieldVariables.put("mas0", pendul0.mass);
+    fieldVariables.put("mas1", pendul1.mass);
+    fieldVariables.put("length0", pendul0.lengh);
+    fieldVariables.put("length1", pendul1.lengh);   
+    fieldVariables.put("radius0", pendul0.radius); 
+    fieldVariables.put("radius1", pendul1.radius);
+    fieldVariables.put("a0_vel", pendul0.velocity);
+    fieldVariables.put("a1_vel", pendul1.velocity);
+    fieldVariables.put("a0_a", pendul0.acceleration);
+    fieldVariables.put("a1_a", pendul1.acceleration);
     fieldVariables.put("position[0].x", pendul0.position.x);
     fieldVariables.put("position[0].y", pendul0.position.y);
     fieldVariables.put("position[1].x", pendul1.position.x);
@@ -138,7 +138,7 @@ class DoublePendulum {
       pendul0.acceleration = mag(PVector.div(f, pendul0.mass).x, PVector.div(f, pendul0.mass).y);
       pendul0.velocity += pendul0.acceleration;
       pendul0.position.add(pendul0.velocity, pendul0.velocity);
-
+      break;
     case 1:
       pendul1.acceleration = mag(PVector.div(f, pendul1.mass).x, PVector.div(f, pendul1.mass).y);
       pendul1.velocity += pendul1.acceleration;
@@ -146,7 +146,7 @@ class DoublePendulum {
     }
   }
 
-  void trace(int k, int ile)
+  void trace(int pendulIndex, int ile)
   {
     update();
     point[traceIterator].set(pendul1.position);
@@ -156,11 +156,7 @@ class DoublePendulum {
     if (traceIterator == point.length)
     {
       traceIterator = 0;
-    }
-
-    stroke(100, 0, 100);
-    strokeWeight(6);
-    noFill();
+    }     
 
     currentPoint = traceIterator;
 
@@ -168,15 +164,15 @@ class DoublePendulum {
     beginShape();
     for (int j = 0; j < point.length; j++)
     {
+
       currentPoint++;
 
-      if (currentPoint == point.length) 
+      if (currentPoint > point.length - 1) 
       {
         currentPoint = 0;
       }
 
-      stroke((map(j, 0, point.length, 10, 255)), (map(k, 0, ile, 10, 255)), (map(currentPoint, 10, point.length, 0, 255)));
-
+      stroke((map(j, 0, point.length - 1, 8, 255)), (map(pendulIndex, 0, ile, 20, 250)), (map(currentPoint, 0, point.length, 12, 252)));
       curveVertex(point[currentPoint].x, point[currentPoint].y);
     }
     endShape();

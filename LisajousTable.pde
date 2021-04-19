@@ -4,9 +4,9 @@ class LisajousTable {
   float centerX = 0, centerY = 0, x = 0, y = 0;  
   ArrayList<ArrayList<Curve>> curves = new ArrayList<ArrayList<Curve>>();
   boolean whatLine = true; //true - horizontal line, false - vertical line
-  float angle = 0, angleChange1 = 0.05, angleChange2 = 0.05;    
+  float angle = 0, angleChange1 = 0, angleChange2 = 0.05;    
   float diameter = size - 0.2 * size, radius = diameter/2, offset = size/2;
-  
+
   LisajousTable()
   {
     //Calculation of the number of circles vertically and horizontally
@@ -24,7 +24,7 @@ class LisajousTable {
   void reset(float change)
   {
 
-    angleChange1 = change;
+    angleChange1 = 0;
     angleChange2 = change;
 
     for (int j = 0; j < rows; j++) 
@@ -54,36 +54,36 @@ class LisajousTable {
 
   void calculations()
   {
-    float line1 = 0, plane = 0, line2 = 0;
+    float line1 = 0, plane = 0, line2 = 0, inside = 0, sizePlusOfset = size + offset;
 
     if (whatLine)
     {
       line1 = cols;
       line2 = rows;
       plane = height;
+      centerY = offset;
     } else
     {
       line1 = rows;
       line2 = cols;
       plane = width;
+      centerX = offset;
     }
-
 
     for (int i = 0; i < line1; i++) 
     {
-
       if (whatLine)
       {
-        centerY = offset;
-        centerX = size + i * size + offset;
+        centerX = sizePlusOfset + i * size;
       } else
-      {
-        centerX = offset;
-        centerY = size + i * size + offset;
+      { 
+        centerY = sizePlusOfset + i * size;
       }
-
-      x = radius * cos(angle * (i + 1) - HALF_PI);
-      y = radius * sin(angle * (i + 1) - HALF_PI);
+       
+       inside = angle * (i + 1) - HALF_PI;
+       
+      x = radius * cos(inside);
+      y = radius * sin(inside);
 
       for (int j = 0; j < line2; j++) 
       {
@@ -104,9 +104,10 @@ class LisajousTable {
       point(centerX + x, centerY + y);
       stroke(255, 150);
       strokeWeight(1);
-
+      //stroke((map(i, 0, line1 - 1, 0, 255)), (map(angle, -TWO_PI, TWO_PI, 50, 255)), (map(float(int(whatLine)), 0, 1, 100, 255)));
+      
       if (whatLine)
-      {
+      {        
         line(centerX + x, 0, centerX + x, plane);
       } else
       {
@@ -115,26 +116,17 @@ class LisajousTable {
     }
   }
 
-  void show()
+  void show(boolean action)
   {
-    noFill();
-    if (lisajousAction )
-    {
-      angleChange1 = angleChange2;
-    } else 
-    {
-      angleChange1 = 0;
-    }
-
     for (int i = 0; i < 2; i++)
     {
       calculations();
       whatLine = !whatLine;
-    }
+    }    
 
     for (int j = 0; j < rows; j++) {
       for (int i = 0; i < cols; i++) {
-        if (lisajousAction )
+        if (action)
         {
           curves.get(j).get(i).addPoint();
         }
@@ -152,8 +144,8 @@ class LisajousTable {
         for (int i = 0; i < cols; i++) {
           curves.get(j).get(i).reset();
         }
-      }
-      //saveFrame("lissajous.png");
+      }      
+      //saveFrame("###lissajous.png");
       angle = 0;
     }
   }

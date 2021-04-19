@@ -9,7 +9,6 @@ class NPendulum {
   PVector origin = new PVector(width / 2, height/4); 
   HashMap<String, Float> fieldVariables = new HashMap<String, Float>();
 
-
   NPendulum(int _tier)
   {
     tier = _tier;   
@@ -23,7 +22,7 @@ class NPendulum {
     }
   }
 
-  NPendulum(int tier_, FloatList mas, FloatList angles, FloatList lenghts, FloatList radiuses, FloatList velocities, FloatList accelerations, FloatList positionX, FloatList positionY)
+  NPendulum(int tier_, FloatList mases, FloatList angles, FloatList lenghts, FloatList radiuses, FloatList velocities, FloatList accelerations, FloatList positionX, FloatList positionY)
   {        
     tier = tier_; 
     singlePendulum = new ArrayList<Pendulum>(tier);
@@ -31,7 +30,7 @@ class NPendulum {
 
     for (int i = 0; i < tier; i++)
     {
-      singlePendulum.add(new Pendulum(origin, radiuses.get(i), gravity, damping, angles.get(i), velocities.get(i), accelerations.get(i), lenghts.get(i), mas.get(i)));
+      singlePendulum.add(new Pendulum(origin, radiuses.get(i), gravity, damping, angles.get(i), velocities.get(i), accelerations.get(i), lenghts.get(i), mases.get(i)));
       singlePendulum.get(i).position = new PVector(positionX.get(i), positionY.get(i));
       colorDetermination.add(new LotsOfFunctions(singlePendulum.get(i).velocity, singlePendulum.get(i).acceleration, singlePendulum.get(i).angle));
     }
@@ -40,8 +39,26 @@ class NPendulum {
     {
       point[j] = new PVector(singlePendulum.get(tier - 1).position.x, singlePendulum.get(tier - 1).position.y);
     }
-    
-    setingFieldVariables();
+
+    inicjalizationFieldVariables();
+  }
+
+  void inicjalizationFieldVariables()
+  {
+    fieldVariables.put("gravity", gravity);
+    fieldVariables.put("tier", float (tier));
+
+    for (int i = 0; i < tier; i++)
+    {
+      fieldVariables.put("mas" + i, singlePendulum.get(i).mass);
+      fieldVariables.put("angles" + i, singlePendulum.get(i).angle);
+      fieldVariables.put("length" + i, singlePendulum.get(i).lengh);
+      fieldVariables.put("radius" + i, singlePendulum.get(i).radius);
+      fieldVariables.put("velocities" + i, singlePendulum.get(i).velocity);      
+      fieldVariables.put("accelerations" + i, singlePendulum.get(i).acceleration);
+      fieldVariables.put("position["+ i +"].x", singlePendulum.get(i).position.x);
+      fieldVariables.put("position["+ i +"].y", singlePendulum.get(i).position.y);
+    }
   }
 
   void reset()
@@ -58,7 +75,7 @@ class NPendulum {
       colorDetermination.add(new LotsOfFunctions(singlePendulum.get(i).velocity, singlePendulum.get(i).acceleration, singlePendulum.get(i).angle));
     }
 
-    setingFieldVariables();
+    inicjalizationFieldVariables();
     calculations();
   }
 
@@ -68,25 +85,19 @@ class NPendulum {
     float numerator3 = 0, denominator = 0;
 
     for (int j = 0; j < tier; j++) {
-      //denominator 
       for (int k = 0; k < tier; k++) {
         denominator += singlePendulum.get(k).mass * singlePendulum.get(k).lengh * singlePendulum.get(k).lengh * (j <= k? 1 : 0);
       }
 
-
       for (int k = 0; k < tier; k++) {
-        //first numerator
         numerator1 = gravity * singlePendulum.get(j).lengh * sin(singlePendulum.get(j).angle) * singlePendulum.get(j).mass * (j <= k? 1 : 0);
 
         //second numerator
         float inner_sum = 0;
-        // inner sum
         for (int q = k+1; q < tier; q++) {
           inner_sum += singlePendulum.get(q).mass * (j <= q? 1 : 0);
         }
         numerator2 = inner_sum * singlePendulum.get(j).lengh * singlePendulum.get(k).lengh * sin(singlePendulum.get(j).angle - singlePendulum.get(k).angle) * singlePendulum.get(j).velocity * singlePendulum.get(k).velocity;
-
-        //Third numerator
         //The inner sum is the same as in the num2
         numerator3 = inner_sum * singlePendulum.get(j).lengh * singlePendulum.get(k).lengh * (sin(singlePendulum.get(k).angle - singlePendulum.get(j).angle) * (singlePendulum.get(j).velocity * singlePendulum.get(k).velocity) * singlePendulum.get(k).velocity 
           + (j != k ? 1 : 0) * cos(singlePendulum.get(j).angle - singlePendulum.get(k).angle) * singlePendulum.get(k).acceleration);
@@ -138,12 +149,12 @@ class NPendulum {
     for (int j = 0; j<point.length; j++)
     {
       current++;
-
+      
       if (current == point.length) 
       {
         current = 0;
-      }
-
+      } 
+      
       stroke((map(j, 0, point.length, 10, 255)), (map(k, 0, howManyNPen, 10, 255)), (map(current, 10, point.length, 0, 255)));
 
       curveVertex(point[current].x, point[current].y);
@@ -153,8 +164,8 @@ class NPendulum {
 
   void setingFieldVariables()
   { 
-    fieldVariables.put("gravity", gravity);
-    fieldVariables.put("tier", float (tier));
+    fieldVariables.replace("gravity", gravity);
+    fieldVariables.replace("tier", float (tier));
 
     for (int i = 0; i < tier; i++)
     {

@@ -22,7 +22,7 @@ class Function {
     dateInt[4] = month();
     dateInt[5] = year();
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i <= 5; i++)
     {
       dateString[i] = twoDate(dateInt[i]);
     }    
@@ -33,13 +33,7 @@ class Function {
   String twoDate(int lo) 
   {
     String convert = str(lo);
-
-    if (convert.length() == 1)
-    {
-      convert = "0" + convert;
-    }
-
-    return convert;
+    return (convert.length() == 1) ? ("0" + convert) : convert;
   }
 
   void findingTheItem(float item_)
@@ -74,16 +68,23 @@ class LotsOfFunctions
   }
 
   float valueMapping(int index, float value, int smallestValue, int biggestValue)
-  {
-    float result;
+  {   
+    float average = (biggestValue + smallestValue)/2;
+    boolean equal = (fun[index].largestItem == fun[index].smallestItem);
+    boolean outOfRange = value > fun[index].largestItem || value < fun[index].smallestItem;
+    
+    
+    if(equal)
+   {
+     fun[index].largestItem += (fun[index].largestItem * 0.1) + 0.001;
+     fun[index].smallestItem -= (fun[index].smallestItem * 0.1) + 0.001; 
+   }
 
-    if (value >= fun[index].largestItem || value < fun[index].smallestItem)
-    {
-      result = (biggestValue + smallestValue)/2;
-    } else
-    {
-      result = map(value, fun[index].smallestItem, fun[index].largestItem, smallestValue, biggestValue);
-    }
-    return result;
+    float mappedValue = map(value, fun[index].smallestItem, fun[index].largestItem, smallestValue, biggestValue);
+    
+    //mappedValue
+    
+    
+    return outOfRange ? average : mappedValue;
   }
 }

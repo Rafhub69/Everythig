@@ -10,7 +10,6 @@ void creatingButtons(PFont inputFont, PFont font_)
   cp5.addSlider("Gravity").setGroup(menu).setPosition(0, 15).setRange(0.01, 1);  
   cp5.addSlider("Springness").setGroup(menu).setPosition(0, 30).setRange(0.01, 1);
 
-
   cp5.addButton("Start").setPosition(centerX, centerY).setSize(200, 60).setCaptionLabel("Start");
   cp5.addButton("Settings").setPosition(centerX, centerY + 60).setSize(200, 60).setCaptionLabel("Ustawienia");
   cp5.addButton("Exit").setPosition(centerX, centerY + 120).setSize(200, 60).setCaptionLabel("Wyjscie z programu");
@@ -19,7 +18,7 @@ void creatingButtons(PFont inputFont, PFont font_)
   cp5.addButton("Load").setPosition(pozXSet, 63).setSize(65, button_height).setCaptionLabel("Odczyt").hide();
   cp5.addButton("Set").setPosition(pozXSet, 63).setSize(70, button_height).setCaptionLabel("Ustawienia").hide();
 
-  cp5.addButton("Menu").setPosition(pozX, 1).setSize(button_width, button_height).hide();
+  cp5.addButton("Menu").setPosition(pozX, 3).setSize(button_width, button_height).hide();
   cp5.addButton("Reset").setPosition(pozX, button_height * factor).setSize(button_width, button_height).hide();
   factor++;
   cp5.addButton("StartStop").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Uruchomienie programu").hide();
@@ -45,6 +44,7 @@ void creatingButtons(PFont inputFont, PFont font_)
   cp5.addButton("FourierTrans").setPosition(pozX, button_height * factor).setSize(button_width, button_height).setCaptionLabel("Transformata fouriera").hide().setValue(5);
   factor++;
   cp5.addTextfield("input").setPosition(20, 100).setSize(200, 40).setFont(inputFont).setFocus(false).setCaptionLabel(" ").setColor(color(255, 0, 0)).hide();
+  mode = 0;
 }
 
 //reading input from buttons
@@ -74,6 +74,7 @@ void Circle(int n)
 void Lisajous(int n) 
 {
   CentralButton(n, true);
+  table.angleChange1 = lisajousAction ? table.angleChange2 : 0;
 }
 
 void Bonaci(int n) 
@@ -209,18 +210,10 @@ void StartStop()
   strangeCirclesAction = stopStart;
   fourierTransformAction = stopStart; 
 
-  if (stopStart)
-  {
-    cp5.getController("StartStop").setCaptionLabel("Zatrzymanie programu");
-  } else
-  {
-    cp5.get("contextMenu").hide();          
-    cp5.get(Slider.class, "Mass").setVisible(false);   
-    cp5.get(Slider.class, "Radius").setVisible(false);
-    cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Springness").setVisible(false);
-    cp5.getController("StartStop").setCaptionLabel("Uruchomienie programu");
-  }
+  String startStopText = stopStart ? "Zatrzymanie programu" : "Uruchomienie programu";
+  cp5.getController("StartStop").setCaptionLabel(startStopText);
+  table.angleChange1 = lisajousAction ? table.angleChange2 : 0;
+  cp5.get("contextMenu").hide();
 }
 
 void Start() 
@@ -229,7 +222,7 @@ void Start()
   cp5.get(Button.class, "Start").hide();  
   cp5.get(Button.class, "Settings").hide();
 
-  stopStart = true;
+  mode = 2;
   startMenu = false;
 
   cp5.get(Button.class, "Menu").show();
@@ -258,7 +251,7 @@ void Save()
       values.setJSONObject(i, jsonArray.get(i));
     }
     objectName = "Cir";
-    break;
+    break; 
   case 2:
     if (pendul)
     {
@@ -291,7 +284,7 @@ void Save()
       }
       objectName = "DoublePend";
     }
-    break;
+    break;  
   case 4:
     if (!cirOrNpendul)
     {
@@ -309,7 +302,6 @@ void Save()
       }
       objectName = "NPend";
     }
-
     break;
   }
 
@@ -318,27 +310,24 @@ void Save()
 
 void Load()
 {
-  // Save();
   switch(mode) {
   case 1:
-    selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveCir*.json"));    
-    break;
+    selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_4/saves/saveCir*.json"));    
+    break;   
   case 2:
-
     if (pendul)
     {
-      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveSinglePend*.json"));
+      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_4/saves/saveSinglePend*.json"));
     } else 
     {
-      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveDoublePend*.json"));
+      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_4/saves/saveDoublePend*.json"));
     }
-    break;
+    break;   
   case 4:
     if (!cirOrNpendul)
     {
-      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_3/saves/saveNPend*.json"));
+      selectInput("Select a file to load:", "loadOutput", dataFile("C:/Users/Rafał/Documents/Processing/Everything2D_4/saves/saveNPend*.json"));
     }
-
     break;
   }
 }
@@ -377,7 +366,6 @@ void CentralButton(int n, boolean switches)
 
 void ButtonManagement()
 {
-  
   if (information)
   {
     fill(255);
@@ -431,13 +419,15 @@ int inputChange(String input)
     sum += Integer.parseInt(matcher.group());
   }
 
+  if (sum == 0) sum = 1;
+
   return sum;
 }
 
 // automatically receives results from controller input
 void input(String theText) 
 {
-  if (theText != null)
+  if (!theText.equals(null))
   {
     int amount = inputChange(theText);
 
@@ -455,7 +445,7 @@ void input(String theText)
       howManySinglePend = amount;
     } else if (buttonName.equals("Lisajous"))
     {
-      table.size = amount;
+      table.size = amount < 48 ? 48 : amount;
     } else if (buttonName.equals("Npendul"))
     {
       numberOfNpendulum = amount;
@@ -467,7 +457,7 @@ void input(String theText)
 
 void degreesOfPendulum(String degree) 
 {
-  if (degree != null)
+  if (!degree.equals(null))
   {
     degreeOfPendulum = inputChange(degree);
 

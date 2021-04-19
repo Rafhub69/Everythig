@@ -14,7 +14,7 @@ class SaveGame
 
     if (ObjectName != null)
     {
-      fileName +=ObjectName;
+      fileName += ObjectName;
     }
 
     boolean exist = true;

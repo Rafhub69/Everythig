@@ -1,11 +1,11 @@
 void creatingRandomPendulums(int howManySinglePendulum)
 {
-  float a1 = PI / (randa.nextFloat() + 0.5);;
+  float a1 = PI / (randa.nextFloat() + 0.5);
   singlePend.add(new Pendulum(a1, new PVector(width / 2, height/3)));
 
   for (int i = 1; i < howManySinglePendulum; i++)
   {
-    a1 = PI / (randa.nextFloat() + 0.5);
+    a1 = PI / (randa.nextFloat() + 0.6);
     singlePend.add(new Pendulum(a1, singlePend.get(i - 1).position));
   }
 }
@@ -24,7 +24,7 @@ void creatingRandomDoublePendulums(int howManyDoublePendulum)
 
 void creatingRandomNPendulums()
 {
-  for (int i= 0; i < numberOfNpendulum; i++)
+  for (int i = 0; i < numberOfNpendulum; i++)
   {
     nPend.add(new NPendulum(degreeOfPendulum));
   }
@@ -60,7 +60,9 @@ void dublePendulumManagement()
   { 
     if (doubleAction) 
     {
-      doublePend.get(i).trace(i, howManyDoublePen);
+      noFill(); 
+      strokeWeight(6); 
+      doublePend.get(i).trace(i, doublePend.size());
     }    
     doublePend.get(i).drawing();
   }
@@ -73,7 +75,7 @@ void dublePendulumManagement()
 void nPendulManagement()
 {
   background(120);
-  
+
   for (int i= 0; i < nPend.size(); i++)
   {
     if (nPendulumAction)

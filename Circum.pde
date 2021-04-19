@@ -80,6 +80,7 @@ class Circum {
       velocity.y *= -springness;
       point.y = height - radius ;
     }
+    
     if (point.x - radius <= 0)
     {
       velocity.x *= -springness;
@@ -89,6 +90,7 @@ class Circum {
       velocity.x *= -springness;
       point.x = width - radius;
     }
+    
     acceleration.mult(0);
   }
 

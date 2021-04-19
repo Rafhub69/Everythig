@@ -5,6 +5,7 @@ void mousePressed()
     switch(mode) 
     {
     case 1:
+
       if (field)
       { 
         for (int i = 0; i < cir.size(); i++)
@@ -48,6 +49,7 @@ void mousePressed()
       }
       break;
     case 2:
+
       if (pendul)
       {
         for (int k = 0; k < singlePend.size(); k++)
@@ -110,6 +112,7 @@ void mousePressed()
       }
       break;
     case 4:
+
       for (int m = 0; m < nPend.size(); m++)
       {
         for (int i = 0; i < nPend.get(m).tier; i++)
@@ -136,6 +139,7 @@ void mousePressed()
       }
       break; 
     case 5:
+
       fourier.mousePress();
       break;
     }
@@ -149,6 +153,7 @@ void mouseReleased()
     switch(mode) 
     {
     case 1:
+
       if (field)
       { 
         if (changePositionByMouse[0]) {
@@ -175,6 +180,7 @@ void mouseReleased()
       }
       break;
     case 2:
+
       if (pendul)
       {
         if (changePositionByMouse[2]) {
@@ -209,6 +215,7 @@ void mouseReleased()
 
       break;
     case 4:
+
       if (changePositionByMouse[5]) {
         changePositionByMouse[5] = false;
       }
@@ -334,7 +341,7 @@ void keyPressed()
         pozYSet = cp5.getController("Npendul").getPosition();
       } else if (mode == 5)
       {
-        pozYSet = cp5.getController("FourTrans").getPosition();
+        //pozYSet = cp5.getController("FourTrans").getPosition();
       }
 
       cp5.get(Button.class, "Set").setPosition(pozXSet, pozYSet[1]).setVisible(true);
@@ -348,14 +355,14 @@ void checkingIfMouseIsOver()
 {
   if (cp5.isMouseOver(cp5.getController("Menu")) || cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("StartStop")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")) || cp5.isMouseOver(cp5.getController("Lisajous")) || cp5.isMouseOver(cp5.getController("Circle"))) 
   {
-
     if (cp5.isMouseOver(cp5.getController("Menu")) || cp5.isMouseOver(cp5.getController("Reset")) || cp5.isMouseOver(cp5.getController("Bonaci")) || cp5.isMouseOver(cp5.getController("FourTrans")) || cp5.isMouseOver(cp5.getController("StartStop")))
     {
       cp5.getController("input").hide();
       cp5.getController("degreesOfPendulum").hide();
     }
 
-    if (cp5.isMouseOver(cp5.getController("Menu"))) {
+    if (cp5.isMouseOver(cp5.getController("Menu"))) 
+    {
       fill(255);
       textAlign(LEFT);
       textLeading(18);
@@ -365,35 +372,40 @@ void checkingIfMouseIsOver()
         + shortcutTable.get("shortcutCentralField") + " - pole centralne\n " + shortcutTable.get("shortcutSinglePendulum") + " - pojedyncze wahadło\n "
         + shortcutTable.get("shortcutDoublePendulum") + " - podwójne wahadło\n " + shortcutTable.get("shortcutBonaciSeqense") + " - sekwencja fibonacziego\n "
         + shortcutTable.get("shortcutLisajousTable")  + " - tablica Lisajous\n " + shortcutTable.get("shortcutFourierTransform") + " - transformata furiera\n "
-        + shortcutTable.get("shortcutNpendulum") +" - wahadło z n kół\n " + shortcutTable.get("shortcutStrangeCircles") + " - dziwne koła\n K - zmiana ilości obiektów\n "  
+        + shortcutTable.get("shortcutNpendulum") +" - wahadło n-tego stopnia\n " + shortcutTable.get("shortcutStrangeCircles") + " - dziwne koła\n K - zmiana ilości obiektów\n "  
         + shortcutTable.get("shortcutReset") + " - reset\n " + shortcutTable.get("shortcutDisableEnableAll") + " - Wyłączenie pokazywania menu\n " + shortcutTable.get("shortcutStopStartAll") + " - Zatrzymanie obiektów\n "; 
-      text(advice, 110, 20, 660, 330);
-    } else if (cp5.isMouseOver(cp5.getController("Lisajous")))
+
+      text(advice, 110, 20, 365, 410);
+    } else if (cp5.isMouseOver(cp5.getController("Lisajous"))) 
     {
       Disclosures_set("Lisajous");
       cp5.get(Textfield.class, "input").setLabel("Ustaw wielkość okręgów");
-    } else if (cp5.isMouseOver(cp5.getController("Circle")))
+    } else if (cp5.isMouseOver(cp5.getController("Circle"))) 
     {
       Disclosures_set("Circle");
       cp5.get(Textfield.class, "input").setLabel("Ustaw wielkość zmiany kąta");
     } 
-
     cp5.getController("Set").hide();
     cp5.getController("Load").hide();
     cp5.getController("Save").hide();
-  } else if (cp5.isMouseOver(cp5.getController("Central"))) {
+  } else if (cp5.isMouseOver(cp5.getController("Central"))) 
+  {
     Disclosures_set("Central");
     cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość obiektów w centralnym polu grawitacyjnym");
-  } else if (cp5.isMouseOver(cp5.getController("Homogen"))) {
+  } else if (cp5.isMouseOver(cp5.getController("Homogen"))) 
+  {
     Disclosures_set("Homogen");
     cp5.get(Textfield.class, "input").setLabel("Ustaw ilość obiektów w jednorodnym polu grawitacyjnym");
-  } else if (cp5.isMouseOver(cp5.getController("Single"))) {
+  } else if (cp5.isMouseOver(cp5.getController("Single"))) 
+  {
     Disclosures_set("Single");   
     cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość pojedyńczych wahadeł");
-  } else if (cp5.isMouseOver(cp5.getController("Dual"))) {
+  } else if (cp5.isMouseOver(cp5.getController("Dual"))) 
+  {
     Disclosures_set("Dual");
     cp5.get(Textfield.class, "input").setCaptionLabel("Ustaw ilość podwójnych wahadeł");
-  } else if (cp5.isMouseOver(cp5.getController("Npendul"))) {
+  } else if (cp5.isMouseOver(cp5.getController("Npendul"))) 
+  {
     Disclosures_set("Npendul");
     cp5.get(Textfield.class, "input").setLabel("Ustaw ilość wahadeł n-tego stopnia");
     cp5.getController("degreesOfPendulum").show();
@@ -440,9 +452,9 @@ void contextMenu(int currentIndex)
     cp5.get("contextMenu").show();
     doublePenIndex = 0;
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas1")).setCaptionLabel("mas1").setVisible(true);
+    cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas0")).setCaptionLabel("mas1").setVisible(true);
     cp5.get(Slider.class, "Springness").setValue(doublePend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius0")).setCaptionLabel("radius1").setVisible(true);
   } else if (contextMenuOpenByMouse[4])
   {
     doublePend.get(curIndex).setingFieldVariables();
@@ -454,9 +466,9 @@ void contextMenu(int currentIndex)
     doublePenIndex = 1;
 
     cp5.get(Slider.class, "Gravity").setVisible(false);
-    cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas2")).setCaptionLabel("mas2").setVisible(true); 
+    cp5.get(Slider.class, "Mass").setValue(doublePend.get(curIndex).fieldVariables.get("mas1")).setCaptionLabel("mas1").setVisible(true); 
     cp5.get(Slider.class, "Springness").setValue(doublePend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius2")).setCaptionLabel("radius2").setVisible(true);
+    cp5.get(Slider.class, "Radius").setValue(doublePend.get(curIndex).fieldVariables.get("radius1")).setCaptionLabel("radius1").setVisible(true);
   } else if (contextMenuOpenByMouse[5])
   {
     int index = nPend.get(curIndex).index;
@@ -473,7 +485,7 @@ void contextMenu(int currentIndex)
 
     cp5.get(Slider.class, "Gravity").setVisible(false);
     cp5.get(Slider.class, "Springness").setValue(nPend.get(curIndex).fieldVariables.get("gravity")).setCaptionLabel("g").setVisible(true);
-    cp5.get(Slider.class, "Mass").setValue(nPend.get(curIndex).fieldVariables.get("mas" + index)).setCaptionLabel("mass").setVisible(true);
+    cp5.get(Slider.class, "Mass").setValue(nPend.get(curIndex).fieldVariables.get("mas" + index)).setCaptionLabel("mas").setVisible(true);
     cp5.get(Slider.class, "Radius").setValue(nPend.get(curIndex).fieldVariables.get("radius" + index)).setCaptionLabel("radius").setVisible(true);
   }
 }
@@ -553,14 +565,8 @@ void changePositionByTheMouse(int currentIndex)
     nPend.get(curIndex).singlePendulum.get(index).position.x = mouseX;
     nPend.get(curIndex).singlePendulum.get(index).position.y = mouseY;
 
-    if (index > 1)
-    {
-      diff = PVector.sub(nPend.get(curIndex).singlePendulum.get(index - 1).position, new PVector(mouseX, mouseY));
-    } else
-    {
-      diff = PVector.sub(nPend.get(curIndex).singlePendulum.get(0).origin, new PVector(mouseX, mouseY));
-    }
 
+    diff = index > 1 ? PVector.sub(nPend.get(curIndex).singlePendulum.get(index - 1).position, new PVector(mouseX, mouseY)) : PVector.sub(nPend.get(curIndex).singlePendulum.get(0).origin, new PVector(mouseX, mouseY));
     nPend.get(curIndex).singlePendulum.get(index).angle = atan2(-1*diff.y, diff.x)- radians(90);                              
 
     nPend.get(curIndex).singlePendulum.get(index).lengh = diff.mag();

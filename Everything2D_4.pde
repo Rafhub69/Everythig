@@ -22,6 +22,7 @@ boolean lisajousAction = false, strangeCirclesAction = false, fourierTransformAc
 boolean[] scrollMenuOpenByMouse = new boolean[6];
 boolean[] changePositionByMouse = new boolean[6];
 boolean[] contextMenuOpenByMouse = new boolean[6];
+PImage img;
 PFont arialFont;
 String buttonName;
 long startedMillis = 0;
@@ -36,6 +37,7 @@ BonaciSequence seq;
 LisajousTable table;
 StrengeCircles strenCir;
 FourierTransform fourier;
+
 //Lists of objects
 List<Circum> cir = new ArrayList<Circum>(control);
 List<NPendulum> nPend = new ArrayList<NPendulum>(numberOfNpendulum);
@@ -53,9 +55,10 @@ void settings()
 void setup() 
 { 
   surface.setResizable(true);
-  surface.setTitle("Projekt Rafała");
-  stroke(255);
-  background(255);    
+  surface.setTitle("Projekt Rafała");  
+  img = loadImage("Background_ID_7777.jpg");  
+  img.resize(width, height);
+  background(img);
 
   creatingObjects();
   creatingShortcuts();
@@ -78,8 +81,8 @@ void creatingObjects()
   strenCir = new StrengeCircles(strCirRadius, angleChange_, strCirAmount);
 
   //creating objects in lists
-  creatingRandomCircles();  
   creatingRandomNPendulums();
+  creatingRandomCircles(controlCopy);   
   creatingRandomPendulums(howManySinglePend);
   creatingRandomDoublePendulums(howManyDoublePen);
 }
@@ -121,8 +124,9 @@ void drawBorders()
   stroke(200, 0, 10);
   line(0, 0, width, 0);
   line(0, 0, 0, height);
-  line(width, 0, width, height);  
-  line(0, height, width, height); 
+  line(width, 0, width, height);    
+  line(0, height, width, height);
+   
   strokeWeight(1);
 }
 
@@ -142,7 +146,8 @@ void resetToBegining()
   case 1: 
 
     cir.clear(); 
-    creatingRandomCircles();
+    control = controlCopy;
+    creatingRandomCircles(controlCopy);
 
     if (field)
     {
@@ -159,29 +164,27 @@ void resetToBegining()
       }
     }
 
-    control = controlCopy; 
     break;
   case 2:
-
     if (pendul)
     {
       howManySinglePendCopy = howManySinglePend;
       singlePend.clear();        
       creatingRandomPendulums(howManySinglePendCopy);
-      break;
     } else
     {
       howManyDoublePenCopy = howManyDoublePen;
       doublePend.clear();  
       creatingRandomDoublePendulums(howManyDoublePenCopy);
-      break;
     }
+    break;
   case 3:
 
     if (wholeScreen)
     {
       float lisousChange = 0.05;
       table.reset(lisousChange);
+      table.angleChange1 = lisajousAction ? lisousChange : 0;
       break;
     }
     seq.reset();
@@ -200,6 +203,7 @@ void resetToBegining()
     break;
   }
 
+  cp5.get("contextMenu").hide();    
   startedMillis = millis();
 }
 
@@ -209,8 +213,8 @@ void strangeCirclesManagement()
   background(0);
   strokeWeight(5);
   translate(width/2, height/2); 
-  point(0, 0); 
-  noFill();
+  noFill(); 
+  point(0, 0);
   strokeWeight(2);
   circle(0, 0, 100);
 
@@ -230,8 +234,9 @@ void calculate_delta_time()
 
 void wholeScreenManagement()
 {
+  noFill();  
   if (wholeScreen) {
-    table.show();
+    table.show(lisajousAction);
   } else {
     seq.drawing();
   }
@@ -249,18 +254,24 @@ void cirOrNpendulManagement()
 void draw() 
 {
   calculate_delta_time(); 
-  drawBorders();
 
   switch(mode) 
   {
+  case 0:
+  
+    img.resize(width, height);
+    background(img);
+    break;
   case 1:
   case 2:
+  
     fill(10, 10, 10);
     background(100);
     break;
   case 3:
   case 4:
   case 5:
+  
     fill(200, 200, 200);
     background(0);
     break;   
@@ -268,18 +279,22 @@ void draw()
     background(255, 0, 0);
   }
 
+  drawBorders();
+
   switch(mode) 
   {
-  case 1: //1 - gravitation
+  case 0: 
+    break;
+  case 1: //1 - central and homogeneous field
     circumManagement();
     break;
-  case 2: //2 - pendulum
+  case 2: //2 - single and double pendulum
     pendulumManagement();
     break;
-  case 3: //3 - programs on whole screen
+  case 3: //3 - Lisajous table and nBonaci Sequence
     wholeScreenManagement();
     break;
-  case 4: // 4 - strenge circles
+  case 4: // 4 - strenge circles and N-pendulum
     cirOrNpendulManagement();
     break; 
   case 5: // 5 - fourier transformation 

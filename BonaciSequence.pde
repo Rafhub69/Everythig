@@ -39,16 +39,16 @@ class BonaciSequence
   {
     pushMatrix();   
     translate(width/2, height/2);
-    noFill();
 
     for (int i = 1; i <= much; i++)
     {
+
       for (int j = 2; j < many; j++)
       {
 
         tab[j] = i * tab[j - 1] + tab[j - 2];
 
-        if (tab[j] <= 0 || tab[j] >= 1070 )
+        if (tab[j] < 0 || tab[j] >= 1920)
         {
           break;
         }
@@ -58,19 +58,17 @@ class BonaciSequence
         fun[1].findingTheItem(i);
         fun[2].findingTheItem(tab[j]);
 
-        strokeWeight(1);
-        stroke((map(scene, fun[0].smallestItem, fun[0].largestItem, 100, 200)), (map(i, fun[1].smallestItem, fun[1].largestItem, 50, 255)), (map(tab[j], fun[2].smallestItem, fun[2].largestItem, 100, 200)) );
+        stroke((map(scene, fun[0].smallestItem, fun[0].largestItem, 140, 255)), (map(i, fun[1].smallestItem, fun[1].largestItem, 50, 255)), (map(tab[j], fun[2].smallestItem, fun[2].largestItem, 100, 255)));
+        //stroke((map(scene, fun[0].smallestItem, fun[0].largestItem, 150, 255)), (map(i, fun[1].smallestItem, fun[1].largestItem, 50, 200)), (map(tab[j], fun[2].smallestItem, fun[2].largestItem, 50, 250)));
         pushMatrix();
-
         rotate(j * (PI/2));
-
         rect(0, 0, scene * tab[j], scene * tab[j]);
-        strokeWeight(10);
-
         popMatrix();
       }
 
-      if (millis()%100 == 0)
+
+
+      if (millis()%10 == 0)
       {
         much++;
         many++;
@@ -80,13 +78,12 @@ class BonaciSequence
           many = 5;
         }
 
-        if (much >= 10000000)
+        if (much >= 1000000)
         {
           much = 100;
         }
       }
     }
-
 
     if (scene < -100)
     {
@@ -96,17 +93,7 @@ class BonaciSequence
       reflection = true;
     }
     
-    if (nBonaciAction)
-    {
-      if (reflection)
-      {
-
-        scene -= 0.04000;
-      } else if (!reflection)
-      {
-        scene += 0.04000;
-      }
-    }
+    scene += nBonaciAction ? (reflection ? -0.04000 : 0.04000) : 0;    
     popMatrix();
   }
 }

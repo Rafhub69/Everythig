@@ -1,8 +1,8 @@
-void creatingRandomCircles()
+void creatingRandomCircles(int controlCopy_)
 {
   float radius, mass, pozX, pozY;
 
-  for (int i = 0; i < controlCopy; i++)
+  for (int i = 0; i < controlCopy_; i++)
   {
     float border = 10;
     mass = 8 * randa.nextFloat() + 4;
